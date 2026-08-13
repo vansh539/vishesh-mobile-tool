@@ -71,9 +71,33 @@ h3{font-size:12px;font-weight:600;color:#888;margin-bottom:.75rem;text-transform
 .dl-btn:hover{filter:brightness(0.85)}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 input[type=number]{-moz-appearance:textfield}
+.chk{display:flex;align-items:center;gap:7px;font-size:13px;color:#333;margin:2px 0 10px;cursor:pointer}
+.chk input{width:16px;height:16px}
+.inv-row{display:flex;align-items:center;gap:4px;padding:0 4px 0 14px;border:1.5px solid #e2e2e2;border-radius:8px;margin-bottom:8px;background:#f7f7f5}
+.inv-row:hover{border-color:#1a2a6e}
+.inv-main{flex:1;display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:12px 0;min-width:0}
+.inv-name{font-size:14px;color:#111;font-weight:500}
+.inv-tag{font-size:12px;color:#888;font-weight:400}
+.inv-amt{font-size:14px;font-weight:600;color:#1a2a6e;white-space:nowrap}
+.inv-del{background:none;border:none;color:#ccc;cursor:pointer;font-size:19px;padding:6px 8px;line-height:1}
+.inv-del:hover{color:#ef4444}
+.dbs-doc{background:#fff;color:#000;width:105mm;height:148.5mm;overflow:hidden;font-family:'Times New Roman',serif;border:1.5px solid #000;padding:2.5mm 3.5mm 3mm 3.5mm;display:block}
+.dbs-shri{text-align:center;font-size:11pt;font-weight:bold;margin-bottom:1mm}
+.dbs-rule1{border-top:0.75px solid #000;margin-bottom:1mm}
+.dbs-meta{display:flex;justify-content:space-between;align-items:baseline;font-size:9pt;border-bottom:0.5px solid #000;padding-bottom:1mm;margin-bottom:3mm}
+.dbs-hindi{font-weight:bold;font-size:9.5pt}
+.dbs-grid{display:flex;gap:3mm}
+.dbs-gcol{flex:1;min-width:0}
+.dbs-h{font-size:7.5pt;font-weight:bold;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:1mm;color:#333}
+.dbs-row{display:flex;justify-content:space-between;gap:2mm;font-size:7.5pt;padding:0.6mm 0;line-height:1.25}
+.dbs-row span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dbs-tot{display:flex;justify-content:space-between;font-size:8pt;font-weight:bold;padding:0.5mm 0}
+.dbs-bottom{margin-top:3mm}
+.dbs-catrow{display:flex;justify-content:space-between;font-size:7.5pt;padding:0.6mm 0}
 </style>
 </head>
 <body>
+<datalist id="stock-items"><option value='20X20 (4.5kg/pc)'><option value='20x20 (5.5kg/pc)'><option value='20X20 (7kg/pc)'><option value='25X25 (5.5kg/pc)'><option value='25X25 (7kg/pc)'><option value='25X25 (8.5kg/pc)'><option value='25X25 (11kg/pc)'><option value='32X32 (7kg/pc)'><option value='32X32 (11kg/pc)'><option value='38X38 (8.5kg/pc)'><option value='38X38 (11kg/pc)'><option value='38X38 (14kg/pc)'><option value='38X38 (17kg/pc)'><option value='50X50 (11kg/pc)'><option value='50X50 (14kg/pc)'><option value='50X50 (17kg/pc)'><option value='50X50 (19kg/pc)'><option value='50X50 (22kg/pc)'><option value='50X50 (25kg/pc)'><option value='60X60 (18kg/pc)'><option value='60X60 (22kg/pc)'><option value='60X60 (27kg/pc)'><option value='72X72 (22kg/pc)'><option value='72X72 (27kg/pc)'><option value='72X72 (32kg/pc)'><option value='100X100 (37kg/pc)'><option value='100X100 (47kg/pc)'><option value='100X100 (55kg/pc)'><option value='100X100 (75kg/pc)'><option value='150X150 (75kg/pc)'><option value='150X150 (86kg/pc)'><option value='20X40 (7kg/pc)'><option value='20X40 (11kg/pc)'><option value='50x25 (8.5kg/pc)'><option value='50x25 (11kg/pc)'><option value='50X25 (14kg/pc)'><option value='50x25 (17kg/pc)'><option value='60X40 (11kg/pc)'><option value='60X40 (14kg/pc)'><option value='60X40 (18kg/pc)'><option value='60X40 (25kg/pc)'><option value='75X25 (14kg/pc)'><option value='75X25 (17kg/pc)'><option value='80x40 (18kg/pc)'><option value='80X40 (22kg/pc)'><option value='80X40 (27kg/pc)'><option value='80X40 (32kg/pc)'><option value='100X50 (22kg/pc)'><option value='100X50 (27kg/pc)'><option value='100X50 (32kg/pc)'><option value='122X61 (5 X 2.5 ) (43kg/pc)'><option value='145X82 (6 X 3) (53kg/pc)'><option value='32 OD (7kg/pc)'><option value='32 OD (9kg/pc)'><option value='32 OD (11kg/pc)'><option value='42 OD (7kg/pc)'><option value='42 OD (11kg/pc)'><option value='48 OD (8.5kg/pc)'><option value='48 OD (11kg/pc)'><option value='48 OD (14kg/pc)'><option value='48 OD (17kg/pc)'><option value='48 OD (20kg/pc)'><option value='60 OD (13kg/pc)'><option value='60 OD (16kg/pc)'><option value='60 OD (22kg/pc)'><option value='60 OD (25kg/pc)'><option value='76 OD (22kg/pc)'><option value='76 OD (27kg/pc)'><option value='76 OD (32kg/pc)'><option value='89 OD (27kg/pc)'><option value='89 OD (33kg/pc)'><option value='89 OD (37kg/pc)'><option value='89 OD (42kg/pc)'><option value='89 OD (46kg/pc)'><option value='114 OD (43kg/pc)'><option value='114 OD (58kg/pc)'><option value='165 OD (70kg/pc)'><option value='219 OD (84kg/pc)'><option value='9MM SQ'><option value='10MM SQ'><option value='12MM SQ'><option value='16MM SQ'><option value='20MM SQ'><option value='25MM SQ'><option value='32MM SQ'><option value='40MM SQ'><option value='50MM SQ'><option value='10MM ROUND'><option value='12MM ROUND'><option value='16MM ROUND'><option value='20MM ROUND'><option value='25MM ROUND'><option value='32MM ROUND'><option value='20X5 FLAT'><option value='25X6 FLAT'><option value='32X6 FLAT'><option value='40X6 FLAT'><option value='50X6 FLAT'><option value='65X6 FLAT'><option value='75X6 FLAT'><option value='100X6 FLAT'><option value='100X12 FLAT'><option value='100X16 FLAT'><option value='25X10 FLAT'><option value='40X8 FLAT'><option value='40X10 FLAT'><option value='40X12 FLAT'><option value='50X8 FLAT'><option value='50X10 FLAT'><option value='50X12 FLAT'><option value='50X16 FLAT'><option value='65X12 FLAT'><option value='65X16 FLAT'><option value='75X12 FLAT'><option value='75X16 FLAT'><option value='75X20 FLAT'><option value='75X25 FLAT'><option value='22X2 ANGLE'><option value='25X3 ANGLE'><option value='25 X5 ANGLE'><option value='32X4 ANGLE'><option value='35X5 ANGLE'><option value='40X5 ANGLE'><option value='40X6 ANGE'><option value='50X5 ANGLE'><option value='50X6 ANGLE'><option value='65X6 ANGLE'><option value='75X6 ANGLE'><option value='3X1.5 CH'><option value='4X2 CH'><option value='5X2.5 CH'><option value='6X3 CH'><option value='4X2 IB'><option value='5X2.5 IB'><option value='6X3 IB'><option value='8X4 IB'><option value='12X2 BEND'><option value='17X2 BEND'><option value='17X3 BEND'><option value='18X4 BEND'><option value='25X3 BEND'><option value='32X3 BEND'><option value='40X3 BEND'><option value='7 X 3 RING'><option value='7 X 7 RING'><option value='7 X 10 RING'><option value='7 X 12 RING'><option value='7 X 13 RING'><option value='7 X 14 RING'><option value='7 X 15 RING'><option value='7 X 16 RING'><option value='7 X 17 RING'><option value='7 X 20 RING'><option value='4 X 14 RING'><option value='4 X 13 RING'><option value='06 MM TMT'><option value='08 MM TMT'><option value='10 MM TMT'><option value='12 MM TMT'><option value='16 MM TMT'><option value='20 MM TMT'><option value='25 MM TMT'><option value='32 MM TMT'></datalist>
 <div class="wrap">
   <div class="step active" id="lock">
     <div class="card">
@@ -90,8 +114,25 @@ input[type=number]{-moz-appearance:textfield}
       <button class="type-btn" onclick="pickType('Quotation',this)"><div class="tl">📋 Quotation</div></button>
       <button class="type-btn" onclick="pickType('Chitti',this)"><div class="tl">🧾 Chitti</div></button>
     </div>
+    <div class="grid2" style="margin-top:10px">
+      <button class="type-btn" onclick="pickType('DailyBalance',this)"><div class="tl">📊 Daily Balance Sheet</div></button>
+      <button class="type-btn" onclick="goInvoiceList()"><div class="tl">🧾 Today's Invoices</div></button>
+    </div>
     <div class="acts"><button class="btn-p" id="n2" onclick="go(3)" disabled>Continue →</button></div>
   </div></div>
+  <div class="step" id="s10">
+    <div class="card"><h3>Expenses (today)</h3>
+      <table class="itbl"><thead><tr><th>Description</th><th style="width:100px;text-align:right">Amount</th><th style="width:28px"></th></tr></thead><tbody id="exp-tbody"></tbody></table>
+      <button class="add-row" onclick="addExpRow()">+ Add expense</button>
+    </div>
+    <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button><button class="btn-p" onclick="dbsGenerate()">Generate Daily Balance Sheet</button></div>
+  </div>
+  <div class="step" id="s11">
+    <div class="card"><h2>Today's Invoices</h2>
+      <div id="inv-list"></div>
+    </div>
+    <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button></div>
+  </div>
   <div class="step" id="s3">
     <div class="card"><h3>Customer details</h3>
       <div class="grid2">
@@ -113,21 +154,30 @@ input[type=number]{-moz-appearance:textfield}
         <div class="fg"><label>Freight</label><input id="f-freight" type="number" min="0" placeholder="0" oninput="recalc()"></div>
         <div class="fg"><label>Others</label><input id="f-others" type="number" min="0" placeholder="0" oninput="recalc()"></div>
       </div>
+      <label class="chk"><input type="checkbox" id="f-online" onchange="toggleOnline()"> Online Payment</label>
+      <div id="online-block" style="display:none">
+        <div class="grid2">
+          <div class="fg"><label>App</label><select id="f-provider" onchange="recalc()"><option value="Gpay">Gpay</option><option value="PhonePe">PhonePe</option></select></div>
+          <div class="fg"><label>Sender (number/name)</label><input id="f-sender" type="text" placeholder="9876543210" oninput="recalc()"></div>
+        </div>
+        <div class="fg"><label>UPI Charges</label><input id="f-upi" type="number" min="0" placeholder="0" oninput="recalc()"></div>
+      </div>
       <div class="sumbox">
         <div class="sr"><span>Items subtotal</span><span id="d-sub">0</span></div>
         <div class="sr muted"><span>Labour</span><span id="d-lab">0</span></div>
         <div class="sr muted"><span>Weighment</span><span id="d-weigh">0</span></div>
         <div class="sr muted"><span>Freight</span><span id="d-freight">0</span></div>
         <div class="sr muted"><span>Others</span><span id="d-others">0</span></div>
+        <div class="sr muted" id="d-upi-row" style="display:none"><span>UPI Charges</span><span id="d-upi">0</span></div>
         <div class="sr tot"><span>Grand Total</span><span id="d-tot">0</span></div>
       </div>
     </div>
-    <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button><button class="btn-p" onclick="generate()">Generate Document</button></div>
+    <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button><button class="btn-p" onclick="generate()">Generate Document</button><button class="btn-s" id="final-btn" onclick="finalizeChitti()">✓ Final</button></div>
   </div>
   <div class="step" id="s4">
-    <div class="print-note">✓ Ready · <strong>Generates a real A6-size PDF · Share sheet → Print</strong></div>
+    <div class="print-note" id="preview-note">✓ Ready · <strong>Generates a real A6-size PDF · Share sheet → Print</strong></div>
     <div class="doc-wrap" id="preview-wrap"></div>
-    <div class="acts"><button class="btn-s" onclick="go(3)">← Edit</button><button class="btn-p" id="chitti-print-btn" onclick="printChitti()">🖨 Print / Save PDF</button><button class="btn-s" onclick="reset()">New</button></div>
+    <div class="acts"><button class="btn-s" onclick="editOrBack()">← Edit</button><button class="btn-p" id="chitti-print-btn" onclick="printDoc()">🖨 Print / Save PDF</button><button class="btn-s" onclick="reset()">New</button></div>
   </div>
   <div class="step" id="s9"><div class="card"><h2>Quotation format</h2>
     <div class="grid3">
@@ -205,48 +255,208 @@ input[type=number]{-moz-appearance:textfield}
 </script>
 <script>
 var dtype='',rows=[],qRows=[],qBlobUrl='',qFormat='';
+var ITEM_CATEGORY={'20X20 (4.5kg/pc)':'M.S. Pipes','20x20 (5.5kg/pc)':'M.S. Pipes','20X20 (7kg/pc)':'M.S. Pipes','25X25 (5.5kg/pc)':'M.S. Pipes','25X25 (7kg/pc)':'M.S. Pipes','25X25 (8.5kg/pc)':'M.S. Pipes','25X25 (11kg/pc)':'M.S. Pipes','32X32 (7kg/pc)':'M.S. Pipes','32X32 (11kg/pc)':'M.S. Pipes','38X38 (8.5kg/pc)':'M.S. Pipes','38X38 (11kg/pc)':'M.S. Pipes','38X38 (14kg/pc)':'M.S. Pipes','38X38 (17kg/pc)':'M.S. Pipes','50X50 (11kg/pc)':'M.S. Pipes','50X50 (14kg/pc)':'M.S. Pipes','50X50 (17kg/pc)':'M.S. Pipes','50X50 (19kg/pc)':'M.S. Pipes','50X50 (22kg/pc)':'M.S. Pipes','50X50 (25kg/pc)':'M.S. Pipes','60X60 (18kg/pc)':'M.S. Pipes','60X60 (22kg/pc)':'M.S. Pipes','60X60 (27kg/pc)':'M.S. Pipes','72X72 (22kg/pc)':'M.S. Pipes','72X72 (27kg/pc)':'M.S. Pipes','72X72 (32kg/pc)':'M.S. Pipes','100X100 (37kg/pc)':'M.S. Pipes','100X100 (47kg/pc)':'M.S. Pipes','100X100 (55kg/pc)':'M.S. Pipes','100X100 (75kg/pc)':'M.S. Pipes','150X150 (75kg/pc)':'M.S. Pipes','150X150 (86kg/pc)':'M.S. Pipes','20X40 (7kg/pc)':'M.S. Pipes','20X40 (11kg/pc)':'M.S. Pipes','50x25 (8.5kg/pc)':'M.S. Pipes','50x25 (11kg/pc)':'M.S. Pipes','50X25 (14kg/pc)':'M.S. Pipes','50x25 (17kg/pc)':'M.S. Pipes','60X40 (11kg/pc)':'M.S. Pipes','60X40 (14kg/pc)':'M.S. Pipes','60X40 (18kg/pc)':'M.S. Pipes','60X40 (25kg/pc)':'M.S. Pipes','75X25 (14kg/pc)':'M.S. Pipes','75X25 (17kg/pc)':'M.S. Pipes','80x40 (18kg/pc)':'M.S. Pipes','80X40 (22kg/pc)':'M.S. Pipes','80X40 (27kg/pc)':'M.S. Pipes','80X40 (32kg/pc)':'M.S. Pipes','100X50 (22kg/pc)':'M.S. Pipes','100X50 (27kg/pc)':'M.S. Pipes','100X50 (32kg/pc)':'M.S. Pipes','122X61 (5 X 2.5 ) (43kg/pc)':'M.S. Pipes','145X82 (6 X 3) (53kg/pc)':'M.S. Pipes','32 OD (7kg/pc)':'M.S. Pipes','32 OD (9kg/pc)':'M.S. Pipes','32 OD (11kg/pc)':'M.S. Pipes','42 OD (7kg/pc)':'M.S. Pipes','42 OD (11kg/pc)':'M.S. Pipes','48 OD (8.5kg/pc)':'M.S. Pipes','48 OD (11kg/pc)':'M.S. Pipes','48 OD (14kg/pc)':'M.S. Pipes','48 OD (17kg/pc)':'M.S. Pipes','48 OD (20kg/pc)':'M.S. Pipes','60 OD (13kg/pc)':'M.S. Pipes','60 OD (16kg/pc)':'M.S. Pipes','60 OD (22kg/pc)':'M.S. Pipes','60 OD (25kg/pc)':'M.S. Pipes','76 OD (22kg/pc)':'M.S. Pipes','76 OD (27kg/pc)':'M.S. Pipes','76 OD (32kg/pc)':'M.S. Pipes','89 OD (27kg/pc)':'M.S. Pipes','89 OD (33kg/pc)':'M.S. Pipes','89 OD (37kg/pc)':'M.S. Pipes','89 OD (42kg/pc)':'M.S. Pipes','89 OD (46kg/pc)':'M.S. Pipes','114 OD (43kg/pc)':'M.S. Pipes','114 OD (58kg/pc)':'M.S. Pipes','165 OD (70kg/pc)':'M.S. Pipes','219 OD (84kg/pc)':'M.S. Pipes','9MM SQ':'M.S. Section','10MM SQ':'M.S. Section','12MM SQ':'M.S. Section','16MM SQ':'M.S. Section','20MM SQ':'M.S. Section','25MM SQ':'M.S. Section','32MM SQ':'M.S. Section','40MM SQ':'M.S. Section','50MM SQ':'M.S. Section','10MM ROUND':'M.S. Section','12MM ROUND':'M.S. Section','16MM ROUND':'M.S. Section','20MM ROUND':'M.S. Section','25MM ROUND':'M.S. Section','32MM ROUND':'M.S. Section','20X5 FLAT':'M.S. Section','25X6 FLAT':'M.S. Section','32X6 FLAT':'M.S. Section','40X6 FLAT':'M.S. Section','50X6 FLAT':'M.S. Section','65X6 FLAT':'M.S. Section','75X6 FLAT':'M.S. Section','100X6 FLAT':'M.S. Section','100X12 FLAT':'M.S. Section','100X16 FLAT':'M.S. Section','25X10 FLAT':'M.S. Section','40X8 FLAT':'M.S. Section','40X10 FLAT':'M.S. Section','40X12 FLAT':'M.S. Section','50X8 FLAT':'M.S. Section','50X10 FLAT':'M.S. Section','50X12 FLAT':'M.S. Section','50X16 FLAT':'M.S. Section','65X12 FLAT':'M.S. Section','65X16 FLAT':'M.S. Section','75X12 FLAT':'M.S. Section','75X16 FLAT':'M.S. Section','75X20 FLAT':'M.S. Section','75X25 FLAT':'M.S. Section','22X2 ANGLE':'M.S. Section','25X3 ANGLE':'M.S. Section','25 X5 ANGLE':'M.S. Section','32X4 ANGLE':'M.S. Section','35X5 ANGLE':'M.S. Section','40X5 ANGLE':'M.S. Section','40X6 ANGE':'M.S. Section','50X5 ANGLE':'M.S. Section','50X6 ANGLE':'M.S. Section','65X6 ANGLE':'M.S. Section','75X6 ANGLE':'M.S. Section','3X1.5 CH':'M.S. Section','4X2 CH':'M.S. Section','5X2.5 CH':'M.S. Section','6X3 CH':'M.S. Section','4X2 IB':'M.S. Section','5X2.5 IB':'M.S. Section','6X3 IB':'M.S. Section','8X4 IB':'M.S. Section','12X2 BEND':'M.S. Section','17X2 BEND':'M.S. Section','17X3 BEND':'M.S. Section','18X4 BEND':'M.S. Section','25X3 BEND':'M.S. Section','32X3 BEND':'M.S. Section','40X3 BEND':'M.S. Section','7 X 3 RING':'Rings','7 X 7 RING':'Rings','7 X 10 RING':'Rings','7 X 12 RING':'Rings','7 X 13 RING':'Rings','7 X 14 RING':'Rings','7 X 15 RING':'Rings','7 X 16 RING':'Rings','7 X 17 RING':'Rings','7 X 20 RING':'Rings','4 X 14 RING':'Rings','4 X 13 RING':'Rings','06 MM TMT':'TMT Bars','08 MM TMT':'TMT Bars','10 MM TMT':'TMT Bars','12 MM TMT':'TMT Bars','16 MM TMT':'TMT Bars','20 MM TMT':'TMT Bars','25 MM TMT':'TMT Bars','32 MM TMT':'TMT Bars'};
+var dailyLedger=[]; // in-memory only, for this browser tab/session — never written to disk, localStorage, or a server. Gone on reload/close by design.
+var expRows=[];
+var ledgerDateKey=todayStr();
+function purgeStaleLedger(){
+  var today=todayStr();
+  if(today!==ledgerDateKey){dailyLedger=[];expRows=[];ledgerDateKey=today;}
+}
 var PAGE_TEMPLATE="<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Vishesh Steels Quotation</title>\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\n@page{size:A4 portrait;margin:0}\nhtml,body{width:210mm;height:296.5mm;overflow:hidden;margin:0;padding:0;background:#fff;\n  font-family:Arial,Helvetica,sans-serif;font-size:10pt;color:#000}\n@media print{\n  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}\n  html,body{width:210mm;height:296.5mm;overflow:hidden}\n}\n.page{position:relative;width:210mm;height:296.5mm;overflow:hidden;background:#fff}\n.lh-dark{position:absolute;top:0;left:0;width:210mm;height:45mm;background:#1c1c1c;z-index:0}\n.lh-lockup{position:absolute;top:0;left:0;width:210mm;height:45mm;display:flex;align-items:center;justify-content:center;gap:7mm;z-index:1}\n.lh-lockup-text{display:flex;flex-direction:column;align-items:center}\n.lh-name{font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-size:13mm;letter-spacing:2mm;line-height:1;white-space:nowrap;color:#fff}\n.lh-rule{width:30mm;height:0.6mm;background:#d9822b;margin:2.6mm 0 2.4mm 0}\n.lh-tagline{font-size:9.5pt;color:#d9822b;letter-spacing:2px;font-weight:700;text-transform:uppercase;white-space:nowrap}\n.lh-amberline{position:absolute;top:45mm;left:0;width:210mm;height:1mm;background:#d9822b;z-index:0}\n.lh-contact{position:absolute;top:46mm;left:0;width:210mm;height:13mm;background:#fff;z-index:0;\n  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.6mm}\n.lh-contact-l{font-size:10pt;font-weight:700;color:#1c1c1c;letter-spacing:0.3px;display:flex;align-items:center;gap:4mm}\n.lh-contact-l .dot{color:#d9822b;font-weight:900}\n.lh-contact-r{font-size:9pt;color:#555;letter-spacing:0.2px;display:flex;align-items:center;gap:4mm}\n.lh-contact-r b{color:#1c1c1c}\n.lh-contact-r .dot{color:#d9822b;font-weight:900}\n.cwm{position:absolute;pointer-events:none;z-index:0;opacity:0.05}\n.content>*:not(.cwm){position:relative;z-index:1}\n.content{position:absolute;top:63mm;left:14mm;right:13mm;\n  bottom:7.450666666666667mm;overflow:hidden;z-index:2;background:#fff}\n.lh-footer{position:absolute;bottom:0;left:0;width:210mm;height:7.450666666666667mm;background:#1c1c1c;z-index:0}\n.lh-footer-amber{position:absolute;bottom:7.450666666666667mm;left:0;width:210mm;height:0.9mm;background:#d9822b;z-index:0}\n.lh-footer-text{position:absolute;bottom:0;left:0;width:210mm;height:7.450666666666667mm;display:flex;align-items:center;justify-content:center;font-size:9pt;color:#d9822b;letter-spacing:1px;font-weight:700;text-transform:uppercase;z-index:1}\n.title-row{display:flex;justify-content:center;align-items:baseline;margin-bottom:3.5mm;position:relative}\n.q-title{font-size:16pt;font-weight:bold;text-decoration:underline;letter-spacing:1px;color:#1c1c1c}\n.q-date{position:absolute;right:0;top:2mm;font-size:11pt;font-weight:bold;white-space:nowrap}\n.to-lbl{font-weight:bold;font-size:10pt;margin-bottom:0.9mm}\n.to-name{font-weight:bold;font-size:11pt;margin-bottom:1.5mm}\n.to-addr{font-size:10pt;margin-bottom:1mm}\n.to-gstin{font-size:10pt;font-weight:bold;margin-bottom:1.5mm}\n.resp{font-weight:bold;font-size:10pt;margin-bottom:0.9mm}\n.intro{font-size:10pt;line-height:1.35;margin-bottom:2.5mm}\ntable.qt{width:100%;border-collapse:collapse;table-layout:fixed;font-size:9pt;margin-bottom:2.5mm}\ntable.qt th{border:1px solid #333;padding:1.2mm 1.5mm;text-align:center;font-weight:bold;\n  background:#f5f1ec;font-size:9pt;white-space:nowrap;color:#1c1c1c}\ntable.qt td{border:1px solid #333;padding:1.2mm 1.5mm;text-align:center;overflow:hidden;line-height:1.2}\ntable.qt td.lbl{text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\ntable.qt td.r{text-align:right;font-weight:bold}\ntable.qt tr.sep td{border-top:1.5px solid #333;font-weight:bold;background:#efefef}\ntable.qt tr.charge td{background:#fafafa}\ntable.qt tr.tot td{border-top:1.5px solid #333;font-weight:bold;background:#f5f1ec;font-size:10pt}\n.sec{font-weight:bold;font-size:9.5pt;margin-bottom:0.6mm;color:#1c1c1c}\n.bl{padding-left:5mm;margin-bottom:2mm}\n.bl li{font-weight:bold;font-size:9pt;list-style:disc;margin-bottom:0.4mm;line-height:1.25;color:#333}\n.bl li::marker{color:#d9822b}\n.note-text{font-size:9.5pt;margin-bottom:2mm;white-space:pre-wrap;word-break:break-word}\n</style>\n</head>\n<body>\n<div class=\"page\">\n  <div class=\"lh-dark\"></div>\n  <div class=\"lh-lockup\">\n    <svg viewBox=\"0 0 1010.000000 800.000000\" xmlns=\"http://www.w3.org/2000/svg\" style=\"width:26mm;height:auto;display:block;\"><g transform=\"translate(0.000000,800.000000) scale(0.100000,-0.100000)\"\nfill=\"#ffffff\" stroke=\"none\">\n<path d=\"M6474 7001 c-46 -11 -54 -19 -76 -69 -11 -25 -39 -73 -62 -108 -66\n-100 -99 -152 -136 -219 -19 -34 -47 -78 -62 -97 -14 -19 -33 -51 -42 -72 -9\n-21 -29 -54 -45 -74 -15 -21 -40 -59 -54 -87 -14 -27 -37 -61 -51 -74 -14 -13\n-35 -49 -47 -80 -11 -31 -33 -72 -48 -91 -16 -20 -38 -54 -50 -77 -11 -24 -34\n-57 -50 -75 -15 -18 -38 -55 -49 -81 -12 -26 -37 -67 -55 -90 -19 -23 -44 -63\n-55 -89 -11 -26 -34 -64 -51 -85 -16 -21 -37 -55 -46 -75 -8 -21 -28 -52 -44\n-70 -15 -18 -41 -58 -56 -88 -15 -30 -39 -68 -53 -85 -14 -16 -37 -57 -52 -90\n-15 -33 -38 -73 -52 -90 -14 -16 -35 -49 -46 -71 -12 -23 -32 -54 -45 -70 -13\n-16 -36 -52 -51 -81 -14 -29 -39 -67 -56 -86 -16 -19 -39 -56 -50 -83 -12 -27\n-32 -62 -44 -79 -13 -16 -33 -50 -46 -75 -12 -25 -36 -61 -53 -79 -16 -19 -41\n-60 -54 -90 -14 -30 -38 -71 -55 -90 -17 -19 -40 -55 -51 -80 -11 -26 -29 -59\n-42 -76 -12 -16 -32 -50 -45 -75 -12 -25 -37 -63 -55 -85 -18 -22 -42 -59 -53\n-82 -12 -23 -40 -68 -62 -99 -22 -32 -40 -63 -40 -69 0 -7 -15 -32 -34 -56\n-18 -24 -43 -64 -56 -89 -12 -25 -35 -61 -50 -80 -15 -19 -39 -58 -53 -86 -14\n-28 -37 -64 -50 -80 -13 -16 -39 -56 -56 -89 -43 -81 -91 -159 -139 -225 -21\n-30 -51 -81 -65 -112 -36 -79 -105 -121 -137 -83 -7 8 -23 84 -36 167 -26 162\n-39 218 -73 310 -20 56 -29 106 -50 288 -5 47 -24 128 -41 180 -17 52 -38 142\n-47 200 -8 58 -26 146 -39 195 -28 105 -47 202 -68 340 -8 57 -28 133 -46 178\n-19 47 -35 110 -40 159 -8 64 -15 87 -32 105 l-23 22 -1225 3 c-1304 3 -1270\n4 -1270 -44 0 -33 28 -57 89 -75 31 -8 85 -30 121 -48 36 -18 88 -40 115 -49\n28 -9 76 -34 109 -56 32 -22 65 -40 72 -40 7 0 50 -20 96 -44 46 -23 108 -51\n138 -61 30 -9 71 -29 90 -44 48 -38 68 -48 117 -56 28 -4 59 -20 89 -44 26\n-23 70 -46 106 -56 70 -22 162 -84 182 -124 8 -15 18 -52 22 -82 4 -30 20 -87\n36 -128 17 -44 35 -117 44 -180 27 -203 36 -246 66 -316 19 -45 36 -114 48\n-195 11 -69 33 -172 49 -230 16 -58 37 -159 46 -225 10 -72 30 -160 50 -220\n23 -66 41 -149 54 -245 13 -98 30 -173 51 -229 16 -46 37 -127 46 -180 8 -53\n30 -154 49 -226 18 -71 43 -195 55 -275 15 -100 30 -165 50 -210 15 -36 31\n-90 35 -119 6 -41 15 -62 35 -83 l28 -28 608 0 607 0 59 63 c33 34 71 87 85\n117 13 30 38 73 54 95 56 77 129 194 145 231 9 21 31 56 49 79 18 22 42 58 53\n80 11 22 40 70 64 107 23 36 61 96 83 133 22 36 63 102 90 146 28 43 73 115\n100 159 28 45 74 117 102 162 29 45 56 91 59 102 4 12 21 41 39 66 18 25 43\n65 55 90 12 25 33 56 46 70 12 14 40 55 61 91 21 37 52 90 68 119 17 29 44 73\n62 99 17 25 44 69 59 96 15 28 38 63 51 79 13 16 35 50 48 76 13 26 36 61 50\n78 15 17 42 62 61 99 65 127 114 206 156 253 24 26 51 59 61 73 43 64 60 -4\n31 -126 -16 -63 -16 -76 0 -185 33 -230 47 -290 77 -330 16 -20 48 -66 72\n-102 47 -71 186 -201 257 -242 25 -14 54 -35 64 -47 11 -12 49 -30 85 -41 36\n-11 86 -34 110 -50 25 -17 70 -38 100 -46 31 -9 83 -28 116 -41 32 -14 113\n-36 180 -49 134 -26 160 -33 225 -62 25 -11 99 -30 165 -42 192 -33 365 -131\n381 -214 17 -96 -49 -166 -207 -217 -141 -45 -418 -54 -584 -19 -109 23 -220\n43 -334 60 -50 7 -94 22 -135 44 -34 19 -94 41 -135 50 -75 17 -118 35 -159\n67 -13 10 -51 27 -86 39 -35 11 -72 27 -82 35 -25 19 -94 19 -121 0 -12 -8\n-33 -46 -48 -84 -14 -38 -34 -76 -45 -86 -11 -10 -31 -48 -46 -86 -14 -38 -41\n-88 -60 -110 -19 -23 -40 -65 -50 -100 -9 -33 -30 -78 -45 -99 -16 -21 -42\n-68 -58 -105 -17 -36 -39 -77 -50 -91 -11 -14 -30 -51 -41 -82 -12 -31 -35\n-74 -52 -95 -16 -21 -40 -64 -52 -96 -13 -31 -39 -81 -59 -110 -21 -29 -37\n-59 -37 -66 0 -7 -16 -37 -37 -66 -20 -30 -49 -81 -66 -114 -16 -33 -40 -75\n-54 -93 -14 -18 -36 -61 -49 -94 -13 -33 -34 -75 -48 -92 -13 -18 -35 -54 -48\n-82 -13 -27 -40 -70 -61 -97 -57 -74 -64 -149 -14 -155 25 -3 162 86 182 118\n3 6 54 41 113 79 59 38 123 83 143 100 20 17 56 42 80 56 25 13 58 38 74 55\n17 17 50 40 75 51 25 11 59 33 75 48 17 16 55 45 85 64 106 70 175 119 200\n142 45 43 135 77 188 72 132 -13 529 -73 612 -93 47 -11 142 -17 345 -21 300\n-5 291 -6 600 56 55 11 150 27 210 36 79 12 124 24 160 44 28 16 77 36 110 46\n33 9 87 32 120 50 33 19 85 43 116 54 30 12 69 35 85 52 16 17 42 38 58 46 90\n47 322 276 352 348 7 17 29 51 48 74 21 25 43 67 52 99 9 32 29 80 45 108 44\n79 64 216 63 449 -1 230 -17 323 -68 400 -18 28 -43 70 -55 93 -26 51 -194\n223 -241 247 -19 10 -51 30 -70 45 -19 15 -57 35 -84 44 -27 9 -72 32 -100 51\n-37 25 -75 40 -141 54 -49 11 -124 33 -165 49 -41 17 -114 38 -163 46 -48 9\n-120 30 -160 46 -44 17 -117 35 -187 45 -154 22 -346 110 -375 172 -25 51 -22\n113 7 165 21 38 34 47 128 89 144 65 195 72 478 66 229 -4 241 -5 340 -35 56\n-17 148 -38 204 -47 106 -17 126 -24 171 -61 15 -13 46 -28 69 -35 23 -6 65\n-24 95 -41 85 -48 149 -13 198 110 15 37 39 87 54 112 15 25 40 76 55 114 15\n38 40 88 56 110 15 23 36 66 45 96 10 30 31 73 47 95 15 23 37 65 49 94 11 29\n31 68 45 87 44 57 32 92 -42 130 -34 17 -74 40 -89 52 -16 12 -53 30 -84 39\n-31 8 -81 27 -111 40 -75 34 -100 41 -210 58 -52 9 -142 32 -200 51 -127 44\n-244 53 -705 53 -371 1 -551 -15 -650 -57 -38 -17 -119 -40 -180 -51 -64 -12\n-131 -32 -160 -47 -27 -14 -77 -34 -110 -45 -33 -10 -91 -39 -128 -63 -65 -43\n-175 -92 -184 -82 -12 11 33 122 62 155 18 20 44 61 58 91 13 30 32 61 41 69\n10 8 30 40 46 71 16 31 36 62 45 70 9 8 34 48 55 90 21 42 46 82 55 90 9 8 32\n44 50 80 18 36 41 72 50 80 9 8 32 44 50 80 18 36 41 72 50 80 9 8 30 41 47\n74 17 34 43 77 59 97 16 20 37 57 48 81 10 25 32 60 49 79 16 19 43 62 60 96\n18 34 36 64 42 68 6 4 24 32 40 64 16 32 40 71 53 87 13 16 37 54 52 84 15 30\n39 68 52 84 13 16 35 51 49 78 14 27 40 69 59 94 19 25 35 51 35 59 0 7 17 36\n38 64 20 27 49 72 65 98 15 26 39 63 52 82 30 41 30 42 6 72 l-19 24 -619 2\nc-340 0 -632 -2 -649 -6z\"/>\n</g></svg>\n    <div class=\"lh-lockup-text\">\n      <div class=\"lh-name\">VISHESH STEELS</div>\n      <div class=\"lh-rule\"></div>\n      <div class=\"lh-tagline\">Iron &nbsp;&middot;&nbsp; Steel &nbsp;&middot;&nbsp; TMT Bars &nbsp;&middot;&nbsp; MS Rounds &nbsp;&middot;&nbsp; Pipes</div>\n    </div>\n  </div>\n  <div class=\"lh-amberline\"></div>\n  <div class=\"lh-contact\">\n    <div class=\"lh-contact-l\"><span>&#9742;&nbsp; (+91) 96400 11230</span><span class=\"dot\">&#9670;</span><span>&#9993;&nbsp; visheshsteels21@gmail.com</span></div>\n    <div class=\"lh-contact-r\"><span>19-2-225/C&amp;D, Miralam Tank Road, Bahadurpura, Hyderabad - 500064</span><span class=\"dot\">&#9670;</span><span>GSTIN: <b>36ADQPJ3563J1Z4</b></span></div>\n  </div>\n  <div class=\"content\">\n  <div class=\"cwm\" style=\"top:46mm;left:56mm;\"><svg viewBox=\"0 0 1010.000000 800.000000\" xmlns=\"http://www.w3.org/2000/svg\" style=\"width:70mm;height:auto;display:block;\"><g transform=\"translate(0.000000,800.000000) scale(0.100000,-0.100000)\"\nfill=\"#1c1c1c\" stroke=\"none\">\n<path d=\"M6474 7001 c-46 -11 -54 -19 -76 -69 -11 -25 -39 -73 -62 -108 -66\n-100 -99 -152 -136 -219 -19 -34 -47 -78 -62 -97 -14 -19 -33 -51 -42 -72 -9\n-21 -29 -54 -45 -74 -15 -21 -40 -59 -54 -87 -14 -27 -37 -61 -51 -74 -14 -13\n-35 -49 -47 -80 -11 -31 -33 -72 -48 -91 -16 -20 -38 -54 -50 -77 -11 -24 -34\n-57 -50 -75 -15 -18 -38 -55 -49 -81 -12 -26 -37 -67 -55 -90 -19 -23 -44 -63\n-55 -89 -11 -26 -34 -64 -51 -85 -16 -21 -37 -55 -46 -75 -8 -21 -28 -52 -44\n-70 -15 -18 -41 -58 -56 -88 -15 -30 -39 -68 -53 -85 -14 -16 -37 -57 -52 -90\n-15 -33 -38 -73 -52 -90 -14 -16 -35 -49 -46 -71 -12 -23 -32 -54 -45 -70 -13\n-16 -36 -52 -51 -81 -14 -29 -39 -67 -56 -86 -16 -19 -39 -56 -50 -83 -12 -27\n-32 -62 -44 -79 -13 -16 -33 -50 -46 -75 -12 -25 -36 -61 -53 -79 -16 -19 -41\n-60 -54 -90 -14 -30 -38 -71 -55 -90 -17 -19 -40 -55 -51 -80 -11 -26 -29 -59\n-42 -76 -12 -16 -32 -50 -45 -75 -12 -25 -37 -63 -55 -85 -18 -22 -42 -59 -53\n-82 -12 -23 -40 -68 -62 -99 -22 -32 -40 -63 -40 -69 0 -7 -15 -32 -34 -56\n-18 -24 -43 -64 -56 -89 -12 -25 -35 -61 -50 -80 -15 -19 -39 -58 -53 -86 -14\n-28 -37 -64 -50 -80 -13 -16 -39 -56 -56 -89 -43 -81 -91 -159 -139 -225 -21\n-30 -51 -81 -65 -112 -36 -79 -105 -121 -137 -83 -7 8 -23 84 -36 167 -26 162\n-39 218 -73 310 -20 56 -29 106 -50 288 -5 47 -24 128 -41 180 -17 52 -38 142\n-47 200 -8 58 -26 146 -39 195 -28 105 -47 202 -68 340 -8 57 -28 133 -46 178\n-19 47 -35 110 -40 159 -8 64 -15 87 -32 105 l-23 22 -1225 3 c-1304 3 -1270\n4 -1270 -44 0 -33 28 -57 89 -75 31 -8 85 -30 121 -48 36 -18 88 -40 115 -49\n28 -9 76 -34 109 -56 32 -22 65 -40 72 -40 7 0 50 -20 96 -44 46 -23 108 -51\n138 -61 30 -9 71 -29 90 -44 48 -38 68 -48 117 -56 28 -4 59 -20 89 -44 26\n-23 70 -46 106 -56 70 -22 162 -84 182 -124 8 -15 18 -52 22 -82 4 -30 20 -87\n36 -128 17 -44 35 -117 44 -180 27 -203 36 -246 66 -316 19 -45 36 -114 48\n-195 11 -69 33 -172 49 -230 16 -58 37 -159 46 -225 10 -72 30 -160 50 -220\n23 -66 41 -149 54 -245 13 -98 30 -173 51 -229 16 -46 37 -127 46 -180 8 -53\n30 -154 49 -226 18 -71 43 -195 55 -275 15 -100 30 -165 50 -210 15 -36 31\n-90 35 -119 6 -41 15 -62 35 -83 l28 -28 608 0 607 0 59 63 c33 34 71 87 85\n117 13 30 38 73 54 95 56 77 129 194 145 231 9 21 31 56 49 79 18 22 42 58 53\n80 11 22 40 70 64 107 23 36 61 96 83 133 22 36 63 102 90 146 28 43 73 115\n100 159 28 45 74 117 102 162 29 45 56 91 59 102 4 12 21 41 39 66 18 25 43\n65 55 90 12 25 33 56 46 70 12 14 40 55 61 91 21 37 52 90 68 119 17 29 44 73\n62 99 17 25 44 69 59 96 15 28 38 63 51 79 13 16 35 50 48 76 13 26 36 61 50\n78 15 17 42 62 61 99 65 127 114 206 156 253 24 26 51 59 61 73 43 64 60 -4\n31 -126 -16 -63 -16 -76 0 -185 33 -230 47 -290 77 -330 16 -20 48 -66 72\n-102 47 -71 186 -201 257 -242 25 -14 54 -35 64 -47 11 -12 49 -30 85 -41 36\n-11 86 -34 110 -50 25 -17 70 -38 100 -46 31 -9 83 -28 116 -41 32 -14 113\n-36 180 -49 134 -26 160 -33 225 -62 25 -11 99 -30 165 -42 192 -33 365 -131\n381 -214 17 -96 -49 -166 -207 -217 -141 -45 -418 -54 -584 -19 -109 23 -220\n43 -334 60 -50 7 -94 22 -135 44 -34 19 -94 41 -135 50 -75 17 -118 35 -159\n67 -13 10 -51 27 -86 39 -35 11 -72 27 -82 35 -25 19 -94 19 -121 0 -12 -8\n-33 -46 -48 -84 -14 -38 -34 -76 -45 -86 -11 -10 -31 -48 -46 -86 -14 -38 -41\n-88 -60 -110 -19 -23 -40 -65 -50 -100 -9 -33 -30 -78 -45 -99 -16 -21 -42\n-68 -58 -105 -17 -36 -39 -77 -50 -91 -11 -14 -30 -51 -41 -82 -12 -31 -35\n-74 -52 -95 -16 -21 -40 -64 -52 -96 -13 -31 -39 -81 -59 -110 -21 -29 -37\n-59 -37 -66 0 -7 -16 -37 -37 -66 -20 -30 -49 -81 -66 -114 -16 -33 -40 -75\n-54 -93 -14 -18 -36 -61 -49 -94 -13 -33 -34 -75 -48 -92 -13 -18 -35 -54 -48\n-82 -13 -27 -40 -70 -61 -97 -57 -74 -64 -149 -14 -155 25 -3 162 86 182 118\n3 6 54 41 113 79 59 38 123 83 143 100 20 17 56 42 80 56 25 13 58 38 74 55\n17 17 50 40 75 51 25 11 59 33 75 48 17 16 55 45 85 64 106 70 175 119 200\n142 45 43 135 77 188 72 132 -13 529 -73 612 -93 47 -11 142 -17 345 -21 300\n-5 291 -6 600 56 55 11 150 27 210 36 79 12 124 24 160 44 28 16 77 36 110 46\n33 9 87 32 120 50 33 19 85 43 116 54 30 12 69 35 85 52 16 17 42 38 58 46 90\n47 322 276 352 348 7 17 29 51 48 74 21 25 43 67 52 99 9 32 29 80 45 108 44\n79 64 216 63 449 -1 230 -17 323 -68 400 -18 28 -43 70 -55 93 -26 51 -194\n223 -241 247 -19 10 -51 30 -70 45 -19 15 -57 35 -84 44 -27 9 -72 32 -100 51\n-37 25 -75 40 -141 54 -49 11 -124 33 -165 49 -41 17 -114 38 -163 46 -48 9\n-120 30 -160 46 -44 17 -117 35 -187 45 -154 22 -346 110 -375 172 -25 51 -22\n113 7 165 21 38 34 47 128 89 144 65 195 72 478 66 229 -4 241 -5 340 -35 56\n-17 148 -38 204 -47 106 -17 126 -24 171 -61 15 -13 46 -28 69 -35 23 -6 65\n-24 95 -41 85 -48 149 -13 198 110 15 37 39 87 54 112 15 25 40 76 55 114 15\n38 40 88 56 110 15 23 36 66 45 96 10 30 31 73 47 95 15 23 37 65 49 94 11 29\n31 68 45 87 44 57 32 92 -42 130 -34 17 -74 40 -89 52 -16 12 -53 30 -84 39\n-31 8 -81 27 -111 40 -75 34 -100 41 -210 58 -52 9 -142 32 -200 51 -127 44\n-244 53 -705 53 -371 1 -551 -15 -650 -57 -38 -17 -119 -40 -180 -51 -64 -12\n-131 -32 -160 -47 -27 -14 -77 -34 -110 -45 -33 -10 -91 -39 -128 -63 -65 -43\n-175 -92 -184 -82 -12 11 33 122 62 155 18 20 44 61 58 91 13 30 32 61 41 69\n10 8 30 40 46 71 16 31 36 62 45 70 9 8 34 48 55 90 21 42 46 82 55 90 9 8 32\n44 50 80 18 36 41 72 50 80 9 8 32 44 50 80 18 36 41 72 50 80 9 8 30 41 47\n74 17 34 43 77 59 97 16 20 37 57 48 81 10 25 32 60 49 79 16 19 43 62 60 96\n18 34 36 64 42 68 6 4 24 32 40 64 16 32 40 71 53 87 13 16 37 54 52 84 15 30\n39 68 52 84 13 16 35 51 49 78 14 27 40 69 59 94 19 25 35 51 35 59 0 7 17 36\n38 64 20 27 49 72 65 98 15 26 39 63 52 82 30 41 30 42 6 72 l-19 24 -619 2\nc-340 0 -632 -2 -649 -6z\"/>\n</g></svg></div>\n  <div class=\"title-row\">\n      <div class=\"q-title\">QUOTATION</div>\n      <div class=\"q-date\">Date: __DATE__</div>\n    </div>\n    <div class=\"to-lbl\">To:</div>\n    <div class=\"to-name\">__TONAME__,</div>\n    __TOEXTRA__\n    <div class=\"resp\">Respectfully,</div>\n    <div class=\"intro\">With reference to your facsimile enquiry regarding the requirement of<br>\n    <strong>__SUBJECT__ .</strong> We are hereby quoting our lowest prices for your kind consideration.</div>\n    <table class=\"qt\">\n      <thead><tr>\n        <th style=\"width:5%\">S.NO</th><th style=\"width:33%\">PARTICULARS</th>\n        <th style=\"width:10%\">WT/PC</th><th style=\"width:8%\">PCS</th><th style=\"width:11%\">QTY (KG)</th>\n        <th style=\"width:12%\">__RATEHDR__</th><th style=\"width:21%\">AMOUNT</th>\n      </tr></thead>\n      <tbody>\n        __ITEMS__\n        __CHARGES__\n      </tbody>\n    </table>\n    __NOTE__\n    <div class=\"sec\">Terms And Condition:</div>\n    <ul class=\"bl\">__TERMS__</ul>\n    __BANKDETAILS__\n  </div>\n  <div class=\"lh-footer-amber\"></div>\n  <div class=\"lh-footer\"></div>\n  <div class=\"lh-footer-text\">Strength in Every Bar &middot; Vishesh Steels, Hyderabad</div>\n</div>\n</body>\n</html>";
 function pickType(t,el){dtype=t;document.querySelectorAll('.type-btn').forEach(function(b){b.classList.remove('on');});el.classList.add('on');document.getElementById('n2').disabled=false;}
 function go(n){
   document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
   if(n===3&&dtype==='Quotation'){document.getElementById('s9').classList.add('active');window.scrollTo(0,0);return;}
+  if(n===3&&dtype==='DailyBalance'){document.getElementById('s10').classList.add('active');if(expRows.length===0)addExpRow();else expRender();window.scrollTo(0,0);return;}
   document.getElementById('s'+n).classList.add('active');
   if(n===3&&rows.length===0)addRow();
   window.scrollTo(0,0);
 }
+function addExpRow(){expRows.push({desc:'',amt:''});expRender();}
+function expRender(){
+  var tb=document.getElementById('exp-tbody');tb.innerHTML='';
+  expRows.forEach(function(r,i){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td><input type="text" value="'+r.desc+'" placeholder="e.g. Tea, Auto fare" oninput="expUpd('+i+',\'desc\',this.value)"></td>'
+      +'<td><input type="number" min="0" step="any" value="'+r.amt+'" placeholder="0" oninput="expUpd('+i+',\'amt\',this.value)"></td>'
+      +'<td><button class="rm" onclick="expDel('+i+')">×</button></td>';
+    tb.appendChild(tr);
+  });
+}
+function expUpd(i,f,v){expRows[i][f]=v;}
+function expDel(i){expRows.splice(i,1);if(!expRows.length)expRows.push({desc:'',amt:''});expRender();}
+function todayStr(){var d=new Date();var p=function(n){return String(n).padStart(2,'0');};return p(d.getDate())+'/'+p(d.getMonth()+1)+'/'+d.getFullYear();}
+var DBS_FULL=20,DBS_LEFT_LAST=17,DBS_RIGHT_LAST=13;
+function dbsGenerate(){
+  purgeStaleLedger();
+  var cashEntries=[],onlineEntries=[],totalCash=0,totalOnline=0,catTotals={};
+  dailyLedger.forEach(function(e){
+    var isCashName=(e.customerName||'').trim().toUpperCase()==='CASH';
+    if(e.online){onlineEntries.push(e);totalOnline+=e.total;}
+    else if(isCashName){cashEntries.push(e);totalCash+=e.total;}
+    e.items.forEach(function(it){catTotals[it.category]=(catTotals[it.category]||0)+it.qty;});
+  });
+  var expenses=expRows.filter(function(r){return r.desc&&parseFloat(r.amt)>0;});
+  var expTotal=expenses.reduce(function(s,r){return s+(parseFloat(r.amt)||0);},0);
+  var leftItems=[];
+  cashEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>CASH</span><span>'+fmt(e.total)+' (Cash)</span></div>');});
+  onlineEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>'+e.provider+(e.sender?(' '+escHtml(e.sender)):'')+'</span><span>'+fmt(e.total)+'</span></div>');});
+  var rightItems=[];
+  expenses.forEach(function(r){rightItems.push('<div class="dbs-row"><span>'+escHtml(r.desc)+'</span><span>'+fmt(parseFloat(r.amt)||0)+'</span></div>');});
+  var catRows='';
+  Object.keys(catTotals).sort().forEach(function(c){var q=catTotals[c];if(q>0)catRows+='<div class="dbs-catrow"><span>'+c+'</span><span>'+(q%1===0?q:q.toFixed(2))+' kg</span></div>';});
+  if(!catRows)catRows='<div class="dbs-catrow" style="color:#888">No sales today</div>';
+  var needsPage2=leftItems.length>DBS_LEFT_LAST||rightItems.length>DBS_RIGHT_LAST;
+  var leftChunks=needsPage2?[leftItems.slice(0,DBS_FULL),leftItems.slice(DBS_FULL)]:[leftItems];
+  var rightChunks=needsPage2?[rightItems.slice(0,DBS_FULL),rightItems.slice(DBS_FULL)]:[rightItems];
+  var pageCount=leftChunks.length;
+  var pages='';
+  for(var p=0;p<pageCount;p++){
+    var isLast=(p===pageCount-1);
+    var leftHtml=leftChunks[p].join('')||(p===0&&!leftItems.length?'<div class="dbs-row" style="color:#888">None today</div>':'');
+    var rightHtml=rightChunks[p].join('')||(p===0&&!rightItems.length?'<div class="dbs-row" style="color:#888">None today</div>':'');
+    var leftBottom=isLast?('<div class="dbs-bottom"><div class="dbs-tot"><span>Total Cash</span><span>'+fmt(totalCash)+'</span></div><div class="dbs-tot"><span>Total Online</span><span>'+fmt(totalOnline)+'</span></div></div>'):'';
+    var rightBottom=isLast?('<div class="dbs-tot"><span>Total Expenses</span><span>'+fmt(expTotal)+'</span></div><div class="dbs-bottom"><div class="dbs-h">Category Qty Sold</div>'+catRows+'</div>'):'';
+    pages+='<div class="dbs-doc">'
+      +'<div class="dbs-shri">||श्री||</div>'
+      +'<div class="dbs-rule1"></div>'
+      +'<div class="dbs-meta"><span class="dbs-hindi">श्री रानी सती दादी जी'+(p>0?' (contd.)':'')+'</span><span>'+todayStr()+'</span></div>'
+      +'<div class="dbs-grid">'
+        +'<div class="dbs-gcol"><div class="dbs-h">Cash / Online</div>'+leftHtml+leftBottom+'</div>'
+        +'<div class="dbs-gcol"><div class="dbs-h">Expenses</div>'+rightHtml+rightBottom+'</div>'
+      +'</div>'
+    +'</div>';
+  }
+  document.getElementById('preview-wrap').innerHTML=pages;
+  document.getElementById('preview-note').innerHTML='✓ Ready · <strong>Generates a real A6-size PDF · Share sheet → Print</strong>';
+  go(4);
+}
 function addRow(){rows.push({q:'',name:'',p:'',r:''});renderRows();}
 function renderRows(){
   const tb=document.getElementById('tbody');tb.innerHTML='';
-  rows.forEach((row,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td><input type="number" min="0" step="any" value="${row.q}" placeholder="0" oninput="upd(${i},'q',this.value)"></td><td><input type="text" value="${row.name}" placeholder="Item" oninput="upd(${i},'name',this.value)"></td><td><input type="number" min="0" step="1" value="${row.p}" placeholder="0" oninput="upd(${i},'p',this.value)"></td><td><input type="number" min="0" step="any" value="${row.r}" placeholder="0.00" oninput="upd(${i},'r',this.value)"></td><td class="amt">${calcAmt(row)}</td><td><button class="rm" onclick="delRow(${i})">×</button></td>`;tb.appendChild(tr);});recalc();
+  rows.forEach((row,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td><input type="number" min="0" step="any" value="${row.q}" placeholder="0" oninput="upd(${i},'q',this.value)"></td><td><input type="text" value="${row.name}" placeholder="Item" list="stock-items" oninput="upd(${i},'name',this.value)"></td><td><input type="number" min="0" step="1" value="${row.p}" placeholder="0" oninput="upd(${i},'p',this.value)"></td><td><input type="number" min="0" step="any" value="${row.r}" placeholder="0.00" oninput="upd(${i},'r',this.value)"></td><td class="amt">${calcAmt(row)}</td><td><button class="rm" onclick="delRow(${i})">×</button></td>`;tb.appendChild(tr);});recalc();
 }
 function calcAmt(row){const q=parseFloat(row.q)||0,r=parseFloat(row.r)||0,a=q*r;return a>0?''+Math.round(a).toLocaleString('en-IN'):'—';}
 function upd(i,f,v){rows[i][f]=v;const t=document.getElementById('tbody').children[i]?.children;if(t)t[4].textContent=calcAmt(rows[i]);recalc();}
 function delRow(i){rows.splice(i,1);if(!rows.length)rows.push({q:'',name:'',p:'',r:''});renderRows();}
 function gc(id){return parseFloat(document.getElementById(id).value)||0;}
 function fmt(v){return''+Math.round(v).toLocaleString('en-IN');}
+function toggleOnline(){
+  var on=document.getElementById('f-online').checked;
+  document.getElementById('online-block').style.display=on?'':'none';
+  recalc();
+}
 function recalc(){
   let sub=0;rows.forEach(r=>{sub+=(parseFloat(r.q)||0)*(parseFloat(r.r)||0);});
-  const lab=gc('f-labour'),weigh=gc('f-weigh'),freight=gc('f-freight'),others=gc('f-others'),tot=sub+lab+weigh+freight+others;
-  document.getElementById('d-sub').textContent=fmt(sub);document.getElementById('d-lab').textContent=fmt(lab);document.getElementById('d-weigh').textContent=fmt(weigh);document.getElementById('d-freight').textContent=fmt(freight);document.getElementById('d-others').textContent=fmt(others);document.getElementById('d-tot').textContent=fmt(tot);
+  const lab=gc('f-labour'),weigh=gc('f-weigh'),freight=gc('f-freight'),others=gc('f-others');
+  const online=document.getElementById('f-online').checked;
+  const upi=online?gc('f-upi'):0;
+  const tot=sub+lab+weigh+freight+others+upi;
+  document.getElementById('d-sub').textContent=fmt(sub);document.getElementById('d-lab').textContent=fmt(lab);document.getElementById('d-weigh').textContent=fmt(weigh);document.getElementById('d-freight').textContent=fmt(freight);document.getElementById('d-others').textContent=fmt(others);
+  document.getElementById('d-upi-row').style.display=(online&&upi>0)?'':'none';
+  document.getElementById('d-upi').textContent=fmt(upi);
+  document.getElementById('d-tot').textContent=fmt(tot);
 }
 function tableRows(c){return c.map(r=>{const q=parseFloat(r.q)||0,rt=parseFloat(r.r)||0,a=q*rt;return`<tr><td class="c">${r.q||''}</td><td class="lbl">${r.name||''}</td><td class="c">${r.p||''}</td><td class="r">${rt?''+rt:''}</td><td class="r">${a>0?''+Math.round(a).toLocaleString('en-IN'):''}</td></tr>`;}).join('');}
 function colgroup(){return`<colgroup><col style="width:17%"><col style="width:36%"><col style="width:11%"><col style="width:17%"><col style="width:19%"></colgroup>`;}
 function thead(){return`<thead><tr><th>Qty.</th><th>Particulars</th><th>Pcs.</th><th>Rate</th><th>Amount</th></tr></thead>`;}
 function emptyRows(n){let r='';for(let i=0;i<n;i++)r+=`<tr class="empty"><td></td><td></td><td></td><td></td><td></td></tr>`;return r;}
-function totalsBlock(sub,tq,lab,weigh,freight,others,tot){const qs=tq%1===0?tq:tq.toFixed(2);let r=`<tr class="sep"><td class="c">${qs}</td><td style="border-right:0.75px solid #000"></td><td class="lbl" colspan="2" style="font-weight:bold">Subtotal</td><td class="r">${fmt(sub)}</td></tr>`;[['Labour',lab],['Weighment',weigh],['Freight',freight],['Others',others]].forEach(([l,v])=>{if(v>0)r+=`<tr class="charge"><td></td><td style="border-right:0.75px solid #000"></td><td class="lbl" colspan="2">${l}</td><td class="r">${fmt(v)}</td></tr>`;});r+=`<tr class="grand"><td colspan="4" style="text-align:right;padding-right:2mm">TOTAL</td><td class="r">${fmt(tot)}</td></tr>`;return r;}
+function totalsBlock(sub,tq,lab,weigh,freight,others,upi,tot,payNote){const qs=tq%1===0?tq:tq.toFixed(2);let r=`<tr class="sep"><td class="c">${qs}</td><td style="border-right:0.75px solid #000"></td><td class="lbl" colspan="2" style="font-weight:bold">Subtotal</td><td class="r">${fmt(sub)}</td></tr>`;[['Labour',lab],['Weighment',weigh],['Freight',freight],['Others',others],['UPI Charges',upi]].forEach(([l,v])=>{if(v>0)r+=`<tr class="charge"><td></td><td style="border-right:0.75px solid #000"></td><td class="lbl" colspan="2">${l}</td><td class="r">${fmt(v)}</td></tr>`;});r+=`<tr class="grand"><td colspan="4" style="text-align:right;padding-right:2mm">TOTAL</td><td class="r">${fmt(tot)}</td></tr>`;if(payNote)r+=`<tr><td colspan="5" style="text-align:left;font-size:7pt;font-weight:normal;padding:0.5mm 1mm;border:0.75px solid #000">${payNote}</td></tr>`;return r;}
 const FIRST_TOTAL=19;
-function buildFirstSlip(ic,isLast,sub,tq,lab,weigh,freight,others,tot,meta){const{name,date,dist,lorry}=meta;let tbody=tableRows(ic);const tc=isLast?2+[lab,weigh,freight,others].filter(v=>v>0).length:0;tbody+=emptyRows(Math.max(0,FIRST_TOTAL-ic.length-tc));if(isLast)tbody+=totalsBlock(sub,tq,lab,weigh,freight,others,tot);return`<div class="doc"><div class="d-hdr"><div class="d-shri">||श्री||</div><div class="d-title">QUOTATION</div><div class="d-valid">Valid for 2 Hours</div></div><div class="d-meta"><span>M/s.&nbsp;<b style="font-size:11pt">${name}</b></span><span>Dt.&nbsp;<b style="font-size:11pt">${date}</b></span></div><div class="d-meta"><span>Dist.&nbsp;<b style="font-size:11pt">${dist}</b></span><span style="margin-right:12mm">Lorry No.&nbsp;<b style="font-size:11pt">${lorry}</b></span></div><table class="d-tbl">${colgroup()}${thead()}<tbody>${tbody}</tbody></table></div>`;}
+function buildFirstSlip(ic,isLast,sub,tq,lab,weigh,freight,others,upi,tot,payNote,meta){const{name,date,dist,lorry}=meta;let tbody=tableRows(ic);const tc=isLast?2+[lab,weigh,freight,others,upi].filter(v=>v>0).length+(payNote?1:0):0;tbody+=emptyRows(Math.max(0,FIRST_TOTAL-ic.length-tc));if(isLast)tbody+=totalsBlock(sub,tq,lab,weigh,freight,others,upi,tot,payNote);return`<div class="doc"><div class="d-hdr"><div class="d-shri">||श्री||</div><div class="d-title">QUOTATION</div><div class="d-valid">Valid for 2 Hours</div></div><div class="d-meta"><span>M/s.&nbsp;<b style="font-size:11pt">${name}</b></span><span>Dt.&nbsp;<b style="font-size:11pt">${date}</b></span></div><div class="d-meta"><span>Dist.&nbsp;<b style="font-size:11pt">${dist}</b></span><span style="margin-right:12mm">Lorry No.&nbsp;<b style="font-size:11pt">${lorry}</b></span></div><table class="d-tbl">${colgroup()}${thead()}<tbody>${tbody}</tbody></table></div>`;}
 const CONT_TOTAL=19;
-function buildContSlip(ic,isLast,sub,tq,lab,weigh,freight,others,tot,meta){const{name}=meta;let tbody=tableRows(ic);const tc=isLast?2+[lab,weigh,freight,others].filter(v=>v>0).length:0;tbody+=emptyRows(Math.max(0,CONT_TOTAL-ic.length-tc));if(isLast)tbody+=totalsBlock(sub,tq,lab,weigh,freight,others,tot);return`<div class="doc-cont"><div style="font-family:'Times New Roman',serif;font-size:9pt;border-bottom:0.5px solid #000;padding-bottom:0.8mm;margin-bottom:1mm;line-height:1.4">M/s.&nbsp;<b style="font-size:10pt">${name}</b>&nbsp;<span style="float:right;font-size:8.5pt;color:#444">(contd.)</span></div><table class="d-tbl">${colgroup()}${thead()}<tbody>${tbody}</tbody></table></div>`;}
-function generate(){
+function buildContSlip(ic,isLast,sub,tq,lab,weigh,freight,others,upi,tot,payNote,meta){const{name}=meta;let tbody=tableRows(ic);const tc=isLast?2+[lab,weigh,freight,others,upi].filter(v=>v>0).length+(payNote?1:0):0;tbody+=emptyRows(Math.max(0,CONT_TOTAL-ic.length-tc));if(isLast)tbody+=totalsBlock(sub,tq,lab,weigh,freight,others,upi,tot,payNote);return`<div class="doc-cont"><div style="font-family:'Times New Roman',serif;font-size:9pt;border-bottom:0.5px solid #000;padding-bottom:0.8mm;margin-bottom:1mm;line-height:1.4">M/s.&nbsp;<b style="font-size:10pt">${name}</b>&nbsp;<span style="float:right;font-size:8.5pt;color:#444">(contd.)</span></div><table class="d-tbl">${colgroup()}${thead()}<tbody>${tbody}</tbody></table></div>`;}
+function getChittiCalc(){
   let sub=0,tq=0;rows.forEach(r=>{const q=parseFloat(r.q)||0,rt=parseFloat(r.r)||0;sub+=q*rt;tq+=q;});
-  const lab=gc('f-labour'),weigh=gc('f-weigh'),freight=gc('f-freight'),others=gc('f-others'),tot=sub+lab+weigh+freight+others;
-  const meta={name:document.getElementById('f-name').value||'_______________________',date:document.getElementById('f-date').value||'________',dist:document.getElementById('f-dist').value||'___________',lorry:document.getElementById('f-lorry').value||'___________'};
-  const cc=[lab,weigh,freight,others].filter(v=>v>0).length,tr2=2+cc,mp1=FIRST_TOTAL-tr2;
-  const chunks=rows.length<=mp1?[{items:rows,cont:false}]:[{items:rows.slice(0,mp1),cont:false},{items:rows.slice(mp1),cont:true}];
-  let ph='';chunks.forEach((c,idx)=>{const il=(idx===chunks.length-1);ph+=c.cont?buildContSlip(c.items,il,sub,tq,lab,weigh,freight,others,tot,meta):buildFirstSlip(c.items,il,sub,tq,lab,weigh,freight,others,tot,meta);});
-  document.getElementById('preview-wrap').innerHTML=ph;
+  const lab=gc('f-labour'),weigh=gc('f-weigh'),freight=gc('f-freight'),others=gc('f-others');
+  const online=document.getElementById('f-online').checked;
+  const provider=document.getElementById('f-provider').value;
+  const sender=document.getElementById('f-sender').value.trim();
+  const upi=online?gc('f-upi'):0;
+  const tot=sub+lab+weigh+freight+others+upi;
+  const payNote=online?escHtml(provider+(sender?(': '+sender):'')):'';
+  const rawName=document.getElementById('f-name').value.trim();
+  const meta={name:rawName||'_______________________',date:document.getElementById('f-date').value||'________',dist:document.getElementById('f-dist').value||'___________',lorry:document.getElementById('f-lorry').value||'___________'};
+  return{sub,tq,lab,weigh,freight,others,online,provider,sender,upi,tot,payNote,meta,rawName};
+}
+function buildChittiPages(rowsData,c){
+  const cc=[c.lab,c.weigh,c.freight,c.others,c.upi].filter(v=>v>0).length,tr2=2+cc+(c.payNote?1:0),mp1=FIRST_TOTAL-tr2;
+  const chunks=rowsData.length<=mp1?[{items:rowsData,cont:false}]:[{items:rowsData.slice(0,mp1),cont:false},{items:rowsData.slice(mp1),cont:true}];
+  let ph='';chunks.forEach((ch,idx)=>{const il=(idx===chunks.length-1);ph+=ch.cont?buildContSlip(ch.items,il,c.sub,c.tq,c.lab,c.weigh,c.freight,c.others,c.upi,c.tot,c.payNote,c.meta):buildFirstSlip(ch.items,il,c.sub,c.tq,c.lab,c.weigh,c.freight,c.others,c.upi,c.tot,c.payNote,c.meta);});
+  return ph;
+}
+function generate(){
+  const c=getChittiCalc();
+  document.getElementById('preview-wrap').innerHTML=buildChittiPages(rows,c);
+  document.getElementById('preview-note').innerHTML='✓ Ready · <strong>Generates a real A6-size PDF · Share sheet → Print</strong>';
   go(4);
+}
+function finalizeChitti(){
+  purgeStaleLedger();
+  const c=getChittiCalc();
+  const hasItems=rows.some(r=>(parseFloat(r.q)||0)>0&&(r.name||'').trim());
+  if(!hasItems||c.tot<=0){alert('Add at least one item before finalizing.');return;}
+  const catItems=rows.filter(r=>r.name&&(parseFloat(r.q)||0)>0&&ITEM_CATEGORY[(r.name||'').trim()]).map(r=>({category:ITEM_CATEGORY[(r.name||'').trim()],qty:parseFloat(r.q)||0}));
+  dailyLedger.push({
+    customerName:c.rawName,total:c.tot,online:c.online,provider:c.provider,sender:c.sender,items:catItems,
+    fullRows:rows.map(function(r){return{q:r.q,name:r.name,p:r.p,r:r.r};}),
+    charges:{lab:c.lab,weigh:c.weigh,freight:c.freight,others:c.others,upi:c.upi},
+    payNote:c.payNote,meta:c.meta,sub:c.sub,tq:c.tq,ts:Date.now()
+  });
+  const btn=document.getElementById('final-btn');
+  const origText=btn.textContent;
+  btn.textContent='✓ Finalized';btn.disabled=true;
+  setTimeout(function(){btn.textContent=origText;btn.disabled=false;},1200);
+  rows=[];document.getElementById('tbody').innerHTML='';addRow();
+  ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others','f-sender','f-upi'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('f-online').checked=false;
+  document.getElementById('f-provider').value='Gpay';
+  document.getElementById('online-block').style.display='none';
+  recalc();
+}
+var previewMode='live';
+function goInvoiceList(){
+  purgeStaleLedger();
+  renderInvoiceList();
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('s11').classList.add('active');
+  window.scrollTo(0,0);
+}
+function renderInvoiceList(){
+  var wrap=document.getElementById('inv-list');
+  if(!dailyLedger.length){wrap.innerHTML='<div style="color:#888;font-size:13px;padding:10px 0">No invoices finalized today.</div>';return;}
+  wrap.innerHTML=dailyLedger.map(function(e,i){
+    var tag=e.online?e.provider:((e.customerName||'').trim().toUpperCase()==='CASH'?'Cash':'Credit');
+    return '<div class="inv-row">'
+      +'<div class="inv-main" onclick="previewInvoice('+i+')"><span class="inv-name">'+escHtml(e.customerName||'—')+' <span class="inv-tag">· '+tag+'</span></span><span class="inv-amt">₹'+fmt(e.total)+'</span></div>'
+      +'<button class="inv-del" onclick="event.stopPropagation();deleteInvoice('+i+')" title="Delete invoice">×</button>'
+    +'</div>';
+  }).join('');
+}
+function deleteInvoice(idx){
+  var e=dailyLedger[idx];
+  if(!e)return;
+  if(!confirm('Delete invoice for "'+(e.customerName||'—')+'" (₹'+fmt(e.total)+')? This cannot be undone.'))return;
+  dailyLedger.splice(idx,1);
+  renderInvoiceList();
+}
+function previewInvoice(idx){
+  purgeStaleLedger();
+  var e=dailyLedger[idx];
+  if(!e)return;
+  dtype='Chitti';
+  previewMode='archive';
+  var c={sub:e.sub,tq:e.tq,lab:e.charges.lab,weigh:e.charges.weigh,freight:e.charges.freight,others:e.charges.others,upi:e.charges.upi,tot:e.total,payNote:e.payNote,meta:e.meta};
+  document.getElementById('preview-wrap').innerHTML=buildChittiPages(e.fullRows,c);
+  document.getElementById('preview-note').innerHTML='✓ Ready · <strong>Generates a real A6-size PDF · Share sheet → Print</strong>';
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('s4').classList.add('active');
+  window.scrollTo(0,0);
+}
+function editOrBack(){
+  if(previewMode==='archive'){previewMode='live';goInvoiceList();}
+  else go(3);
 }
 
 function pickFormat(f,el){qFormat=f;document.querySelectorAll('#s9 .type-btn').forEach(function(b){b.classList.remove('on');});el.classList.add('on');document.getElementById('n9').disabled=false;}
@@ -274,7 +484,7 @@ function qRender(){
   qRows.forEach(function(r,i){
     var q=qQty(r);
     var tr=document.createElement('tr');
-    tr.innerHTML='<td><input type="text" value="'+r.particulars+'" placeholder="MS TMT BAR 12MM" oninput="qUpd('+i+',\'particulars\',this.value)"></td>'
+    tr.innerHTML='<td><input type="text" value="'+r.particulars+'" placeholder="MS TMT BAR 12MM" list="stock-items" oninput="qUpd('+i+',\'particulars\',this.value)"></td>'
       +'<td><input type="number" min="0" step="any" value="'+r.wtpc+'" placeholder="0" oninput="qUpd('+i+',\'wtpc\',this.value)"></td>'
       +'<td><input type="number" min="0" step="1" value="'+r.pieces+'" placeholder="0" oninput="qUpd('+i+',\'pieces\',this.value)"></td>'
       +'<td class="amt">'+(q>0?(q%1===0?q:q.toFixed(2)):'—')+'</td>'
@@ -370,16 +580,17 @@ function qOpen(){
 function mmToPt(mm){return mm*72/25.4;}
 var CHITTI_PDF_W=mmToPt(105),CHITTI_PDF_H=mmToPt(148.5);
 function jpegBinaryFromDataUrl(dataUrl){return atob(dataUrl.split(',')[1]);}
-function buildChittiPdf(pages){
+function buildChittiPdf(pages,dims){
   var n=pages.length;
   var objs=new Array(3+3*n);
   objs[1]='<< /Type /Catalog /Pages 2 0 R >>';
   var kids=[];for(var i=0;i<n;i++)kids.push((3+3*i)+' 0 R');
   objs[2]='<< /Type /Pages /Kids ['+kids.join(' ')+'] /Count '+n+' >>';
   for(var i=0;i<n;i++){
+    var d=Array.isArray(dims)?dims[i]:(dims||{w:CHITTI_PDF_W,h:CHITTI_PDF_H});
     var pageObj=3+3*i,contentObj=4+3*i,imgObj=5+3*i;
-    objs[pageObj]='<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+CHITTI_PDF_W.toFixed(2)+' '+CHITTI_PDF_H.toFixed(2)+'] /Resources << /XObject << /Im0 '+imgObj+' 0 R >> >> /Contents '+contentObj+' 0 R >>';
-    objs[contentObj]={stream:'q '+CHITTI_PDF_W.toFixed(2)+' 0 0 '+CHITTI_PDF_H.toFixed(2)+' 0 0 cm /Im0 Do Q'};
+    objs[pageObj]='<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+d.w.toFixed(2)+' '+d.h.toFixed(2)+'] /Resources << /XObject << /Im0 '+imgObj+' 0 R >> >> /Contents '+contentObj+' 0 R >>';
+    objs[contentObj]={stream:'q '+d.w.toFixed(2)+' 0 0 '+d.h.toFixed(2)+' 0 0 cm /Im0 Do Q'};
     objs[imgObj]={image:pages[i]};
   }
   var out='%PDF-1.3\n';
@@ -399,8 +610,14 @@ function buildChittiPdf(pages){
 }
 function binToBlob(bin,type){var buf=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i)&0xFF;return new Blob([buf],{type:type});}
 var chittiBlobUrl=null;
+function openLoadingTab(){
+  var w=window.open('','_blank');
+  if(w)w.document.write('<title>Generating…</title><body style="font-family:sans-serif;padding:40px;text-align:center;color:#666">Generating your PDF…</body>');
+  return w;
+}
 async function printChitti(){
   var btn=document.getElementById('chitti-print-btn'),origText=btn.textContent;
+  var w=openLoadingTab();
   btn.textContent='Generating…';btn.disabled=true;
   try{
     var docs=document.querySelectorAll('#preview-wrap > .doc, #preview-wrap > .doc-cont');
@@ -409,19 +626,43 @@ async function printChitti(){
       var canvas=await html2canvas(docs[i],{scale:3,backgroundColor:'#ffffff'});
       pages.push({bin:jpegBinaryFromDataUrl(canvas.toDataURL('image/jpeg',0.92)),w:canvas.width,h:canvas.height});
     }
-    var pdf=buildChittiPdf(pages);
+    var pdf=buildChittiPdf(pages,{w:CHITTI_PDF_W,h:CHITTI_PDF_H});
     if(chittiBlobUrl)URL.revokeObjectURL(chittiBlobUrl);
     chittiBlobUrl=URL.createObjectURL(binToBlob(pdf,'application/pdf'));
-    var w=window.open(chittiBlobUrl,'_blank');
-    if(!w){var a=document.createElement('a');a.href=chittiBlobUrl;a.download='Chitti.pdf';document.body.appendChild(a);a.click();document.body.removeChild(a);}
-  }catch(err){alert('Could not generate PDF: '+err.message);}
+    if(w&&!w.closed){w.location=chittiBlobUrl;}
+    else{var a=document.createElement('a');a.href=chittiBlobUrl;a.download='Chitti.pdf';document.body.appendChild(a);a.click();document.body.removeChild(a);}
+  }catch(err){if(w&&!w.closed)w.close();alert('Could not generate PDF: '+err.message);}
+  btn.textContent=origText;btn.disabled=false;
+}
+var dbsBlobUrl=null;
+function printDoc(){dtype==='DailyBalance'?printDbs():printChitti();}
+async function printDbs(){
+  var btn=document.getElementById('chitti-print-btn'),origText=btn.textContent;
+  var w=openLoadingTab();
+  btn.textContent='Generating…';btn.disabled=true;
+  try{
+    var docs=document.querySelectorAll('#preview-wrap > .dbs-doc');
+    var pages=[];
+    for(var i=0;i<docs.length;i++){
+      var canvas=await html2canvas(docs[i],{scale:3,backgroundColor:'#ffffff'});
+      pages.push({bin:jpegBinaryFromDataUrl(canvas.toDataURL('image/jpeg',0.92)),w:canvas.width,h:canvas.height});
+    }
+    var pdf=buildChittiPdf(pages,{w:CHITTI_PDF_W,h:CHITTI_PDF_H});
+    if(dbsBlobUrl)URL.revokeObjectURL(dbsBlobUrl);
+    dbsBlobUrl=URL.createObjectURL(binToBlob(pdf,'application/pdf'));
+    if(w&&!w.closed){w.location=dbsBlobUrl;}
+    else{var a=document.createElement('a');a.href=dbsBlobUrl;a.download='Daily-Balance-Sheet.pdf';document.body.appendChild(a);a.click();document.body.removeChild(a);}
+  }catch(err){if(w&&!w.closed)w.close();alert('Could not generate PDF: '+err.message);}
   btn.textContent=origText;btn.disabled=false;
 }
 function reset(){
-  rows=[];dtype='';qRows=[];qFormat='';
+  rows=[];dtype='';qRows=[];qFormat='';previewMode='live';
   document.getElementById('tbody').innerHTML='';
-  ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others'].forEach(function(id){document.getElementById(id).value='';});
+  ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others','f-sender','f-upi'].forEach(function(id){document.getElementById(id).value='';});
   ['q-to','q-date','q-addr','q-gstin','q-subject','q-kanta','q-transport','q-unload','q-note'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('f-online').checked=false;
+  document.getElementById('f-provider').value='Gpay';
+  document.getElementById('online-block').style.display='none';
   document.querySelectorAll('.type-btn').forEach(function(b){b.classList.remove('on');});
   document.getElementById('n2').disabled=true;
   document.getElementById('n9').disabled=true;
@@ -443,6 +684,7 @@ function tryUnlock(){
   }
 }
 function showMenu(){
+  purgeStaleLedger();
   document.getElementById('lock').classList.remove('active');
   document.getElementById('s2').classList.add('active');
 }
