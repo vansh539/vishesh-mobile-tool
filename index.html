@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="VS Mobile">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAARGVYSWZNTQAqAAAACAABh2kABAAAAAEAAAAaAAAAAAADoAEAAwAAAAEAAQAAoAIABAAAAAEAAAC0oAMABAAAAAEAAAC0AAAAAFbVlnkAAAGdaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA2LjAuMCI+CiAgIDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+CiAgICAgIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICAgICAgICAgIHhtbG5zOmV4aWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vZXhpZi8xLjAvIj4KICAgICAgICAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjUxMjwvZXhpZjpQaXhlbFhEaW1lbnNpb24+CiAgICAgICAgIDxleGlmOlBpeGVsWURpbWVuc2lvbj41MTI8L2V4aWY6UGl4ZWxZRGltZW5zaW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KuC9IVwAAF8NJREFUeAHtnQeQFEUXx/tARQXFgCh6KGYxYc5iqWVWMIABBTGXihkVFRMUqCUihqIMKOacQxnKTBlKzAlzBkExgIqR49tf+/XVstzube+86e2dfa9qb/ZmZ7p7/v2f169fv+5uaGxsnGNyMruJvyqKQG0i0LbNf+WejwP/LN2hjWnTUJsPo6WubwSacip5+qwmq5TnQzND5kt7tTcd2zWYNv9nen1DpE9fKwg05fg746855qSHfjdTZjYZq6HRzB0XbDD/5n6c9N1so4q6VqqzvsuJrdy9c1vLXWddWEIDCycmfT/bnJxjurNH6hsuffrYEcC6GJ2zLHp0adtc1GZCcwbNDJmV0M346JfIESi0JtRijrzCtHh+CCih/fDSqyNHQAkdeQVp8fwQUEL74aVXR46AEjryCtLi+SGghPbDS6+OHAEldOQVpMXzQ0AJ7YeXXh05AkroyCtIi+eHgBLaDy+9OnIElNCRV5AWzw8BJbQfXnp15AgooSOvIC2eHwJKaD+89OrIEVBCR15BWjw/BJTQfnjp1ZEjoISOvIK0eH4IKKH98NKrI0dACR15BWnx/BBQQvvhpVdHjoASOvIK0uL5IaCE9sNLr44cASV05BWkxfNDQAnth5deHTkCSujIK0iL54eAEtoPL706cgSU0JFXkBbPDwEltB9eenXkCCihI68gLZ4fAkpoP7z06sgRUEJHXkFaPD8ElNB+eOnVkSOghI68grR4fgjMtYK/3616dbUQmDNnjvnnn39MEzvmJJQFFlggt1FUdvSaEjohIULfDpnbtWtntthiC9OhQwdLRgjZ0NDQ/CksE/cg+Ue+80JMnDjR/Pjjj5khtRK6sPYj//+vv/4yQ4YMMYMGDRIpKWmNGzfOLLTQQiLpVTuR7LQ11UYyQP6YGWuuuaYZMGCASG4ff/yxefTRR63GF0kwgkSU0BFUQjlFwERo27atOfPMM82iiy5azi0lr8HcGDFihJk6dWpmzA0eWAldstrj+RFTo2/fvmannXYSKdStt95qHn/8cbPggguKpBdLIkroWGqiRDlmz55tlltuOTN48OASV5X/0/Tp082YMWMypZnd0yuhHRIRH//++29z7LHHmsbGRpFSjho1ynz99ddmvvmy5xNQQotQJL1EIPM222xj+vfvL5LJSy+9ZDA3cP1lUZTQEdcqHUGId8YZZ4jYur///rsZOXKkwR7Hb51FUUJHXKt//vmn6devn9loo41ESom/+eWXX86sdgYkJbQIVeQTwee88sori3UEP//8c3PttddmmsxKaHkeiqSIqcFw9umnn246deqUOE18zsOGDTPTpk2zvuzECUacgGroCCsHG7dPnz5m7733Findk08+aZ544onMa2fAUkKLUEYuEbRz+/btzWGHHSaSKD7n4cOH27Sy2hHMB0oJnY9GBN/Rzocccojp0aOHSGmuueYa89FHH2XS59wSQErollCp0jk6gquttpo54YQTREqARwPPRlZ9zi2BpIRuCZUqnMPUINiezttiiy2WuAT//vuvueiii8yvv/6aySHuYgApoYshE/j8H3/8YXr37m223357kZzvuOMO63POWvBR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">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAARGVYSWZNTQAqAAAACAABh2kABAAAAAEAAAAaAAAAAAADoAEAAwAAAAEAAQAAoAIABAAAAAEAAAC0oAMABAAAAAEAAAC0AAAAAFbVlnkAAAGdaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA2LjAuMCI+CiAgIDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+CiAgICAgIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICAgICAgICAgIHhtbG5zOmV4aWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vZXhpZi8xLjAvIj4KICAgICAgICAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjUxMjwvZXhpZjpQaXhlbFhEaW1lbnNpb24+CiAgICAgICAgIDxleGlmOlBpeGVsWURpbWVuc2lvbj41MTI8L2V4aWY6UGl4ZWxZRGltZW5zaW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KuC9IVwAAF8NJREFUeAHtnQeQFEUXx/tARQXFgCh6KGYxYc5iqWVWMIABBTGXihkVFRMUqCUihqIMKOacQxnKTBlKzAlzBkExgIqR49tf+/XVstzube+86e2dfa9qb/ZmZ7p7/v2f169fv+5uaGxsnGNyMruJvyqKQG0i0LbNf+WejwP/LN2hjWnTUJsPo6WubwSacip5+qwmq5TnQzND5kt7tTcd2zWYNv9nen1DpE9fKwg05fg746855qSHfjdTZjYZq6HRzB0XbDD/5n6c9N1so4q6VqqzvsuJrdy9c1vLXWddWEIDCycmfT/bnJxjurNH6hsuffrYEcC6GJ2zLHp0adtc1GZCcwbNDJmV0M346JfIESi0JtRijrzCtHh+CCih/fDSqyNHQAkdeQVp8fwQUEL74aVXR46AEjryCtLi+SGghPbDS6+OHAEldOQVpMXzQ0AJ7YeXXh05AkroyCtIi+eHgBLaDy+9OnIElNCRV5AWzw8BJbQfXnp15AgooSOvIC2eHwJKaD+89OrIEVBCR15BWjw/BJTQfnjp1ZEjoISOvIK0eH4IKKH98NKrI0dACR15BWnx/BBQQvvhpVdHjoASOvIK0uL5IaCE9sNLr44cASV05BWkxfNDQAnth5deHTkCSujIK0iL54eAEtoPL706cgSU0JFXkBbPDwEltB9eenXkCCihI68gLZ4fAkpoP7z06sgRUEJHXkFaPD8ElNB+eOnVkSOghI68grR4fgjMtYK/3616dbUQmDNnjvnnn39MEzvmJJQFFlggt1FUdvSaEjohIULfDpnbtWtntthiC9OhQwdLRgjZ0NDQ/CksE/cg+Ue+80JMnDjR/Pjjj5khtRK6sPYj//+vv/4yQ4YMMYMGDRIpKWmNGzfOLLTQQiLpVTuR7LQ11UYyQP6YGWuuuaYZMGCASG4ff/yxefTRR63GF0kwgkSU0BFUQjlFwERo27atOfPMM82iiy5azi0lr8HcGDFihJk6dWpmzA0eWAldstrj+RFTo2/fvmannXYSKdStt95qHn/8cbPggguKpBdLIkroWGqiRDlmz55tlltuOTN48OASV5X/0/Tp082YMWMypZnd0yuhHRIRH//++29z7LHHmsbGRpFSjho1ynz99ddmvvmy5xNQQotQJL1EIPM222xj+vfvL5LJSy+9ZDA3cP1lUZTQEdcqHUGId8YZZ4jYur///rsZOXKkwR7Hb51FUUJHXKt//vmn6devn9loo41ESom/+eWXX86sdgYkJbQIVeQTwee88sori3UEP//8c3PttddmmsxKaHkeiqSIqcFw9umnn246deqUOE18zsOGDTPTpk2zvuzECUacgGroCCsHG7dPnz5m7733Findk08+aZ544onMa2fAUkKLUEYuEbRz+/btzWGHHSaSKD7n4cOH27Sy2hHMB0oJnY9GBN/Rzocccojp0aOHSGmuueYa89FHH2XS59wSQErollCp0jk6gquttpo54YQTREqARwPPRlZ9zi2BpIRuCZUqnMPUINiezttiiy2WuAT//vuvueiii8yvv/6aySHuYgApoYshE/j8H3/8YXr37m223357kZzvuOMO63POWvBR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">
+<title>Vishesh Steels Mobile</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f4f4f0;min-height:100vh;padding:1.5rem 1rem}
+.wrap{max-width:680px;margin:0 auto}
+.step{display:none}.step.active{display:block}
+.app-title{font-size:20px;font-weight:600;color:#1a2a6e;margin-bottom:4px;text-align:center}
+.app-sub{font-size:13px;color:#888;text-align:center;margin-bottom:1.25rem}
+.card{background:#fff;border:1px solid #e2e2e2;border-radius:12px;padding:1.25rem;margin-bottom:1rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+h2{font-size:16px;font-weight:600;color:#111;margin-bottom:1rem}
+h3{font-size:12px;font-weight:600;color:#888;margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.05em}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.type-btn{background:#f7f7f5;border:1.5px solid #e2e2e2;border-radius:8px;padding:18px 14px;text-align:center;cursor:pointer;width:100%}
+.type-btn:hover{border-color:#aaa}.type-btn.on{border-color:#1a2a6e;background:#f8f8ff}
+.type-btn .tl{font-size:15px;font-weight:600;color:#111}.type-btn.on .tl{color:#1a2a6e}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.fg label{font-size:12px;color:#666;font-weight:500}
+.fg input,.fg textarea{width:100%;padding:9px 11px;border:1.5px solid #e2e2e2;border-radius:7px;font-size:14px;background:#fff;color:#111;font-family:inherit;resize:vertical}
+.fg input:focus,.fg textarea:focus{outline:none;border-color:#1a2a6e}
+.itbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px}
+.itbl th{font-size:11px;font-weight:600;color:#888;padding:6px 5px;border-bottom:1.5px solid #e9e9e9;text-align:left}
+.itbl td{padding:4px 3px;vertical-align:middle}
+.itbl input{width:100%;padding:7px 8px;border:1.5px solid #e2e2e2;border-radius:6px;font-size:13px;background:#f7f7f5;color:#111}
+.itbl input:focus{outline:none;border-color:#1a2a6e;background:#fff}
+.amt{font-size:13px;text-align:right;padding:0 5px;color:#111;white-space:nowrap;font-weight:500}
+.rm{background:none;border:none;color:#ccc;cursor:pointer;font-size:18px;padding:2px 6px;line-height:1}
+.rm:hover{color:#ef4444}
+.add-row{border:1.5px dashed #d1d1d1;border-radius:8px;padding:9px;font-size:13px;color:#888;cursor:pointer;width:100%;background:none;margin-bottom:14px}
+.add-row:hover{border-color:#1a2a6e;color:#1a2a6e}
+.charges-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sumbox{background:#f7f7f5;border-radius:8px;padding:13px 15px;margin-top:4px;border:1px solid #e9e9e9}
+.sr{display:flex;justify-content:space-between;font-size:14px;padding:4px 0;color:#111}
+.sr.muted{color:#777;font-size:13px}
+.sr.tot{border-top:1.5px solid #e2e2e2;margin-top:6px;padding-top:9px;font-size:17px;font-weight:700}
+.acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.btn-p{background:#1a2a6e;color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer}
+.btn-p:hover{filter:brightness(0.85)}.btn-p:disabled{opacity:.4;pointer-events:none}
+.btn-s{background:#fff;border:1.5px solid #e2e2e2;border-radius:8px;padding:10px 22px;font-size:14px;color:#333;cursor:pointer;font-weight:500}
+.btn-s:hover{background:#f4f4f0}
+.print-note{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:13px;color:#92400e;margin-bottom:12px}
+.doc-wrap{background:#999;padding:1.5rem;border-radius:12px;margin-bottom:1rem;display:flex;flex-direction:column;align-items:center;gap:12px}
+.doc{background:#fff;color:#000;width:105mm;height:148.5mm;overflow:hidden;font-family:'Times New Roman',serif;border:1.5px solid #000;padding:2.5mm 3.5mm 2mm 3.5mm;display:block}
+.doc-cont{background:#fff;color:#000;width:105mm;height:148.5mm;overflow:hidden;font-family:'Times New Roman',serif;border:1.5px solid #000;padding:2mm 3.5mm 2mm 3.5mm;display:block}
+.d-hdr{text-align:center;margin-bottom:1.2mm;line-height:1.15}
+.d-shri{font-size:10.5pt;font-weight:bold}.d-title{font-size:13pt;font-weight:bold;text-decoration:underline}
+.d-valid{font-size:8.5pt;color:#444;line-height:1;margin-bottom:0.8mm}
+.d-meta{display:flex;justify-content:space-between;align-items:baseline;font-size:10pt;border-bottom:0.5px solid #000;padding-bottom:0.5mm;margin-bottom:0.8mm;line-height:1.4}
+.d-tbl tr.empty td{height:5mm;padding:0 1mm;border:0.75px solid #000;background:#fff}
+.d-tbl{width:100%;border-collapse:collapse;table-layout:fixed;font-size:8.5pt;line-height:1.3}
+.d-tbl thead th{border:0.75px solid #000;padding:0 1mm;height:5mm;text-align:center;font-weight:bold;font-size:8.5pt;background:#e8e8e8;white-space:nowrap;vertical-align:middle}
+.d-tbl tbody td{border:0.75px solid #000;padding:0 1mm;height:5mm;font-size:8.5pt;line-height:1.3;vertical-align:middle;overflow:hidden;white-space:nowrap}
+.d-tbl td.c{text-align:center;font-weight:bold}.d-tbl td.r{text-align:right;font-weight:bold}
+.d-tbl td.lbl{text-align:left;font-weight:bold;overflow:hidden;text-overflow:ellipsis}
+.d-tbl tr.sep td{border-top:2px solid #000;font-weight:normal;background:#efefef;height:5mm;padding:0 1mm}
+.d-tbl tr.charge td{background:#fafafa;height:5mm;padding:0 1mm;font-size:8.5pt}
+.d-tbl tr.grand td{border-top:1.5px solid #000;font-weight:bold;font-size:9.5pt;background:#e8e8e8;height:5mm;padding:0 1mm}
+.dl-box{background:#f8f8ff;border:2px solid #1a2a6e;border-radius:12px;padding:1.5rem;text-align:center;margin-bottom:1rem}
+.dl-box p{color:#555;font-size:14px;margin-bottom:1rem;line-height:1.6}
+.dl-btn{background:#1a2a6e;color:#fff;padding:12px 28px;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;border:none}
+.dl-btn:hover{filter:brightness(0.85)}
+@media print{
+  @page{size:105mm 148.5mm;margin:0!important}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body,html{margin:0!important;padding:0!important;background:#fff!important}
+  .wrap{display:none!important}
+  #print-area{display:block!important}
+  .print-slip{display:block;width:105mm;height:148.5mm;margin:0!important;padding:0!important;overflow:hidden}
+  .print-slip .doc,.print-slip .doc-cont{width:105mm!important;height:137mm!important;margin:0!important;border:none!important;display:block!important;padding:2.5mm 3.5mm 2mm 3.5mm!important}
+  .page-break{page-break-after:always!important;height:0;display:block}
+}
+#print-area{display:none;position:relative}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="step active" id="lock">
+    <div class="card">
+      <h2>Enter Setup Code</h2>
+      <div class="fg"><label>Setup code</label><input id="lock-code" type="text" inputmode="text" autocomplete="off" placeholder="Setup code"></div>
+      <div id="lock-err" style="display:none;color:#b91c1c;font-size:13px;margin-bottom:10px">Incorrect code.</div>
+      <div class="acts"><button class="btn-p" onclick="tryUnlock()">Unlock</button></div>
+    </div>
+  </div>
+  <div class="app-title">🏭 Vishesh Steels</div>
+  <div class="app-sub">Nothing is saved · Instant print only</div>
+  <div class="step" id="s2"><div class="card"><h2>Document type</h2>
+    <div class="grid2">
+      <button class="type-btn" onclick="pickType('Quotation',this)"><div class="tl">📋 Quotation</div></button>
+      <button class="type-btn" onclick="pickType('Chitti',this)"><div class="tl">🧾 Chitti</div></button>
+    </div>
+    <div class="acts"><button class="btn-p" id="n2" onclick="go(3)" disabled>Continue →</button></div>
+  </div></div>
+  <div class="step" id="s3">
+    <div class="card"><h3>Customer details</h3>
+      <div class="grid2">
+        <div class="fg"><label>M/s. (Customer name)</label><input id="f-name" type="text" placeholder="Customer name"></div>
+        <div class="fg"><label>Date</label><input id="f-date" type="text" placeholder="21/04/2026"></div>
+      </div>
+      <div class="grid2">
+        <div class="fg"><label>District</label><input id="f-dist" type="text" placeholder="District"></div>
+        <div class="fg"><label>Lorry No.</label><input id="f-lorry" type="text" placeholder="TS08AB1234"></div>
+      </div>
+    </div>
+    <div class="card"><h3>Items</h3>
+      <table class="itbl"><thead><tr><th style="width:78px">Qty (kg)</th><th>Particulars</th><th style="width:50px">Pcs.</th><th style="width:82px">Rate/kg</th><th style="width:90px;text-align:right">Amount</th><th style="width:28px"></th></tr></thead><tbody id="tbody"></tbody></table>
+      <button class="add-row" onclick="addRow()">+ Add item</button>
+      <h3>Additional charges</h3>
+      <div class="charges-grid">
+        <div class="fg"><label>Labour</label><input id="f-labour" type="number" min="0" placeholder="0" oninput="recalc()"></div>
+        <div class="fg"><label>Weighment</label><input id="f-weigh" type="number" min="0" placeholder="0" oninput="recalc()"></div>
+        <div class="fg"><label>Freight</label><input id="f-freight" type="number" min="0" placeholder="0" oninput="recalc()"></div>
+        <div class="fg"><label>Others</label><input id="f-others" type="number" min="0" placeholder="0" oninput="recalc()"></div>
+      </div>
+      <div class="sumbox">
+        <div class="sr"><span>Items subtotal</span><span id="d-sub">0</span></div>
+        <div class="sr muted"><span>Labour</span><span id="d-lab">0</span></div>
+        <div class="sr muted"><span>Weighment</span><span id="d-weigh">0</span></div>
+        <div class="sr muted"><span>Freight</span><span id="d-freight">0</span></div>
+        <div class="sr muted"><span>Others</span><span id="d-others">0</span></div>
+        <div class="sr tot"><span>Grand Total</span><span id="d-tot">0</span></div>
+      </div>
+    </div>
+    <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button><button class="btn-p" onclick="generate()">Generate Document</button></div>
+  </div>
+  <div class="step" id="s4">
+    <div class="print-note">✓ Ready · <strong>A6 · Margins: None · Scale: 100% · Backgrounds: ON</strong></div>
+    <div class="doc-wrap" id="preview-wrap"></div>
+    <div class="acts"><button class="btn-s" onclick="go(3)">← Edit</button><button class="btn-p" onclick="window.print()">🖨 Print / Save PDF</button><button class="btn-s" onclick="reset()">New</button></div>
+  </div>
+  <div class="step" id="s9"><div class="card"><h2>Quotation format</h2>
+    <div class="grid3">
+      <button class="type-btn" onclick="pickFormat('BASIC',this)"><div class="tl">Basic</div></button>
+      <button class="type-btn" onclick="pickFormat('INCLUDING',this)"><div class="tl">Including</div></button>
+      <button class="type-btn" onclick="pickFormat('LOCAL',this)"><div class="tl">Local</div></button>
+    </div>
+    <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button><button class="btn-p" id="n9" onclick="goQItems()" disabled>Continue →</button></div>
+  </div></div>
+  <div class="step" id="s5">
+    <div class="card"><h3>Customer details</h3>
+      <div class="grid2">
+        <div class="fg"><label>To (Firm Name)</label><input id="q-to" type="text" placeholder="Lakshmi Bhavani Steel"></div>
+        <div class="fg"><label>Date</label><input id="q-date" type="text" placeholder="25-03-2026"></div>
+      </div>
+      <div class="grid2">
+        <div class="fg"><label>Address</label><input id="q-addr" type="text" placeholder="Customer address"></div>
+        <div class="fg"><label>GSTIN</label><input id="q-gstin" type="text" placeholder="36XXXXX0000X1ZX"></div>
+      </div>
+      <div class="fg"><label>Requirement</label><input id="q-subject" type="text" placeholder="MS TMT BARS JAIRAJ ATOOT 550D"></div>
+      <div class="fg"><label>Note (optional)</label><textarea id="q-note" rows="3" placeholder="Any additional note"></textarea></div>
+    </div>
+    <div class="card"><h3>Items</h3>
+      <table class="itbl"><thead><tr><th>Particulars</th><th style="width:56px">WT/Pc</th><th style="width:44px">Pcs</th><th style="width:64px">Qty(kg)</th><th style="width:70px" id="q-rate-th">Rate/Kg</th><th style="width:80px;text-align:right">Amount</th><th style="width:26px"></th></tr></thead><tbody id="q-tbody"></tbody></table>
+      <button class="add-row" onclick="qAddRow()">+ Add item</button>
+      <h3>Additional charges</h3>
+      <div class="charges-grid">
+        <div class="fg"><label>Loading</label><input id="q-loading" type="number" min="0" placeholder="0" oninput="qRecalc()"></div>
+        <div class="fg"><label>Kanta (Weighment)</label><input id="q-kanta" type="number" min="0" placeholder="0" oninput="qRecalc()"></div>
+        <div class="fg"><label>Transport</label><input id="q-transport" type="number" min="0" placeholder="0" oninput="qRecalc()"></div>
+        <div class="fg"><label>Unloading</label><input id="q-unload" type="number" min="0" placeholder="0" oninput="qRecalc()"></div>
+      </div>
+      <div class="sumbox">
+        <div class="sr"><span>Total Qty (kg)</span><span id="q-d-qty">0</span></div>
+        <div class="sr muted"><span>Sub Amount</span><span id="q-d-sub">0</span></div>
+        <div class="sr muted"><span>Loading</span><span id="q-d-loading">0</span></div>
+        <div class="sr muted"><span>Kanta</span><span id="q-d-kanta">0</span></div>
+        <div class="sr muted"><span>Transport</span><span id="q-d-transport">0</span></div>
+        <div class="sr muted"><span>Unloading</span><span id="q-d-unload">0</span></div>
+        <div class="sr muted" id="q-gst-row"><span>GST @18%</span><span id="q-d-gst">0</span></div>
+        <div class="sr tot"><span id="q-tot-label">Total</span><span id="q-d-tot">0</span></div>
+      </div>
+    </div>
+    <div class="acts"><button class="btn-s" onclick="go(9)">← Back</button><button class="btn-p" onclick="qGenerate()">Generate Quotation</button></div>
+  </div>
+  <div class="step" id="s6">
+    <div class="dl-box">
+      <p>✅ Ready! Click to open in a new tab, then<br><strong>Ctrl+P / Cmd+P → Save as PDF</strong><br>Settings: <strong>A4 · Margins: None · Scale: 100% · Backgrounds: ON</strong></p>
+      <button class="dl-btn" onclick="qOpen()">📄 Open &amp; Print Quotation</button>
+    </div>
+    <div class="acts"><button class="btn-s" onclick="go(5)">← Edit</button><button class="btn-s" onclick="reset()">New</button></div>
+  </div>
+</div>
+<div id="print-area"></div>
+<script>
+var dtype='',rows=[],qRows=[],qBlobUrl='',qFormat='';
+var PAGE_TEMPLATE="<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Vishesh Steels Quotation</title>\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\n@page{size:A4 portrait;margin:0}\nhtml,body{width:210mm;height:296.5mm;overflow:hidden;margin:0;padding:0;background:#fff;\n  font-family:Arial,Helvetica,sans-serif;font-size:10pt;color:#000}\n@media print{\n  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}\n  html,body{width:210mm;height:296.5mm;overflow:hidden}\n}\n.page{position:relative;width:210mm;height:296.5mm;overflow:hidden;background:#fff}\n.lh-dark{position:absolute;top:0;left:0;width:210mm;height:45mm;background:#1c1c1c;z-index:0}\n.lh-lockup{position:absolute;top:0;left:0;width:210mm;height:45mm;display:flex;align-items:center;justify-content:center;gap:7mm;z-index:1}\n.lh-lockup-text{display:flex;flex-direction:column;align-items:center}\n.lh-name{font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-size:13mm;letter-spacing:2mm;line-height:1;white-space:nowrap;color:#fff}\n.lh-rule{width:30mm;height:0.6mm;background:#d9822b;margin:2.6mm 0 2.4mm 0}\n.lh-tagline{font-size:9.5pt;color:#d9822b;letter-spacing:2px;font-weight:700;text-transform:uppercase;white-space:nowrap}\n.lh-amberline{position:absolute;top:45mm;left:0;width:210mm;height:1mm;background:#d9822b;z-index:0}\n.lh-contact{position:absolute;top:46mm;left:0;width:210mm;height:13mm;background:#fff;z-index:0;\n  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.6mm}\n.lh-contact-l{font-size:10pt;font-weight:700;color:#1c1c1c;letter-spacing:0.3px;display:flex;align-items:center;gap:4mm}\n.lh-contact-l .dot{color:#d9822b;font-weight:900}\n.lh-contact-r{font-size:9pt;color:#555;letter-spacing:0.2px;display:flex;align-items:center;gap:4mm}\n.lh-contact-r b{color:#1c1c1c}\n.lh-contact-r .dot{color:#d9822b;font-weight:900}\n.cwm{position:absolute;pointer-events:none;z-index:0;opacity:0.05}\n.content>*:not(.cwm){position:relative;z-index:1}\n.content{position:absolute;top:63mm;left:14mm;right:13mm;\n  bottom:7.450666666666667mm;overflow:hidden;z-index:2;background:#fff}\n.lh-footer{position:absolute;bottom:0;left:0;width:210mm;height:7.450666666666667mm;background:#1c1c1c;z-index:0}\n.lh-footer-amber{position:absolute;bottom:7.450666666666667mm;left:0;width:210mm;height:0.9mm;background:#d9822b;z-index:0}\n.lh-footer-text{position:absolute;bottom:0;left:0;width:210mm;height:7.450666666666667mm;display:flex;align-items:center;justify-content:center;font-size:9pt;color:#d9822b;letter-spacing:1px;font-weight:700;text-transform:uppercase;z-index:1}\n.title-row{display:flex;justify-content:center;align-items:baseline;margin-bottom:3.5mm;position:relative}\n.q-title{font-size:16pt;font-weight:bold;text-decoration:underline;letter-spacing:1px;color:#1c1c1c}\n.q-date{position:absolute;right:0;top:2mm;font-size:11pt;font-weight:bold;white-space:nowrap}\n.to-lbl{font-weight:bold;font-size:10pt;margin-bottom:0.9mm}\n.to-name{font-weight:bold;font-size:11pt;margin-bottom:1.5mm}\n.to-addr{font-size:10pt;margin-bottom:1mm}\n.to-gstin{font-size:10pt;font-weight:bold;margin-bottom:1.5mm}\n.resp{font-weight:bold;font-size:10pt;margin-bottom:0.9mm}\n.intro{font-size:10pt;line-height:1.35;margin-bottom:2.5mm}\ntable.qt{width:100%;border-collapse:collapse;table-layout:fixed;font-size:9pt;margin-bottom:2.5mm}\ntable.qt th{border:1px solid #333;padding:1.2mm 1.5mm;text-align:center;font-weight:bold;\n  background:#f5f1ec;font-size:9pt;white-space:nowrap;color:#1c1c1c}\ntable.qt td{border:1px solid #333;padding:1.2mm 1.5mm;text-align:center;overflow:hidden;line-height:1.2}\ntable.qt td.lbl{text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\ntable.qt td.r{text-align:right;font-weight:bold}\ntable.qt tr.sep td{border-top:1.5px solid #333;font-weight:bold;background:#efefef}\ntable.qt tr.charge td{background:#fafafa}\ntable.qt tr.tot td{border-top:1.5px solid #333;font-weight:bold;background:#f5f1ec;font-size:10pt}\n.sec{font-weight:bold;font-size:9.5pt;margin-bottom:0.6mm;color:#1c1c1c}\n.bl{padding-left:5mm;margin-bottom:2mm}\n.bl li{font-weight:bold;font-size:9pt;list-style:disc;margin-bottom:0.4mm;line-height:1.25;color:#333}\n.bl li::marker{color:#d9822b}\n.note-text{font-size:9.5pt;margin-bottom:2mm;white-space:pre-wrap;word-break:break-word}\n</style>\n</head>\n<body>\n<div class=\"page\">\n  <div class=\"lh-dark\"></div>\n  <div class=\"lh-lockup\">\n    <svg viewBox=\"0 0 1010.000000 800.000000\" xmlns=\"http://www.w3.org/2000/svg\" style=\"width:26mm;height:auto;display:block;\"><g transform=\"translate(0.000000,800.000000) scale(0.100000,-0.100000)\"\nfill=\"#ffffff\" stroke=\"none\">\n<path d=\"M6474 7001 c-46 -11 -54 -19 -76 -69 -11 -25 -39 -73 -62 -108 -66\n-100 -99 -152 -136 -219 -19 -34 -47 -78 -62 -97 -14 -19 -33 -51 -42 -72 -9\n-21 -29 -54 -45 -74 -15 -21 -40 -59 -54 -87 -14 -27 -37 -61 -51 -74 -14 -13\n-35 -49 -47 -80 -11 -31 -33 -72 -48 -91 -16 -20 -38 -54 -50 -77 -11 -24 -34\n-57 -50 -75 -15 -18 -38 -55 -49 -81 -12 -26 -37 -67 -55 -90 -19 -23 -44 -63\n-55 -89 -11 -26 -34 -64 -51 -85 -16 -21 -37 -55 -46 -75 -8 -21 -28 -52 -44\n-70 -15 -18 -41 -58 -56 -88 -15 -30 -39 -68 -53 -85 -14 -16 -37 -57 -52 -90\n-15 -33 -38 -73 -52 -90 -14 -16 -35 -49 -46 -71 -12 -23 -32 -54 -45 -70 -13\n-16 -36 -52 -51 -81 -14 -29 -39 -67 -56 -86 -16 -19 -39 -56 -50 -83 -12 -27\n-32 -62 -44 -79 -13 -16 -33 -50 -46 -75 -12 -25 -36 -61 -53 -79 -16 -19 -41\n-60 -54 -90 -14 -30 -38 -71 -55 -90 -17 -19 -40 -55 -51 -80 -11 -26 -29 -59\n-42 -76 -12 -16 -32 -50 -45 -75 -12 -25 -37 -63 -55 -85 -18 -22 -42 -59 -53\n-82 -12 -23 -40 -68 -62 -99 -22 -32 -40 -63 -40 -69 0 -7 -15 -32 -34 -56\n-18 -24 -43 -64 -56 -89 -12 -25 -35 -61 -50 -80 -15 -19 -39 -58 -53 -86 -14\n-28 -37 -64 -50 -80 -13 -16 -39 -56 -56 -89 -43 -81 -91 -159 -139 -225 -21\n-30 -51 -81 -65 -112 -36 -79 -105 -121 -137 -83 -7 8 -23 84 -36 167 -26 162\n-39 218 -73 310 -20 56 -29 106 -50 288 -5 47 -24 128 -41 180 -17 52 -38 142\n-47 200 -8 58 -26 146 -39 195 -28 105 -47 202 -68 340 -8 57 -28 133 -46 178\n-19 47 -35 110 -40 159 -8 64 -15 87 -32 105 l-23 22 -1225 3 c-1304 3 -1270\n4 -1270 -44 0 -33 28 -57 89 -75 31 -8 85 -30 121 -48 36 -18 88 -40 115 -49\n28 -9 76 -34 109 -56 32 -22 65 -40 72 -40 7 0 50 -20 96 -44 46 -23 108 -51\n138 -61 30 -9 71 -29 90 -44 48 -38 68 -48 117 -56 28 -4 59 -20 89 -44 26\n-23 70 -46 106 -56 70 -22 162 -84 182 -124 8 -15 18 -52 22 -82 4 -30 20 -87\n36 -128 17 -44 35 -117 44 -180 27 -203 36 -246 66 -316 19 -45 36 -114 48\n-195 11 -69 33 -172 49 -230 16 -58 37 -159 46 -225 10 -72 30 -160 50 -220\n23 -66 41 -149 54 -245 13 -98 30 -173 51 -229 16 -46 37 -127 46 -180 8 -53\n30 -154 49 -226 18 -71 43 -195 55 -275 15 -100 30 -165 50 -210 15 -36 31\n-90 35 -119 6 -41 15 -62 35 -83 l28 -28 608 0 607 0 59 63 c33 34 71 87 85\n117 13 30 38 73 54 95 56 77 129 194 145 231 9 21 31 56 49 79 18 22 42 58 53\n80 11 22 40 70 64 107 23 36 61 96 83 133 22 36 63 102 90 146 28 43 73 115\n100 159 28 45 74 117 102 162 29 45 56 91 59 102 4 12 21 41 39 66 18 25 43\n65 55 90 12 25 33 56 46 70 12 14 40 55 61 91 21 37 52 90 68 119 17 29 44 73\n62 99 17 25 44 69 59 96 15 28 38 63 51 79 13 16 35 50 48 76 13 26 36 61 50\n78 15 17 42 62 61 99 65 127 114 206 156 253 24 26 51 59 61 73 43 64 60 -4\n31 -126 -16 -63 -16 -76 0 -185 33 -230 47 -290 77 -330 16 -20 48 -66 72\n-102 47 -71 186 -201 257 -242 25 -14 54 -35 64 -47 11 -12 49 -30 85 -41 36\n-11 86 -34 110 -50 25 -17 70 -38 100 -46 31 -9 83 -28 116 -41 32 -14 113\n-36 180 -49 134 -26 160 -33 225 -62 25 -11 99 -30 165 -42 192 -33 365 -131\n381 -214 17 -96 -49 -166 -207 -217 -141 -45 -418 -54 -584 -19 -109 23 -220\n43 -334 60 -50 7 -94 22 -135 44 -34 19 -94 41 -135 50 -75 17 -118 35 -159\n67 -13 10 -51 27 -86 39 -35 11 -72 27 -82 35 -25 19 -94 19 -121 0 -12 -8\n-33 -46 -48 -84 -14 -38 -34 -76 -45 -86 -11 -10 -31 -48 -46 -86 -14 -38 -41\n-88 -60 -110 -19 -23 -40 -65 -50 -100 -9 -33 -30 -78 -45 -99 -16 -21 -42\n-68 -58 -105 -17 -36 -39 -77 -50 -91 -11 -14 -30 -51 -41 -82 -12 -31 -35\n-74 -52 -95 -16 -21 -40 -64 -52 -96 -13 -31 -39 -81 -59 -110 -21 -29 -37\n-59 -37 -66 0 -7 -16 -37 -37 -66 -20 -30 -49 -81 -66 -114 -16 -33 -40 -75\n-54 -93 -14 -18 -36 -61 -49 -94 -13 -33 -34 -75 -48 -92 -13 -18 -35 -54 -48\n-82 -13 -27 -40 -70 -61 -97 -57 -74 -64 -149 -14 -155 25 -3 162 86 182 118\n3 6 54 41 113 79 59 38 123 83 143 100 20 17 56 42 80 56 25 13 58 38 74 55\n17 17 50 40 75 51 25 11 59 33 75 48 17 16 55 45 85 64 106 70 175 119 200\n142 45 43 135 77 188 72 132 -13 529 -73 612 -93 47 -11 142 -17 345 -21 300\n-5 291 -6 600 56 55 11 150 27 210 36 79 12 124 24 160 44 28 16 77 36 110 46\n33 9 87 32 120 50 33 19 85 43 116 54 30 12 69 35 85 52 16 17 42 38 58 46 90\n47 322 276 352 348 7 17 29 51 48 74 21 25 43 67 52 99 9 32 29 80 45 108 44\n79 64 216 63 449 -1 230 -17 323 -68 400 -18 28 -43 70 -55 93 -26 51 -194\n223 -241 247 -19 10 -51 30 -70 45 -19 15 -57 35 -84 44 -27 9 -72 32 -100 51\n-37 25 -75 40 -141 54 -49 11 -124 33 -165 49 -41 17 -114 38 -163 46 -48 9\n-120 30 -160 46 -44 17 -117 35 -187 45 -154 22 -346 110 -375 172 -25 51 -22\n113 7 165 21 38 34 47 128 89 144 65 195 72 478 66 229 -4 241 -5 340 -35 56\n-17 148 -38 204 -47 106 -17 126 -24 171 -61 15 -13 46 -28 69 -35 23 -6 65\n-24 95 -41 85 -48 149 -13 198 110 15 37 39 87 54 112 15 25 40 76 55 114 15\n38 40 88 56 110 15 23 36 66 45 96 10 30 31 73 47 95 15 23 37 65 49 94 11 29\n31 68 45 87 44 57 32 92 -42 130 -34 17 -74 40 -89 52 -16 12 -53 30 -84 39\n-31 8 -81 27 -111 40 -75 34 -100 41 -210 58 -52 9 -142 32 -200 51 -127 44\n-244 53 -705 53 -371 1 -551 -15 -650 -57 -38 -17 -119 -40 -180 -51 -64 -12\n-131 -32 -160 -47 -27 -14 -77 -34 -110 -45 -33 -10 -91 -39 -128 -63 -65 -43\n-175 -92 -184 -82 -12 11 33 122 62 155 18 20 44 61 58 91 13 30 32 61 41 69\n10 8 30 40 46 71 16 31 36 62 45 70 9 8 34 48 55 90 21 42 46 82 55 90 9 8 32\n44 50 80 18 36 41 72 50 80 9 8 32 44 50 80 18 36 41 72 50 80 9 8 30 41 47\n74 17 34 43 77 59 97 16 20 37 57 48 81 10 25 32 60 49 79 16 19 43 62 60 96\n18 34 36 64 42 68 6 4 24 32 40 64 16 32 40 71 53 87 13 16 37 54 52 84 15 30\n39 68 52 84 13 16 35 51 49 78 14 27 40 69 59 94 19 25 35 51 35 59 0 7 17 36\n38 64 20 27 49 72 65 98 15 26 39 63 52 82 30 41 30 42 6 72 l-19 24 -619 2\nc-340 0 -632 -2 -649 -6z\"/>\n</g></svg>\n    <div class=\"lh-lockup-text\">\n      <div class=\"lh-name\">VISHESH STEELS</div>\n      <div class=\"lh-rule\"></div>\n      <div class=\"lh-tagline\">Iron &nbsp;&middot;&nbsp; Steel &nbsp;&middot;&nbsp; TMT Bars &nbsp;&middot;&nbsp; MS Rounds &nbsp;&middot;&nbsp; Pipes</div>\n    </div>\n  </div>\n  <div class=\"lh-amberline\"></div>\n  <div class=\"lh-contact\">\n    <div class=\"lh-contact-l\"><span>&#9742;&nbsp; (+91) 96400 11230</span><span class=\"dot\">&#9670;</span><span>&#9993;&nbsp; visheshsteels21@gmail.com</span></div>\n    <div class=\"lh-contact-r\"><span>19-2-225/C&amp;D, Miralam Tank Road, Bahadurpura, Hyderabad - 500064</span><span class=\"dot\">&#9670;</span><span>GSTIN: <b>36ADQPJ3563J1Z4</b></span></div>\n  </div>\n  <div class=\"content\">\n  <div class=\"cwm\" style=\"top:46mm;left:56mm;\"><svg viewBox=\"0 0 1010.000000 800.000000\" xmlns=\"http://www.w3.org/2000/svg\" style=\"width:70mm;height:auto;display:block;\"><g transform=\"translate(0.000000,800.000000) scale(0.100000,-0.100000)\"\nfill=\"#1c1c1c\" stroke=\"none\">\n<path d=\"M6474 7001 c-46 -11 -54 -19 -76 -69 -11 -25 -39 -73 -62 -108 -66\n-100 -99 -152 -136 -219 -19 -34 -47 -78 -62 -97 -14 -19 -33 -51 -42 -72 -9\n-21 -29 -54 -45 -74 -15 -21 -40 -59 -54 -87 -14 -27 -37 -61 -51 -74 -14 -13\n-35 -49 -47 -80 -11 -31 -33 -72 -48 -91 -16 -20 -38 -54 -50 -77 -11 -24 -34\n-57 -50 -75 -15 -18 -38 -55 -49 -81 -12 -26 -37 -67 -55 -90 -19 -23 -44 -63\n-55 -89 -11 -26 -34 -64 -51 -85 -16 -21 -37 -55 -46 -75 -8 -21 -28 -52 -44\n-70 -15 -18 -41 -58 -56 -88 -15 -30 -39 -68 -53 -85 -14 -16 -37 -57 -52 -90\n-15 -33 -38 -73 -52 -90 -14 -16 -35 -49 -46 -71 -12 -23 -32 -54 -45 -70 -13\n-16 -36 -52 -51 -81 -14 -29 -39 -67 -56 -86 -16 -19 -39 -56 -50 -83 -12 -27\n-32 -62 -44 -79 -13 -16 -33 -50 -46 -75 -12 -25 -36 -61 -53 -79 -16 -19 -41\n-60 -54 -90 -14 -30 -38 -71 -55 -90 -17 -19 -40 -55 -51 -80 -11 -26 -29 -59\n-42 -76 -12 -16 -32 -50 -45 -75 -12 -25 -37 -63 -55 -85 -18 -22 -42 -59 -53\n-82 -12 -23 -40 -68 -62 -99 -22 -32 -40 -63 -40 -69 0 -7 -15 -32 -34 -56\n-18 -24 -43 -64 -56 -89 -12 -25 -35 -61 -50 -80 -15 -19 -39 -58 -53 -86 -14\n-28 -37 -64 -50 -80 -13 -16 -39 -56 -56 -89 -43 -81 -91 -159 -139 -225 -21\n-30 -51 -81 -65 -112 -36 -79 -105 -121 -137 -83 -7 8 -23 84 -36 167 -26 162\n-39 218 -73 310 -20 56 -29 106 -50 288 -5 47 -24 128 -41 180 -17 52 -38 142\n-47 200 -8 58 -26 146 -39 195 -28 105 -47 202 -68 340 -8 57 -28 133 -46 178\n-19 47 -35 110 -40 159 -8 64 -15 87 -32 105 l-23 22 -1225 3 c-1304 3 -1270\n4 -1270 -44 0 -33 28 -57 89 -75 31 -8 85 -30 121 -48 36 -18 88 -40 115 -49\n28 -9 76 -34 109 -56 32 -22 65 -40 72 -40 7 0 50 -20 96 -44 46 -23 108 -51\n138 -61 30 -9 71 -29 90 -44 48 -38 68 -48 117 -56 28 -4 59 -20 89 -44 26\n-23 70 -46 106 -56 70 -22 162 -84 182 -124 8 -15 18 -52 22 -82 4 -30 20 -87\n36 -128 17 -44 35 -117 44 -180 27 -203 36 -246 66 -316 19 -45 36 -114 48\n-195 11 -69 33 -172 49 -230 16 -58 37 -159 46 -225 10 -72 30 -160 50 -220\n23 -66 41 -149 54 -245 13 -98 30 -173 51 -229 16 -46 37 -127 46 -180 8 -53\n30 -154 49 -226 18 -71 43 -195 55 -275 15 -100 30 -165 50 -210 15 -36 31\n-90 35 -119 6 -41 15 -62 35 -83 l28 -28 608 0 607 0 59 63 c33 34 71 87 85\n117 13 30 38 73 54 95 56 77 129 194 145 231 9 21 31 56 49 79 18 22 42 58 53\n80 11 22 40 70 64 107 23 36 61 96 83 133 22 36 63 102 90 146 28 43 73 115\n100 159 28 45 74 117 102 162 29 45 56 91 59 102 4 12 21 41 39 66 18 25 43\n65 55 90 12 25 33 56 46 70 12 14 40 55 61 91 21 37 52 90 68 119 17 29 44 73\n62 99 17 25 44 69 59 96 15 28 38 63 51 79 13 16 35 50 48 76 13 26 36 61 50\n78 15 17 42 62 61 99 65 127 114 206 156 253 24 26 51 59 61 73 43 64 60 -4\n31 -126 -16 -63 -16 -76 0 -185 33 -230 47 -290 77 -330 16 -20 48 -66 72\n-102 47 -71 186 -201 257 -242 25 -14 54 -35 64 -47 11 -12 49 -30 85 -41 36\n-11 86 -34 110 -50 25 -17 70 -38 100 -46 31 -9 83 -28 116 -41 32 -14 113\n-36 180 -49 134 -26 160 -33 225 -62 25 -11 99 -30 165 -42 192 -33 365 -131\n381 -214 17 -96 -49 -166 -207 -217 -141 -45 -418 -54 -584 -19 -109 23 -220\n43 -334 60 -50 7 -94 22 -135 44 -34 19 -94 41 -135 50 -75 17 -118 35 -159\n67 -13 10 -51 27 -86 39 -35 11 -72 27 -82 35 -25 19 -94 19 -121 0 -12 -8\n-33 -46 -48 -84 -14 -38 -34 -76 -45 -86 -11 -10 -31 -48 -46 -86 -14 -38 -41\n-88 -60 -110 -19 -23 -40 -65 -50 -100 -9 -33 -30 -78 -45 -99 -16 -21 -42\n-68 -58 -105 -17 -36 -39 -77 -50 -91 -11 -14 -30 -51 -41 -82 -12 -31 -35\n-74 -52 -95 -16 -21 -40 -64 -52 -96 -13 -31 -39 -81 -59 -110 -21 -29 -37\n-59 -37 -66 0 -7 -16 -37 -37 -66 -20 -30 -49 -81 -66 -114 -16 -33 -40 -75\n-54 -93 -14 -18 -36 -61 -49 -94 -13 -33 -34 -75 -48 -92 -13 -18 -35 -54 -48\n-82 -13 -27 -40 -70 -61 -97 -57 -74 -64 -149 -14 -155 25 -3 162 86 182 118\n3 6 54 41 113 79 59 38 123 83 143 100 20 17 56 42 80 56 25 13 58 38 74 55\n17 17 50 40 75 51 25 11 59 33 75 48 17 16 55 45 85 64 106 70 175 119 200\n142 45 43 135 77 188 72 132 -13 529 -73 612 -93 47 -11 142 -17 345 -21 300\n-5 291 -6 600 56 55 11 150 27 210 36 79 12 124 24 160 44 28 16 77 36 110 46\n33 9 87 32 120 50 33 19 85 43 116 54 30 12 69 35 85 52 16 17 42 38 58 46 90\n47 322 276 352 348 7 17 29 51 48 74 21 25 43 67 52 99 9 32 29 80 45 108 44\n79 64 216 63 449 -1 230 -17 323 -68 400 -18 28 -43 70 -55 93 -26 51 -194\n223 -241 247 -19 10 -51 30 -70 45 -19 15 -57 35 -84 44 -27 9 -72 32 -100 51\n-37 25 -75 40 -141 54 -49 11 -124 33 -165 49 -41 17 -114 38 -163 46 -48 9\n-120 30 -160 46 -44 17 -117 35 -187 45 -154 22 -346 110 -375 172 -25 51 -22\n113 7 165 21 38 34 47 128 89 144 65 195 72 478 66 229 -4 241 -5 340 -35 56\n-17 148 -38 204 -47 106 -17 126 -24 171 -61 15 -13 46 -28 69 -35 23 -6 65\n-24 95 -41 85 -48 149 -13 198 110 15 37 39 87 54 112 15 25 40 76 55 114 15\n38 40 88 56 110 15 23 36 66 45 96 10 30 31 73 47 95 15 23 37 65 49 94 11 29\n31 68 45 87 44 57 32 92 -42 130 -34 17 -74 40 -89 52 -16 12 -53 30 -84 39\n-31 8 -81 27 -111 40 -75 34 -100 41 -210 58 -52 9 -142 32 -200 51 -127 44\n-244 53 -705 53 -371 1 -551 -15 -650 -57 -38 -17 -119 -40 -180 -51 -64 -12\n-131 -32 -160 -47 -27 -14 -77 -34 -110 -45 -33 -10 -91 -39 -128 -63 -65 -43\n-175 -92 -184 -82 -12 11 33 122 62 155 18 20 44 61 58 91 13 30 32 61 41 69\n10 8 30 40 46 71 16 31 36 62 45 70 9 8 34 48 55 90 21 42 46 82 55 90 9 8 32\n44 50 80 18 36 41 72 50 80 9 8 32 44 50 80 18 36 41 72 50 80 9 8 30 41 47\n74 17 34 43 77 59 97 16 20 37 57 48 81 10 25 32 60 49 79 16 19 43 62 60 96\n18 34 36 64 42 68 6 4 24 32 40 64 16 32 40 71 53 87 13 16 37 54 52 84 15 30\n39 68 52 84 13 16 35 51 49 78 14 27 40 69 59 94 19 25 35 51 35 59 0 7 17 36\n38 64 20 27 49 72 65 98 15 26 39 63 52 82 30 41 30 42 6 72 l-19 24 -619 2\nc-340 0 -632 -2 -649 -6z\"/>\n</g></svg></div>\n  <div class=\"title-row\">\n      <div class=\"q-title\">QUOTATION</div>\n      <div class=\"q-date\">Date: __DATE__</div>\n    </div>\n    <div class=\"to-lbl\">To:</div>\n    <div class=\"to-name\">__TONAME__,</div>\n    __TOEXTRA__\n    <div class=\"resp\">Respectfully,</div>\n    <div class=\"intro\">With reference to your facsimile enquiry regarding the requirement of<br>\n    <strong>__SUBJECT__ .</strong> We are hereby quoting our lowest prices for your kind consideration.</div>\n    <table class=\"qt\">\n      <thead><tr>\n        <th style=\"width:5%\">S.NO</th><th style=\"width:33%\">PARTICULARS</th>\n        <th style=\"width:10%\">WT/PC</th><th style=\"width:8%\">PCS</th><th style=\"width:11%\">QTY (KG)</th>\n        <th style=\"width:12%\">__RATEHDR__</th><th style=\"width:21%\">AMOUNT</th>\n      </tr></thead>\n      <tbody>\n        __ITEMS__\n        __CHARGES__\n      </tbody>\n    </table>\n    __NOTE__\n    <div class=\"sec\">Terms And Condition:</div>\n    <ul class=\"bl\">__TERMS__</ul>\n    __BANKDETAILS__\n  </div>\n  <div class=\"lh-footer-amber\"></div>\n  <div class=\"lh-footer\"></div>\n  <div class=\"lh-footer-text\">Strength in Every Bar &middot; Vishesh Steels, Hyderabad</div>\n</div>\n</body>\n</html>";
+function pickType(t,el){dtype=t;document.querySelectorAll('.type-btn').forEach(function(b){b.classList.remove('on');});el.classList.add('on');document.getElementById('n2').disabled=false;}
+function go(n){
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  if(n===3&&dtype==='Quotation'){document.getElementById('s9').classList.add('active');window.scrollTo(0,0);return;}
+  document.getElementById('s'+n).classList.add('active');
+  if(n===3&&rows.length===0)addRow();
+  window.scrollTo(0,0);
+}
+function addRow(){rows.push({q:'',name:'',p:'',r:''});renderRows();}
+function renderRows(){
+  const tb=document.getElementById('tbody');tb.innerHTML='';
+  rows.forEach((row,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td><input type="number" min="0" step="any" value="${row.q}" placeholder="0" oninput="upd(${i},'q',this.value)"></td><td><input type="text" value="${row.name}" placeholder="Item" oninput="upd(${i},'name',this.value)"></td><td><input type="number" min="0" step="1" value="${row.p}" placeholder="0" oninput="upd(${i},'p',this.value)"></td><td><input type="number" min="0" step="any" value="${row.r}" placeholder="0.00" oninput="upd(${i},'r',this.value)"></td><td class="amt">${calcAmt(row)}</td><td><button class="rm" onclick="delRow(${i})">×</button></td>`;tb.appendChild(tr);});recalc();
+}
+function calcAmt(row){const q=parseFloat(row.q)||0,r=parseFloat(row.r)||0,a=q*r;return a>0?''+Math.round(a).toLocaleString('en-IN'):'—';}
+function upd(i,f,v){rows[i][f]=v;const t=document.getElementById('tbody').children[i]?.children;if(t)t[4].textContent=calcAmt(rows[i]);recalc();}
+function delRow(i){rows.splice(i,1);if(!rows.length)rows.push({q:'',name:'',p:'',r:''});renderRows();}
+function gc(id){return parseFloat(document.getElementById(id).value)||0;}
+function fmt(v){return''+Math.round(v).toLocaleString('en-IN');}
+function recalc(){
+  let sub=0;rows.forEach(r=>{sub+=(parseFloat(r.q)||0)*(parseFloat(r.r)||0);});
+  const lab=gc('f-labour'),weigh=gc('f-weigh'),freight=gc('f-freight'),others=gc('f-others'),tot=sub+lab+weigh+freight+others;
+  document.getElementById('d-sub').textContent=fmt(sub);document.getElementById('d-lab').textContent=fmt(lab);document.getElementById('d-weigh').textContent=fmt(weigh);document.getElementById('d-freight').textContent=fmt(freight);document.getElementById('d-others').textContent=fmt(others);document.getElementById('d-tot').textContent=fmt(tot);
+}
+function tableRows(c){return c.map(r=>{const q=parseFloat(r.q)||0,rt=parseFloat(r.r)||0,a=q*rt;return`<tr><td class="c">${r.q||''}</td><td class="lbl">${r.name||''}</td><td class="c">${r.p||''}</td><td class="r">${rt?''+rt:''}</td><td class="r">${a>0?''+Math.round(a).toLocaleString('en-IN'):''}</td></tr>`;}).join('');}
+function colgroup(){return`<colgroup><col style="width:17%"><col style="width:36%"><col style="width:11%"><col style="width:17%"><col style="width:19%"></colgroup>`;}
+function thead(){return`<thead><tr><th>Qty.</th><th>Particulars</th><th>Pcs.</th><th>Rate</th><th>Amount</th></tr></thead>`;}
+function emptyRows(n){let r='';for(let i=0;i<n;i++)r+=`<tr class="empty"><td></td><td></td><td></td><td></td><td></td></tr>`;return r;}
+function totalsBlock(sub,tq,lab,weigh,freight,others,tot){const qs=tq%1===0?tq:tq.toFixed(2);let r=`<tr class="sep"><td class="c">${qs}</td><td style="border-right:0.75px solid #000"></td><td class="lbl" colspan="2" style="font-weight:bold">Subtotal</td><td class="r">${fmt(sub)}</td></tr>`;[['Labour',lab],['Weighment',weigh],['Freight',freight],['Others',others]].forEach(([l,v])=>{if(v>0)r+=`<tr class="charge"><td></td><td style="border-right:0.75px solid #000"></td><td class="lbl" colspan="2">${l}</td><td class="r">${fmt(v)}</td></tr>`;});r+=`<tr class="grand"><td colspan="4" style="text-align:right;padding-right:2mm">TOTAL</td><td class="r">${fmt(tot)}</td></tr>`;return r;}
+const FIRST_TOTAL=19;
+function buildFirstSlip(ic,isLast,sub,tq,lab,weigh,freight,others,tot,meta){const{name,date,dist,lorry}=meta;let tbody=tableRows(ic);const tc=isLast?2+[lab,weigh,freight,others].filter(v=>v>0).length:0;tbody+=emptyRows(Math.max(0,FIRST_TOTAL-ic.length-tc));if(isLast)tbody+=totalsBlock(sub,tq,lab,weigh,freight,others,tot);return`<div class="doc"><div class="d-hdr"><div class="d-shri">||श्री||</div><div class="d-title">QUOTATION</div><div class="d-valid">Valid for 2 Hours</div></div><div class="d-meta"><span>M/s.&nbsp;<b style="font-size:11pt">${name}</b></span><span>Dt.&nbsp;<b style="font-size:11pt">${date}</b></span></div><div class="d-meta"><span>Dist.&nbsp;<b style="font-size:11pt">${dist}</b></span><span style="margin-right:12mm">Lorry No.&nbsp;<b style="font-size:11pt">${lorry}</b></span></div><table class="d-tbl">${colgroup()}${thead()}<tbody>${tbody}</tbody></table></div>`;}
+const CONT_TOTAL=19;
+function buildContSlip(ic,isLast,sub,tq,lab,weigh,freight,others,tot,meta){const{name}=meta;let tbody=tableRows(ic);const tc=isLast?2+[lab,weigh,freight,others].filter(v=>v>0).length:0;tbody+=emptyRows(Math.max(0,CONT_TOTAL-ic.length-tc));if(isLast)tbody+=totalsBlock(sub,tq,lab,weigh,freight,others,tot);return`<div class="doc-cont"><div style="font-family:'Times New Roman',serif;font-size:9pt;border-bottom:0.5px solid #000;padding-bottom:0.8mm;margin-bottom:1mm;line-height:1.4">M/s.&nbsp;<b style="font-size:10pt">${name}</b>&nbsp;<span style="float:right;font-size:8.5pt;color:#444">(contd.)</span></div><table class="d-tbl">${colgroup()}${thead()}<tbody>${tbody}</tbody></table></div>`;}
+function generate(){
+  let sub=0,tq=0;rows.forEach(r=>{const q=parseFloat(r.q)||0,rt=parseFloat(r.r)||0;sub+=q*rt;tq+=q;});
+  const lab=gc('f-labour'),weigh=gc('f-weigh'),freight=gc('f-freight'),others=gc('f-others'),tot=sub+lab+weigh+freight+others;
+  const meta={name:document.getElementById('f-name').value||'_______________________',date:document.getElementById('f-date').value||'________',dist:document.getElementById('f-dist').value||'___________',lorry:document.getElementById('f-lorry').value||'___________'};
+  const cc=[lab,weigh,freight,others].filter(v=>v>0).length,tr2=2+cc,mp1=FIRST_TOTAL-tr2;
+  const chunks=rows.length<=mp1?[{items:rows,cont:false}]:[{items:rows.slice(0,mp1),cont:false},{items:rows.slice(mp1),cont:true}];
+  let ph='';chunks.forEach((c,idx)=>{const il=(idx===chunks.length-1);ph+=c.cont?buildContSlip(c.items,il,sub,tq,lab,weigh,freight,others,tot,meta):buildFirstSlip(c.items,il,sub,tq,lab,weigh,freight,others,tot,meta);});
+  document.getElementById('preview-wrap').innerHTML=ph;
+  let prh='';chunks.forEach((c,idx)=>{const il=(idx===chunks.length-1);const sh=c.cont?buildContSlip(c.items,il,sub,tq,lab,weigh,freight,others,tot,meta):buildFirstSlip(c.items,il,sub,tq,lab,weigh,freight,others,tot,meta);prh+=`<div class="print-slip"><div style="height:9mm"></div>${sh}</div>`;if(!il)prh+=`<div class="page-break"></div>`;});
+  document.getElementById('print-area').innerHTML=prh;
+  go(4);
+}
+
+function pickFormat(f,el){qFormat=f;document.querySelectorAll('#s9 .type-btn').forEach(function(b){b.classList.remove('on');});el.classList.add('on');document.getElementById('n9').disabled=false;}
+function goQItems(){
+  applyQFormatUI();
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('s5').classList.add('active');
+  if(qRows.length===0)qAddRow();
+  qRecalc();
+  window.scrollTo(0,0);
+}
+function applyQFormatUI(){
+  document.getElementById('q-rate-th').textContent='Rate/Kg';
+  document.getElementById('q-gst-row').style.display=qFormat==='BASIC'?'':'none';
+  document.getElementById('q-tot-label').textContent=qFormat==='INCLUDING'?'Net Amount':(qFormat==='LOCAL'?'Total Amt':'Total');
+}
+function qQty(r){return (parseFloat(r.wtpc)||0)*(parseFloat(r.pieces)||0);}
+function qAmtRaw(r){var q=qQty(r),rt=parseFloat(r.rate)||0;return qFormat==='LOCAL'?(q/1000)*rt:q*rt;}
+function qAmt(r){var a=qAmtRaw(r);return a>0?Math.round(a).toLocaleString('en-IN'):'—';}
+function qFmt(v){return Math.round(v).toLocaleString('en-IN');}
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function qAddRow(){qRows.push({particulars:'',wtpc:'',pieces:'',rate:''});qRender();}
+function qRender(){
+  var tb=document.getElementById('q-tbody');tb.innerHTML='';
+  qRows.forEach(function(r,i){
+    var q=qQty(r);
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td><input type="text" value="'+r.particulars+'" placeholder="MS TMT BAR 12MM" oninput="qUpd('+i+',\'particulars\',this.value)"></td>'
+      +'<td><input type="number" min="0" step="any" value="'+r.wtpc+'" placeholder="0" oninput="qUpd('+i+',\'wtpc\',this.value)"></td>'
+      +'<td><input type="number" min="0" step="1" value="'+r.pieces+'" placeholder="0" oninput="qUpd('+i+',\'pieces\',this.value)"></td>'
+      +'<td class="amt">'+(q>0?(q%1===0?q:q.toFixed(2)):'—')+'</td>'
+      +'<td><input type="number" min="0" step="any" value="'+r.rate+'" placeholder="0" oninput="qUpd('+i+',\'rate\',this.value)"></td>'
+      +'<td class="amt">'+qAmt(r)+'</td>'
+      +'<td><button class="rm" onclick="qDel('+i+')">×</button></td>';
+    tb.appendChild(tr);
+  });
+  qRecalc();
+}
+function qUpd(i,f,v){
+  qRows[i][f]=v;
+  var c=document.getElementById('q-tbody').children[i];
+  if(c){
+    var q=qQty(qRows[i]);
+    c.children[3].textContent=q>0?(q%1===0?q:q.toFixed(2)):'—';
+    c.children[5].textContent=qAmt(qRows[i]);
+  }
+  qRecalc();
+}
+function qDel(i){qRows.splice(i,1);if(!qRows.length)qRows.push({particulars:'',wtpc:'',pieces:'',rate:''});qRender();}
+function qCharges(){
+  var totQty=0,sub=0;
+  qRows.forEach(function(r){totQty+=qQty(r);sub+=qAmtRaw(r);});
+  var loading=parseFloat(document.getElementById('q-loading').value)||0;
+  var kanta=parseFloat(document.getElementById('q-kanta').value)||0;
+  var transport=parseFloat(document.getElementById('q-transport').value)||0;
+  var unload=parseFloat(document.getElementById('q-unload').value)||0;
+  var gst=qFormat==='BASIC'?Math.round((sub+loading+kanta+transport+unload)*0.18):0;
+  var tot=sub+loading+kanta+transport+unload+gst;
+  return {totQty:totQty,sub:sub,loading:loading,kanta:kanta,transport:transport,unload:unload,gst:gst,tot:tot};
+}
+function qRecalc(){
+  var c=qCharges();
+  document.getElementById('q-d-qty').textContent=c.totQty%1===0?c.totQty:c.totQty.toFixed(2);
+  document.getElementById('q-d-sub').textContent=qFmt(c.sub);
+  document.getElementById('q-d-loading').textContent=qFmt(c.loading);
+  document.getElementById('q-d-kanta').textContent=qFmt(c.kanta);
+  document.getElementById('q-d-transport').textContent=qFmt(c.transport);
+  document.getElementById('q-d-unload').textContent=qFmt(c.unload);
+  document.getElementById('q-d-gst').textContent=qFmt(c.gst);
+  document.getElementById('q-d-tot').textContent=qFmt(c.tot);
+}
+function qGenerate(){
+  var toName=document.getElementById('q-to').value.trim()||'_________________________';
+  var date=document.getElementById('q-date').value.trim()||'__________';
+  var toAddr=document.getElementById('q-addr').value.trim();
+  var toGstin=document.getElementById('q-gstin').value.trim();
+  var subject=document.getElementById('q-subject').value.trim()||'________________________';
+  var note=document.getElementById('q-note').value.trim();
+  var c=qCharges();
+  var qStr=c.totQty%1===0?String(c.totQty):c.totQty.toFixed(2);
+  var itemsHtml=qRows.map(function(r,i){
+    var q=qQty(r),rt=parseFloat(r.rate)||0,a=qAmtRaw(r);
+    return '<tr><td>'+(i+1)+'</td><td class="lbl">'+(r.particulars||'')+'</td><td>'+(r.wtpc||'')+'</td><td>'+(r.pieces||'')+'</td><td>'+(q>0?(q%1===0?q:q.toFixed(2)):'')+'</td><td>'+(rt?rt.toLocaleString('en-IN'):'')+'</td><td class="r">'+(a>0?qFmt(a):'')+'</td></tr>';
+  }).join('');
+  var totalsRows='<tr class="sep"><td class="lbl" colspan="4">SUBTOTAL</td><td>'+qStr+'</td><td></td><td class="r">'+qFmt(c.sub)+'</td></tr>';
+  totalsRows+='<tr class="charge"><td class="lbl" colspan="4">LOADING</td><td></td><td></td><td class="r">'+qFmt(c.loading)+'</td></tr>';
+  if(c.kanta>0)totalsRows+='<tr class="charge"><td class="lbl" colspan="4">KANTA</td><td></td><td></td><td class="r">'+qFmt(c.kanta)+'</td></tr>';
+  if(c.transport>0)totalsRows+='<tr class="charge"><td class="lbl" colspan="4">TRANSPORT</td><td></td><td></td><td class="r">'+qFmt(c.transport)+'</td></tr>';
+  if(c.unload>0)totalsRows+='<tr class="charge"><td class="lbl" colspan="4">UNLOADING</td><td></td><td></td><td class="r">'+qFmt(c.unload)+'</td></tr>';
+  if(qFormat==='BASIC')totalsRows+='<tr class="charge"><td class="lbl" colspan="4">GST @ 18%</td><td></td><td></td><td class="r">'+qFmt(c.gst)+'</td></tr>';
+  var totLabel=qFormat==='INCLUDING'?'NET AMOUNT':(qFormat==='LOCAL'?'TOTAL AMT':'TOTAL');
+  totalsRows+='<tr class="tot"><td colspan="6" style="text-align:right;padding-right:2mm">'+totLabel+'</td><td class="r">'+qFmt(c.tot)+'</td></tr>';
+  var termsMap={
+    BASIC:['100% Advance payment only','Transportation extra as per actuals','Rate valid only for '+date],
+    INCLUDING:['Rate is inclusive of GST @ 18%','Advance payment only','Rate valid only for '+date],
+    LOCAL:['Transportation extra','Unloading extra','100% Advance payment only','No exchange / no return of material','Rate valid for '+date+' only']
+  };
+  var commonNotes=['Reconfirm rates before order confirmation as rates are subject to changes.','Amounts shown are approx and subject to final weighment','Factory weighment final'];
+  var termsHtml=(termsMap[qFormat]||[]).concat(commonNotes).map(function(t){return '<li>'+t.toUpperCase()+'</li>';}).join('');
+  var rateHdr='RATE/KG';
+  var bankHtml='<div class="sec">Bank Details:</div><ul class="bl"><li>BANK NAME: ICICI BANK</li><li>A/C NO.: 665005501385</li><li>IFSC CODE: ICIC0006650</li><li>BANK BRANCH: SIDDIAMBER BAZAAR</li></ul>';
+  var noteHtml=note?'<div class="sec">Note:</div><div class="note-text">'+escHtml(note)+'</div>':'';
+  var toExtra='';
+  if(toAddr)toExtra+='<div class="to-addr">'+toAddr+'</div>';
+  if(toGstin)toExtra+='<div class="to-gstin">GSTIN: '+toGstin+'</div>';
+  var page=PAGE_TEMPLATE;
+  page=page.replace('__DATE__',date).replace('__TONAME__',toName).replace('__TOEXTRA__',toExtra).replace('__SUBJECT__',subject)
+    .replace('__ITEMS__',itemsHtml)
+    .replace('__RATEHDR__',rateHdr).replace('__CHARGES__',totalsRows).replace('__TERMS__',termsHtml)
+    .replace('__NOTE__',noteHtml).replace('__BANKDETAILS__',bankHtml);
+  if(qBlobUrl)URL.revokeObjectURL(qBlobUrl);
+  qBlobUrl=URL.createObjectURL(new Blob([page],{type:'text/html'}));
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('s6').classList.add('active');
+  window.scrollTo(0,0);
+}
+function qOpen(){
+  var w=window.open(qBlobUrl,'_blank');
+  if(!w){var a=document.createElement('a');a.href=qBlobUrl;a.download='Quotation.html';document.body.appendChild(a);a.click();document.body.removeChild(a);}
+}
+function reset(){
+  rows=[];dtype='';qRows=[];qFormat='';
+  document.getElementById('tbody').innerHTML='';
+  ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others'].forEach(function(id){document.getElementById(id).value='';});
+  ['q-to','q-date','q-addr','q-gstin','q-subject','q-kanta','q-transport','q-unload','q-note'].forEach(function(id){document.getElementById(id).value='';});
+  document.querySelectorAll('.type-btn').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('n2').disabled=true;
+  document.getElementById('n9').disabled=true;
+  recalc();go(2);
+}
+var SETUP_CODE='VISHESH2026',LOCK_KEY='vs_mobile_token';
+function makeUnlockToken(){
+  if(typeof crypto!=='undefined'&&crypto.randomUUID)return crypto.randomUUID();
+  return 'tok-'+Math.random().toString(36).slice(2)+Date.now().toString(36);
+}
+function isDeviceUnlocked(){return !!localStorage.getItem(LOCK_KEY);}
+function tryUnlock(){
+  var val=document.getElementById('lock-code').value.trim();
+  if(val===SETUP_CODE){
+    localStorage.setItem(LOCK_KEY,makeUnlockToken());
+    showMenu();
+  }else{
+    document.getElementById('lock-err').style.display='block';
+  }
+}
+function showMenu(){
+  document.getElementById('lock').classList.remove('active');
+  document.getElementById('s2').classList.add('active');
+}
+(function initLock(){
+  if(isDeviceUnlocked())showMenu();
+})();
+</script></body></html>
