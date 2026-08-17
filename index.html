@@ -558,7 +558,7 @@ function todayStrDash(){return todayStr().split('/').join('-');}
 var DBS_FULL=13,DBS_LEFT_LAST=11,DBS_RIGHT_LAST=8;
 function dbsGenerate(){
   purgeStaleLedger();
-  var cashEntries=[],onlineEntries=[],rtgsEntries=[],totalCash=0,totalOnline=0,totalRTGS=0,catTotals={};
+  var cashEntries=[],onlineEntries=[],rtgsEntries=[],totalCash=0,totalOnline=0,totalRTGS=0,catTotals={},otherItemTotals={};
   dailyLedger.forEach(function(e){
     var isCashName=invoiceDisplayName(e).toUpperCase()==='CASH';
     if(e.online){onlineEntries.push(e);totalOnline+=e.total;}
@@ -566,7 +566,14 @@ function dbsGenerate(){
     else if(isCashName){cashEntries.push(e);totalCash+=e.total;}
     (e.fullRows||[]).forEach(function(r){
       var qty=parseFloat(r.q)||0;
-      if(qty>0){var cat=categoryForItemName(r.name);catTotals[cat]=(catTotals[cat]||0)+qty;}
+      if(qty>0){
+        var cat=categoryForItemName(r.name);
+        catTotals[cat]=(catTotals[cat]||0)+qty;
+        if(cat==='Other'){
+          var nm=(r.name||'').trim()||'(unnamed item)';
+          otherItemTotals[nm]=(otherItemTotals[nm]||0)+qty;
+        }
+      }
     });
   });
   var incomes=incRows.filter(function(r){return r.desc&&parseFloat(r.amt)>0;});
@@ -581,7 +588,18 @@ function dbsGenerate(){
   var rightItems=[];
   expenses.forEach(function(r){rightItems.push('<div class="dbs-row"><span>'+escHtml(r.desc)+'</span><span>'+fmt(parseFloat(r.amt)||0)+'</span></div>');});
   var catRows='';
-  Object.keys(catTotals).sort().forEach(function(c){var q=catTotals[c];if(q>0)catRows+='<div class="dbs-catrow"><span>'+c+'</span><span>'+(q%1===0?q:q.toFixed(2))+' kg</span></div>';});
+  Object.keys(catTotals).sort().forEach(function(c){
+    var q=catTotals[c];
+    if(q<=0)return;
+    if(c==='Other'){
+      Object.keys(otherItemTotals).sort().forEach(function(nm){
+        var oq=otherItemTotals[nm];
+        if(oq>0)catRows+='<div class="dbs-catrow"><span>'+escHtml(nm)+'</span><span>'+(oq%1===0?oq:oq.toFixed(2))+' kg</span></div>';
+      });
+      return;
+    }
+    catRows+='<div class="dbs-catrow"><span>'+c+'</span><span>'+(q%1===0?q:q.toFixed(2))+' kg</span></div>';
+  });
   if(!catRows)catRows='<div class="dbs-catrow" style="color:#888">No sales today</div>';
   var needsPage2=leftItems.length>DBS_LEFT_LAST||rightItems.length>DBS_RIGHT_LAST;
   var leftChunks=needsPage2?[leftItems.slice(0,DBS_FULL),leftItems.slice(DBS_FULL)]:[leftItems];
