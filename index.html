@@ -70,6 +70,13 @@ h3{font-size:10px;font-weight:800;color:var(--muted);margin-bottom:11px;text-tra
 .item-dd-opt{padding:10px 12px;font-size:14.5px;color:var(--text);cursor:pointer;border-bottom:1px solid var(--rule)}
 .item-dd-opt:last-child{border-bottom:none}
 .item-dd-opt:hover,.item-dd-opt:active{background:var(--amber-dim)}
+.cat-modal-overlay{display:none;position:fixed;inset:0;background:rgba(28,28,28,.5);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.cat-modal-overlay.on{display:flex}
+.cat-modal-box{background:var(--card);border-radius:var(--r);border:1px solid var(--rule);padding:18px;width:100%;max-width:320px;box-shadow:0 12px 32px rgba(28,28,28,.25)}
+.cat-modal-h{font-weight:800;font-size:16px;margin-bottom:4px}
+.cat-modal-name{font-size:14px;color:var(--muted);margin-bottom:12px;word-break:break-word}
+.cat-modal-acts{display:flex;gap:8px;margin-top:14px}
+.cat-modal-acts button{flex:1}
 .rm{background:none;border:none;color:#bdb6ae;cursor:pointer;font-size:21px;padding:4px 9px;line-height:1}
 .rm:hover,.rm:active{color:var(--bad)}
 .add-row{border:1.5px dashed #c9c2ba;border-radius:9px;padding:12px;font-size:13px;color:var(--muted);cursor:pointer;width:100%;background:none;margin-bottom:15px;font-family:inherit;font-weight:600;transition:border-color .15s,color .15s}
@@ -152,6 +159,15 @@ input[type=number]{-moz-appearance:textfield}
 <body>
 <datalist id="stock-items"><option value='20X20 (4.5kg/pc)'><option value='20x20 (5.5kg/pc)'><option value='20X20 (7kg/pc)'><option value='25X25 (5.5kg/pc)'><option value='25X25 (7kg/pc)'><option value='25X25 (8.5kg/pc)'><option value='25X25 (11kg/pc)'><option value='32X32 (7kg/pc)'><option value='32X32 (11kg/pc)'><option value='38X38 (8.5kg/pc)'><option value='38X38 (11kg/pc)'><option value='38X38 (14kg/pc)'><option value='38X38 (17kg/pc)'><option value='50X50 (11kg/pc)'><option value='50X50 (14kg/pc)'><option value='50X50 (17kg/pc)'><option value='50X50 (19kg/pc)'><option value='50X50 (22kg/pc)'><option value='50X50 (25kg/pc)'><option value='60X60 (18kg/pc)'><option value='60X60 (22kg/pc)'><option value='60X60 (27kg/pc)'><option value='72X72 (22kg/pc)'><option value='72X72 (27kg/pc)'><option value='72X72 (32kg/pc)'><option value='100X100 (37kg/pc)'><option value='100X100 (47kg/pc)'><option value='100X100 (55kg/pc)'><option value='100X100 (75kg/pc)'><option value='150X150 (75kg/pc)'><option value='150X150 (86kg/pc)'><option value='20X40 (7kg/pc)'><option value='20X40 (11kg/pc)'><option value='50x25 (8.5kg/pc)'><option value='50x25 (11kg/pc)'><option value='50X25 (14kg/pc)'><option value='50x25 (17kg/pc)'><option value='60X40 (11kg/pc)'><option value='60X40 (14kg/pc)'><option value='60X40 (18kg/pc)'><option value='60X40 (25kg/pc)'><option value='75X25 (14kg/pc)'><option value='75X25 (17kg/pc)'><option value='80x40 (18kg/pc)'><option value='80X40 (22kg/pc)'><option value='80X40 (27kg/pc)'><option value='80X40 (32kg/pc)'><option value='100X50 (22kg/pc)'><option value='100X50 (27kg/pc)'><option value='100X50 (32kg/pc)'><option value='122X61 (5 X 2.5 ) (43kg/pc)'><option value='145X82 (6 X 3) (53kg/pc)'><option value='32 OD (7kg/pc)'><option value='32 OD (9kg/pc)'><option value='32 OD (11kg/pc)'><option value='42 OD (7kg/pc)'><option value='42 OD (11kg/pc)'><option value='48 OD (8.5kg/pc)'><option value='48 OD (11kg/pc)'><option value='48 OD (14kg/pc)'><option value='48 OD (17kg/pc)'><option value='48 OD (20kg/pc)'><option value='60 OD (13kg/pc)'><option value='60 OD (16kg/pc)'><option value='60 OD (22kg/pc)'><option value='60 OD (25kg/pc)'><option value='76 OD (22kg/pc)'><option value='76 OD (27kg/pc)'><option value='76 OD (32kg/pc)'><option value='89 OD (27kg/pc)'><option value='89 OD (33kg/pc)'><option value='89 OD (37kg/pc)'><option value='89 OD (42kg/pc)'><option value='89 OD (46kg/pc)'><option value='114 OD (43kg/pc)'><option value='114 OD (58kg/pc)'><option value='165 OD (70kg/pc)'><option value='219 OD (84kg/pc)'><option value='9MM SQ'><option value='10MM SQ'><option value='12MM SQ'><option value='16MM SQ'><option value='20MM SQ'><option value='25MM SQ'><option value='32MM SQ'><option value='40MM SQ'><option value='50MM SQ'><option value='10MM ROUND'><option value='12MM ROUND'><option value='16MM ROUND'><option value='20MM ROUND'><option value='25MM ROUND'><option value='32MM ROUND'><option value='20X5 FLAT'><option value='25X6 FLAT'><option value='32X6 FLAT'><option value='40X6 FLAT'><option value='50X6 FLAT'><option value='65X6 FLAT'><option value='75X6 FLAT'><option value='100X6 FLAT'><option value='100X12 FLAT'><option value='100X16 FLAT'><option value='25X10 FLAT'><option value='40X8 FLAT'><option value='40X10 FLAT'><option value='40X12 FLAT'><option value='50X8 FLAT'><option value='50X10 FLAT'><option value='50X12 FLAT'><option value='50X16 FLAT'><option value='65X12 FLAT'><option value='65X16 FLAT'><option value='75X12 FLAT'><option value='75X16 FLAT'><option value='75X20 FLAT'><option value='75X25 FLAT'><option value='22X2 ANGLE'><option value='25X3 ANGLE'><option value='25 X5 ANGLE'><option value='32X4 ANGLE'><option value='35X5 ANGLE'><option value='40X5 ANGLE'><option value='40X6 ANGE'><option value='50X5 ANGLE'><option value='50X6 ANGLE'><option value='65X6 ANGLE'><option value='75X6 ANGLE'><option value='3X1.5 CH'><option value='4X2 CH'><option value='5X2.5 CH'><option value='6X3 CH'><option value='4X2 IB'><option value='5X2.5 IB'><option value='6X3 IB'><option value='8X4 IB'><option value='12X2 BEND'><option value='17X2 BEND'><option value='17X3 BEND'><option value='18X4 BEND'><option value='25X3 BEND'><option value='32X3 BEND'><option value='40X3 BEND'><option value='7 X 3 RING'><option value='7 X 7 RING'><option value='7 X 10 RING'><option value='7 X 12 RING'><option value='7 X 13 RING'><option value='7 X 14 RING'><option value='7 X 15 RING'><option value='7 X 16 RING'><option value='7 X 17 RING'><option value='7 X 20 RING'><option value='4 X 14 RING'><option value='4 X 13 RING'><option value='06 MM TMT'><option value='08 MM TMT'><option value='10 MM TMT'><option value='12 MM TMT'><option value='16 MM TMT'><option value='20 MM TMT'><option value='25 MM TMT'><option value='32 MM TMT'></datalist>
 <div id="item-dropdown" class="item-dd"></div>
+<div id="cat-modal" class="cat-modal-overlay">
+  <div class="cat-modal-box">
+    <div class="cat-modal-h">New item</div>
+    <div class="cat-modal-name" id="cat-modal-name"></div>
+    <div class="fg"><label>Category</label><select id="cat-modal-select"></select></div>
+    <div class="fg" id="cat-modal-new-wrap" style="display:none"><label>New category name</label><input id="cat-modal-new-input" type="text" placeholder="e.g. Wire Rods"></div>
+    <div class="cat-modal-acts"><button class="btn-s" type="button" id="cat-modal-skip">Skip</button><button class="btn-a" type="button" id="cat-modal-save">Save</button></div>
+  </div>
+</div>
 <header class="mast"><div class="mast-lock"><svg class="mast-logo" viewBox="0 0 1010 800" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g transform="translate(0,800) scale(0.1,-0.1)" fill="#fff" stroke="none"><path d="M6474 7001 c-46 -11 -54 -19 -76 -69 -11 -25 -39 -73 -62 -108 -66
 -100 -99 -152 -136 -219 -19 -34 -47 -78 -62 -97 -14 -19 -33 -51 -42 -72 -9
 -21 -29 -54 -45 -74 -15 -21 -40 -59 -54 -87 -14 -27 -37 -61 -51 -74 -14 -13
@@ -548,7 +564,10 @@ function dbsGenerate(){
     if(e.online){onlineEntries.push(e);totalOnline+=e.total;}
     else if(e.rtgs){rtgsEntries.push(e);totalRTGS+=e.total;}
     else if(isCashName){cashEntries.push(e);totalCash+=e.total;}
-    e.items.forEach(function(it){catTotals[it.category]=(catTotals[it.category]||0)+it.qty;});
+    (e.fullRows||[]).forEach(function(r){
+      var qty=parseFloat(r.q)||0;
+      if(qty>0){var cat=categoryForItemName(r.name);catTotals[cat]=(catTotals[cat]||0)+qty;}
+    });
   });
   var incomes=incRows.filter(function(r){return r.desc&&parseFloat(r.amt)>0;});
   var incTotal=incomes.reduce(function(s,r){return s+(parseFloat(r.amt)||0);},0);
@@ -680,7 +699,7 @@ function finalizeChitti(){
   const c=getChittiCalc();
   const hasItems=rows.some(r=>(r.name||'').trim()&&((parseFloat(r.q)||0)>0||(parseFloat(r.p)||0)>0));
   if(!hasItems||c.tot<=0){alert('Add at least one item before finalizing.');return;}
-  const catItems=rows.filter(r=>r.name&&(parseFloat(r.q)||0)>0&&ITEM_CATEGORY[(r.name||'').trim()]).map(r=>({category:ITEM_CATEGORY[(r.name||'').trim()],qty:parseFloat(r.q)||0}));
+  const catItems=rows.filter(r=>r.name&&(parseFloat(r.q)||0)>0).map(r=>({category:categoryForItemName(r.name),qty:parseFloat(r.q)||0}));
   var newEntry={
     id:crypto.randomUUID(),
     customerName:c.rawName,total:c.tot,online:c.online,provider:c.provider,sender:c.sender,rtgs:c.rtgs,items:catItems,
@@ -819,17 +838,63 @@ function getStockNames(){
   if(!window._stockNamesCache){window._stockNamesCache=Array.from(document.querySelectorAll('#stock-items option')).map(function(o){return o.value;});}
   return window._stockNamesCache;
 }
-function getCustomItems(){try{return JSON.parse(localStorage.getItem(CUSTOM_ITEMS_KEY)||'[]');}catch(e){return [];}}
-function saveCustomItem(name){
+function getCustomItems(){
+  try{
+    var raw=JSON.parse(localStorage.getItem(CUSTOM_ITEMS_KEY)||'[]');
+    return raw.map(function(it){return typeof it==='string'?{name:it,category:'Other'}:it;});
+  }catch(e){return [];}
+}
+function getCustomItemNames(){return getCustomItems().map(function(c){return c.name;});}
+function customCategoryFor(name){
+  name=(name||'').trim().toLowerCase();
+  var found=getCustomItems().find(function(c){return c.name.toLowerCase()===name;});
+  return found?found.category:null;
+}
+function categoryForItemName(name){
+  name=(name||'').trim();
+  return ITEM_CATEGORY[name]||customCategoryFor(name)||'Other';
+}
+function allCategories(){
+  var base=Array.from(new Set(Object.values(ITEM_CATEGORY)));
+  var custom=getCustomItems().map(function(c){return c.category;});
+  return Array.from(new Set(base.concat(custom).concat(['Other']))).sort();
+}
+function saveCustomItem(name,category){
   name=(name||'').trim();
   if(!name)return;
-  var all=getStockNames().concat(getCustomItems());
-  if(all.some(function(n){return n.toLowerCase()===name.toLowerCase();}))return;
   var custom=getCustomItems();
-  custom.push(name);
+  custom.push({name:name,category:category||'Other'});
   localStorage.setItem(CUSTOM_ITEMS_KEY,JSON.stringify(custom));
 }
-function allItemNames(){return getStockNames().concat(getCustomItems());}
+function allItemNames(){return getStockNames().concat(getCustomItemNames());}
+var catModalPendingInput=null,catModalPendingName='';
+function openCategoryModal(inputEl,name){
+  catModalPendingInput=inputEl;
+  catModalPendingName=name;
+  document.getElementById('cat-modal-name').textContent=name;
+  var sel=document.getElementById('cat-modal-select');
+  sel.innerHTML=allCategories().map(function(c){return '<option value="'+escAttr(c)+'">'+escHtml(c)+'</option>';}).join('')+'<option value="__new__">+ New category…</option>';
+  document.getElementById('cat-modal-new-wrap').style.display='none';
+  document.getElementById('cat-modal-new-input').value='';
+  document.getElementById('cat-modal').classList.add('on');
+}
+function closeCategoryModal(){
+  document.getElementById('cat-modal').classList.remove('on');
+  catModalPendingInput=null;catModalPendingName='';
+}
+document.getElementById('cat-modal-select').addEventListener('change',function(){
+  document.getElementById('cat-modal-new-wrap').style.display=this.value==='__new__'?'':'none';
+});
+document.getElementById('cat-modal-skip').addEventListener('click',function(){closeCategoryModal();});
+document.getElementById('cat-modal-save').addEventListener('click',function(){
+  var sel=document.getElementById('cat-modal-select');
+  var cat=sel.value==='__new__'?document.getElementById('cat-modal-new-input').value.trim():sel.value;
+  if(cat)saveCustomItem(catModalPendingName,cat);
+  closeCategoryModal();
+});
+document.getElementById('cat-modal').addEventListener('mousedown',function(e){
+  if(e.target.id==='cat-modal')closeCategoryModal();
+});
 var itemDDActiveInput=null;
 function itemDDFilter(q){
   if(!itemDDActiveInput)return;
@@ -851,7 +916,13 @@ document.addEventListener('input',function(e){
   if(e.target&&e.target.classList&&e.target.classList.contains('item-input')&&e.target===itemDDActiveInput)itemDDFilter(e.target.value);
 });
 document.addEventListener('focusout',function(e){
-  if(e.target&&e.target.classList&&e.target.classList.contains('item-input')){saveCustomItem(e.target.value);setTimeout(itemDDHide,150);}
+  if(e.target&&e.target.classList&&e.target.classList.contains('item-input')){
+    var name=(e.target.value||'').trim(),input=e.target;
+    if(name&&allItemNames().every(function(n){return n.toLowerCase()!==name.toLowerCase();})){
+      setTimeout(function(){openCategoryModal(input,name);},160);
+    }
+    setTimeout(itemDDHide,150);
+  }
 });
 document.getElementById('item-dropdown').addEventListener('mousedown',function(e){
   var opt=e.target.closest('.item-dd-opt');
