@@ -135,18 +135,18 @@ input[type=number]{-moz-appearance:textfield}
 .inv-del:hover,.inv-del:active{color:var(--bad)}
 .empty{color:var(--muted);font-size:13px;padding:18px 2px;line-height:1.5}
 .dbs-doc{background:#fff;color:#000;width:105mm;height:148.5mm;overflow:hidden;font-family:'Times New Roman',serif;border:1.5px solid #000;padding:2.5mm 3.5mm 3mm 3.5mm;display:block}
-.dbs-shri{text-align:center;font-size:16.5pt;font-weight:bold;margin-bottom:1mm}
+.dbs-shri{text-align:center;font-size:11pt;font-weight:bold;margin-bottom:1mm}
 .dbs-rule1{border-top:0.75px solid #000;margin-bottom:1mm}
-.dbs-meta{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5pt;border-bottom:0.5px solid #000;padding-bottom:1mm;margin-bottom:3mm}
-.dbs-hindi{font-weight:bold;font-size:14.25pt}
+.dbs-meta{display:flex;justify-content:space-between;align-items:baseline;font-size:9pt;border-bottom:0.5px solid #000;padding-bottom:1mm;margin-bottom:3mm}
+.dbs-hindi{font-weight:bold;font-size:9.5pt}
 .dbs-grid{display:flex;gap:3mm}
 .dbs-gcol{flex:1;min-width:0}
-.dbs-h{font-size:11.25pt;font-weight:bold;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:1mm;color:#333}
-.dbs-row{display:flex;justify-content:space-between;gap:2mm;font-size:11.25pt;padding:0.6mm 0;line-height:1.25}
+.dbs-h{font-size:7.5pt;font-weight:bold;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:1mm;color:#333}
+.dbs-row{display:flex;justify-content:space-between;gap:2mm;font-size:7.5pt;padding:0.6mm 0;line-height:1.25}
 .dbs-row span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dbs-tot{display:flex;justify-content:space-between;font-size:12pt;font-weight:bold;padding:0.5mm 0}
+.dbs-tot{display:flex;justify-content:space-between;font-size:8pt;font-weight:bold;padding:0.5mm 0}
 .dbs-bottom{margin-top:3mm}
-.dbs-catrow{display:flex;justify-content:space-between;font-size:11.25pt;padding:0.6mm 0}
+.dbs-catrow{display:flex;justify-content:space-between;font-size:7.5pt;padding:0.6mm 0}
 </style>
 </head>
 <body>
@@ -520,7 +520,7 @@ function expUpd(i,f,v){expRows[i][f]=v;}
 function expDel(i){expRows.splice(i,1);if(!expRows.length)expRows.push({desc:'',amt:''});expRender();}
 function todayStr(){var d=new Date();var p=function(n){return String(n).padStart(2,'0');};return p(d.getDate())+'/'+p(d.getMonth()+1)+'/'+d.getFullYear();}
 function todayStrDash(){return todayStr().split('/').join('-');}
-var DBS_FULL=13,DBS_LEFT_LAST=11,DBS_RIGHT_LAST=8;
+var DBS_FULL=20,DBS_LEFT_LAST=17,DBS_RIGHT_LAST=13;
 function dbsGenerate(){
   purgeStaleLedger();
   var cashEntries=[],onlineEntries=[],totalCash=0,totalOnline=0,catTotals={};
