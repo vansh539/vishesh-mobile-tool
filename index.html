@@ -134,19 +134,19 @@ input[type=number]{-moz-appearance:textfield}
 .inv-del{background:none;border:none;color:#bdb6ae;cursor:pointer;font-size:21px;padding:7px 9px;line-height:1}
 .inv-del:hover,.inv-del:active{color:var(--bad)}
 .empty{color:var(--muted);font-size:13px;padding:18px 2px;line-height:1.5}
-.dbs-doc{background:#fff;color:#000;width:105mm;height:148.5mm;overflow:hidden;font-family:'Times New Roman',serif;border:1.5px solid #000;padding:2.5mm 3.5mm 3mm 3.5mm;display:block}
-.dbs-shri{text-align:center;font-size:11pt;font-weight:bold;margin-bottom:1mm}
+.dbs-doc{background:#fff;color:#000;width:105mm;height:148.5mm;overflow:hidden;font-family:'Times New Roman',serif;border:1.5px solid #000;padding:2.5mm 3.5mm 3mm 3.5mm;display:flex;flex-direction:column}
+.dbs-shri{text-align:center;font-size:16.5pt;font-weight:bold;margin-bottom:1mm}
 .dbs-rule1{border-top:0.75px solid #000;margin-bottom:1mm}
-.dbs-meta{display:flex;justify-content:space-between;align-items:baseline;font-size:9pt;border-bottom:0.5px solid #000;padding-bottom:1mm;margin-bottom:3mm}
-.dbs-hindi{font-weight:bold;font-size:9.5pt}
-.dbs-grid{display:flex;gap:3mm}
-.dbs-gcol{flex:1;min-width:0}
-.dbs-h{font-size:7.5pt;font-weight:bold;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:1mm;color:#333}
-.dbs-row{display:flex;justify-content:space-between;gap:2mm;font-size:7.5pt;padding:0.6mm 0;line-height:1.25}
+.dbs-meta{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5pt;border-bottom:0.5px solid #000;padding-bottom:1mm;margin-bottom:3mm}
+.dbs-hindi{font-weight:bold;font-size:14.25pt}
+.dbs-grid{display:flex;gap:3mm;flex:1;min-height:0}
+.dbs-gcol{flex:1;min-width:0;display:flex;flex-direction:column}
+.dbs-h{font-size:11.25pt;font-weight:bold;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:1mm;color:#333}
+.dbs-row{display:flex;justify-content:space-between;gap:2mm;font-size:11.25pt;padding:0.6mm 0;line-height:1.25}
 .dbs-row span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dbs-tot{display:flex;justify-content:space-between;font-size:8pt;font-weight:bold;padding:0.5mm 0}
-.dbs-bottom{margin-top:3mm}
-.dbs-catrow{display:flex;justify-content:space-between;font-size:7.5pt;padding:0.6mm 0}
+.dbs-tot{display:flex;justify-content:space-between;font-size:12pt;font-weight:bold;padding:0.5mm 0}
+.dbs-bottom{margin-top:auto;padding-top:3mm}
+.dbs-catrow{display:flex;justify-content:space-between;font-size:11.25pt;padding:0.6mm 0}
 </style>
 </head>
 <body>
@@ -247,6 +247,10 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
     <div class="acts"><button class="btn-p" id="n2" onclick="go(3)" disabled>Continue →</button></div>
   </div></div>
   <div class="step" id="s10">
+    <div class="card"><h3>Other Income (today)</h3>
+      <table class="itbl"><thead><tr><th>Description</th><th style="width:100px;text-align:right">Amount</th><th style="width:28px"></th></tr></thead><tbody id="inc-tbody"></tbody></table>
+      <button class="add-row" onclick="addIncRow()">+ Add income</button>
+    </div>
     <div class="card"><h3>Expenses (today)</h3>
       <table class="itbl"><thead><tr><th>Description</th><th style="width:100px;text-align:right">Amount</th><th style="width:28px"></th></tr></thead><tbody id="exp-tbody"></tbody></table>
       <button class="add-row" onclick="addExpRow()">+ Add expense</button>
@@ -288,6 +292,7 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
         </div>
         <div class="fg"><label>UPI Charges</label><input id="f-upi" type="number" min="0" placeholder="0" oninput="recalc()"></div>
       </div>
+      <label class="chk"><input type="checkbox" id="f-rtgs" onchange="toggleRTGS()"> RTGS</label>
       <div class="sumbox">
         <div class="sr"><span>Items subtotal</span><span id="d-sub">0</span></div>
         <div class="sr muted"><span>Labour</span><span id="d-lab">0</span></div>
@@ -384,10 +389,11 @@ var dtype='',rows=[],qRows=[],qBlobUrl='',qFormat='';
 var ITEM_CATEGORY={'20X20 (4.5kg/pc)':'M.S. Pipes','20x20 (5.5kg/pc)':'M.S. Pipes','20X20 (7kg/pc)':'M.S. Pipes','25X25 (5.5kg/pc)':'M.S. Pipes','25X25 (7kg/pc)':'M.S. Pipes','25X25 (8.5kg/pc)':'M.S. Pipes','25X25 (11kg/pc)':'M.S. Pipes','32X32 (7kg/pc)':'M.S. Pipes','32X32 (11kg/pc)':'M.S. Pipes','38X38 (8.5kg/pc)':'M.S. Pipes','38X38 (11kg/pc)':'M.S. Pipes','38X38 (14kg/pc)':'M.S. Pipes','38X38 (17kg/pc)':'M.S. Pipes','50X50 (11kg/pc)':'M.S. Pipes','50X50 (14kg/pc)':'M.S. Pipes','50X50 (17kg/pc)':'M.S. Pipes','50X50 (19kg/pc)':'M.S. Pipes','50X50 (22kg/pc)':'M.S. Pipes','50X50 (25kg/pc)':'M.S. Pipes','60X60 (18kg/pc)':'M.S. Pipes','60X60 (22kg/pc)':'M.S. Pipes','60X60 (27kg/pc)':'M.S. Pipes','72X72 (22kg/pc)':'M.S. Pipes','72X72 (27kg/pc)':'M.S. Pipes','72X72 (32kg/pc)':'M.S. Pipes','100X100 (37kg/pc)':'M.S. Pipes','100X100 (47kg/pc)':'M.S. Pipes','100X100 (55kg/pc)':'M.S. Pipes','100X100 (75kg/pc)':'M.S. Pipes','150X150 (75kg/pc)':'M.S. Pipes','150X150 (86kg/pc)':'M.S. Pipes','20X40 (7kg/pc)':'M.S. Pipes','20X40 (11kg/pc)':'M.S. Pipes','50x25 (8.5kg/pc)':'M.S. Pipes','50x25 (11kg/pc)':'M.S. Pipes','50X25 (14kg/pc)':'M.S. Pipes','50x25 (17kg/pc)':'M.S. Pipes','60X40 (11kg/pc)':'M.S. Pipes','60X40 (14kg/pc)':'M.S. Pipes','60X40 (18kg/pc)':'M.S. Pipes','60X40 (25kg/pc)':'M.S. Pipes','75X25 (14kg/pc)':'M.S. Pipes','75X25 (17kg/pc)':'M.S. Pipes','80x40 (18kg/pc)':'M.S. Pipes','80X40 (22kg/pc)':'M.S. Pipes','80X40 (27kg/pc)':'M.S. Pipes','80X40 (32kg/pc)':'M.S. Pipes','100X50 (22kg/pc)':'M.S. Pipes','100X50 (27kg/pc)':'M.S. Pipes','100X50 (32kg/pc)':'M.S. Pipes','122X61 (5 X 2.5 ) (43kg/pc)':'M.S. Pipes','145X82 (6 X 3) (53kg/pc)':'M.S. Pipes','32 OD (7kg/pc)':'M.S. Pipes','32 OD (9kg/pc)':'M.S. Pipes','32 OD (11kg/pc)':'M.S. Pipes','42 OD (7kg/pc)':'M.S. Pipes','42 OD (11kg/pc)':'M.S. Pipes','48 OD (8.5kg/pc)':'M.S. Pipes','48 OD (11kg/pc)':'M.S. Pipes','48 OD (14kg/pc)':'M.S. Pipes','48 OD (17kg/pc)':'M.S. Pipes','48 OD (20kg/pc)':'M.S. Pipes','60 OD (13kg/pc)':'M.S. Pipes','60 OD (16kg/pc)':'M.S. Pipes','60 OD (22kg/pc)':'M.S. Pipes','60 OD (25kg/pc)':'M.S. Pipes','76 OD (22kg/pc)':'M.S. Pipes','76 OD (27kg/pc)':'M.S. Pipes','76 OD (32kg/pc)':'M.S. Pipes','89 OD (27kg/pc)':'M.S. Pipes','89 OD (33kg/pc)':'M.S. Pipes','89 OD (37kg/pc)':'M.S. Pipes','89 OD (42kg/pc)':'M.S. Pipes','89 OD (46kg/pc)':'M.S. Pipes','114 OD (43kg/pc)':'M.S. Pipes','114 OD (58kg/pc)':'M.S. Pipes','165 OD (70kg/pc)':'M.S. Pipes','219 OD (84kg/pc)':'M.S. Pipes','9MM SQ':'M.S. Section','10MM SQ':'M.S. Section','12MM SQ':'M.S. Section','16MM SQ':'M.S. Section','20MM SQ':'M.S. Section','25MM SQ':'M.S. Section','32MM SQ':'M.S. Section','40MM SQ':'M.S. Section','50MM SQ':'M.S. Section','10MM ROUND':'M.S. Section','12MM ROUND':'M.S. Section','16MM ROUND':'M.S. Section','20MM ROUND':'M.S. Section','25MM ROUND':'M.S. Section','32MM ROUND':'M.S. Section','20X5 FLAT':'M.S. Section','25X6 FLAT':'M.S. Section','32X6 FLAT':'M.S. Section','40X6 FLAT':'M.S. Section','50X6 FLAT':'M.S. Section','65X6 FLAT':'M.S. Section','75X6 FLAT':'M.S. Section','100X6 FLAT':'M.S. Section','100X12 FLAT':'M.S. Section','100X16 FLAT':'M.S. Section','25X10 FLAT':'M.S. Section','40X8 FLAT':'M.S. Section','40X10 FLAT':'M.S. Section','40X12 FLAT':'M.S. Section','50X8 FLAT':'M.S. Section','50X10 FLAT':'M.S. Section','50X12 FLAT':'M.S. Section','50X16 FLAT':'M.S. Section','65X12 FLAT':'M.S. Section','65X16 FLAT':'M.S. Section','75X12 FLAT':'M.S. Section','75X16 FLAT':'M.S. Section','75X20 FLAT':'M.S. Section','75X25 FLAT':'M.S. Section','22X2 ANGLE':'M.S. Section','25X3 ANGLE':'M.S. Section','25 X5 ANGLE':'M.S. Section','32X4 ANGLE':'M.S. Section','35X5 ANGLE':'M.S. Section','40X5 ANGLE':'M.S. Section','40X6 ANGE':'M.S. Section','50X5 ANGLE':'M.S. Section','50X6 ANGLE':'M.S. Section','65X6 ANGLE':'M.S. Section','75X6 ANGLE':'M.S. Section','3X1.5 CH':'M.S. Section','4X2 CH':'M.S. Section','5X2.5 CH':'M.S. Section','6X3 CH':'M.S. Section','4X2 IB':'M.S. Section','5X2.5 IB':'M.S. Section','6X3 IB':'M.S. Section','8X4 IB':'M.S. Section','12X2 BEND':'M.S. Section','17X2 BEND':'M.S. Section','17X3 BEND':'M.S. Section','18X4 BEND':'M.S. Section','25X3 BEND':'M.S. Section','32X3 BEND':'M.S. Section','40X3 BEND':'M.S. Section','7 X 3 RING':'Rings','7 X 7 RING':'Rings','7 X 10 RING':'Rings','7 X 12 RING':'Rings','7 X 13 RING':'Rings','7 X 14 RING':'Rings','7 X 15 RING':'Rings','7 X 16 RING':'Rings','7 X 17 RING':'Rings','7 X 20 RING':'Rings','4 X 14 RING':'Rings','4 X 13 RING':'Rings','06 MM TMT':'TMT Bars','08 MM TMT':'TMT Bars','10 MM TMT':'TMT Bars','12 MM TMT':'TMT Bars','16 MM TMT':'TMT Bars','20 MM TMT':'TMT Bars','25 MM TMT':'TMT Bars','32 MM TMT':'TMT Bars'};
 var dailyLedger=[]; // in-memory only, for this browser tab/session — never written to disk, localStorage, or a server. Gone on reload/close by design.
 var expRows=[];
+var incRows=[];
 var ledgerDateKey=todayStr();
 function purgeStaleLedger(){
   var today=todayStr();
-  if(today!==ledgerDateKey){dailyLedger=[];expRows=[];ledgerDateKey=today;}
+  if(today!==ledgerDateKey){dailyLedger=[];expRows=[];incRows=[];ledgerDateKey=today;}
 }
 var SYNC_BASE='https://vishesh-relay.onrender.com';
 var RELAY_SECRET='8dbba301082fd985efbc4cd08f7aac7642737d38c6a4f1254f57a32062f0c204';
@@ -500,7 +506,7 @@ function pickType(t,el){
 function go(n){
   document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
   if(n===3&&dtype==='Quotation'){document.getElementById('s9').classList.add('active');window.scrollTo(0,0);return;}
-  if(n===3&&dtype==='DailyBalance'){document.getElementById('s10').classList.add('active');if(expRows.length===0)addExpRow();else expRender();window.scrollTo(0,0);return;}
+  if(n===3&&dtype==='DailyBalance'){document.getElementById('s10').classList.add('active');if(incRows.length===0)addIncRow();else incRender();if(expRows.length===0)addExpRow();else expRender();window.scrollTo(0,0);return;}
   document.getElementById('s'+n).classList.add('active');
   if(n===3&&rows.length===0)addRow();
   window.scrollTo(0,0);
@@ -518,23 +524,41 @@ function expRender(){
 }
 function expUpd(i,f,v){expRows[i][f]=v;}
 function expDel(i){expRows.splice(i,1);if(!expRows.length)expRows.push({desc:'',amt:''});expRender();}
+function addIncRow(){incRows.push({desc:'',amt:''});incRender();}
+function incRender(){
+  var tb=document.getElementById('inc-tbody');tb.innerHTML='';
+  incRows.forEach(function(r,i){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td><input type="text" value="'+escAttr(r.desc)+'" placeholder="e.g. Old credit settled" oninput="incUpd('+i+',\'desc\',this.value)"></td>'
+      +'<td><input type="number" min="0" step="any" inputmode="decimal" value="'+escAttr(r.amt)+'" placeholder="0" oninput="incUpd('+i+',\'amt\',this.value)"></td>'
+      +'<td><button class="rm" onclick="incDel('+i+')">×</button></td>';
+    tb.appendChild(tr);
+  });
+}
+function incUpd(i,f,v){incRows[i][f]=v;}
+function incDel(i){incRows.splice(i,1);if(!incRows.length)incRows.push({desc:'',amt:''});incRender();}
 function todayStr(){var d=new Date();var p=function(n){return String(n).padStart(2,'0');};return p(d.getDate())+'/'+p(d.getMonth()+1)+'/'+d.getFullYear();}
 function todayStrDash(){return todayStr().split('/').join('-');}
-var DBS_FULL=20,DBS_LEFT_LAST=17,DBS_RIGHT_LAST=13;
+var DBS_FULL=13,DBS_LEFT_LAST=11,DBS_RIGHT_LAST=8;
 function dbsGenerate(){
   purgeStaleLedger();
-  var cashEntries=[],onlineEntries=[],totalCash=0,totalOnline=0,catTotals={};
+  var cashEntries=[],onlineEntries=[],rtgsEntries=[],totalCash=0,totalOnline=0,totalRTGS=0,catTotals={};
   dailyLedger.forEach(function(e){
     var isCashName=invoiceDisplayName(e).toUpperCase()==='CASH';
     if(e.online){onlineEntries.push(e);totalOnline+=e.total;}
+    else if(e.rtgs){rtgsEntries.push(e);totalRTGS+=e.total;}
     else if(isCashName){cashEntries.push(e);totalCash+=e.total;}
     e.items.forEach(function(it){catTotals[it.category]=(catTotals[it.category]||0)+it.qty;});
   });
+  var incomes=incRows.filter(function(r){return r.desc&&parseFloat(r.amt)>0;});
+  var incTotal=incomes.reduce(function(s,r){return s+(parseFloat(r.amt)||0);},0);
   var expenses=expRows.filter(function(r){return r.desc&&parseFloat(r.amt)>0;});
   var expTotal=expenses.reduce(function(s,r){return s+(parseFloat(r.amt)||0);},0);
   var leftItems=[];
   cashEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>CASH</span><span>'+fmt(e.total)+' (Cash)</span></div>');});
   onlineEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>'+e.provider+(e.sender?(' '+escHtml(e.sender)):'')+'</span><span>'+fmt(e.total)+'</span></div>');});
+  rtgsEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>RTGS</span><span>'+fmt(e.total)+'</span></div>');});
+  incomes.forEach(function(r){leftItems.push('<div class="dbs-row"><span>'+escHtml(r.desc)+'</span><span>'+fmt(parseFloat(r.amt)||0)+'</span></div>');});
   var rightItems=[];
   expenses.forEach(function(r){rightItems.push('<div class="dbs-row"><span>'+escHtml(r.desc)+'</span><span>'+fmt(parseFloat(r.amt)||0)+'</span></div>');});
   var catRows='';
@@ -549,14 +573,14 @@ function dbsGenerate(){
     var isLast=(p===pageCount-1);
     var leftHtml=leftChunks[p].join('')||(p===0&&!leftItems.length?'<div class="dbs-row" style="color:#888">None today</div>':'');
     var rightHtml=rightChunks[p].join('')||(p===0&&!rightItems.length?'<div class="dbs-row" style="color:#888">None today</div>':'');
-    var leftBottom=isLast?('<div class="dbs-bottom"><div class="dbs-tot"><span>Total Cash</span><span>'+fmt(totalCash)+'</span></div><div class="dbs-tot"><span>Total Online</span><span>'+fmt(totalOnline)+'</span></div></div>'):'';
-    var rightBottom=isLast?('<div class="dbs-tot"><span>Total Expenses</span><span>'+fmt(expTotal)+'</span></div><div class="dbs-bottom"><div class="dbs-h">Category Qty Sold</div>'+catRows+'</div>'):'';
+    var leftBottom=isLast?('<div class="dbs-bottom"><div class="dbs-tot"><span>Total Cash</span><span>'+fmt(totalCash)+'</span></div><div class="dbs-tot"><span>Total Online</span><span>'+fmt(totalOnline)+'</span></div><div class="dbs-tot"><span>Total RTGS</span><span>'+fmt(totalRTGS)+'</span></div><div class="dbs-tot"><span>Total Other Income</span><span>'+fmt(incTotal)+'</span></div></div>'):'';
+    var rightBottom=isLast?('<div class="dbs-bottom"><div class="dbs-tot"><span>Total Expenses</span><span>'+fmt(expTotal)+'</span></div><div class="dbs-h">Category Qty Sold</div>'+catRows+'</div>'):'';
     pages+='<div class="dbs-doc">'
       +'<div class="dbs-shri">||श्री||</div>'
       +'<div class="dbs-rule1"></div>'
       +'<div class="dbs-meta"><span class="dbs-hindi">श्री रानी सती दादी जी'+(p>0?' (contd.)':'')+'</span><span>'+todayStr()+'</span></div>'
       +'<div class="dbs-grid">'
-        +'<div class="dbs-gcol"><div class="dbs-h">Cash / Online</div>'+leftHtml+leftBottom+'</div>'
+        +'<div class="dbs-gcol"><div class="dbs-h">Cash / Online / RTGS</div>'+leftHtml+leftBottom+'</div>'
         +'<div class="dbs-gcol"><div class="dbs-h">Expenses</div>'+rightHtml+rightBottom+'</div>'
       +'</div>'
     +'</div>';
@@ -593,7 +617,15 @@ function gc(id){return parseFloat(document.getElementById(id).value)||0;}
 function fmt(v){return''+Math.round(v).toLocaleString('en-IN');}
 function toggleOnline(){
   var on=document.getElementById('f-online').checked;
+  if(on)document.getElementById('f-rtgs').checked=false;
   document.getElementById('online-block').style.display=on?'':'none';
+  recalc();
+}
+function toggleRTGS(){
+  if(document.getElementById('f-rtgs').checked){
+    document.getElementById('f-online').checked=false;
+    document.getElementById('online-block').style.display='none';
+  }
   recalc();
 }
 function recalc(){
@@ -622,13 +654,14 @@ function getChittiCalc(){
   const online=document.getElementById('f-online').checked;
   const provider=document.getElementById('f-provider').value;
   const sender=document.getElementById('f-sender').value.trim();
+  const rtgs=document.getElementById('f-rtgs').checked;
   const upi=online?gc('f-upi'):0;
   const tot=sub+lab+weigh+freight+others+upi;
-  const payNote=online?escHtml(provider+(sender?(': '+sender):'')):'';
+  const payNote=online?escHtml(provider+(sender?(': '+sender):'')):(rtgs?'RTGS':'');
   const typedName=document.getElementById('f-name').value.trim();
-  const rawName=typedName||(online?(provider+(sender?(' - '+sender):'')):'CASH');
+  const rawName=typedName||(online?(provider+(sender?(' - '+sender):'')):(rtgs?'RTGS':'CASH'));
   const meta={name:rawName,date:document.getElementById('f-date').value||'________',dist:document.getElementById('f-dist').value||'___________',lorry:document.getElementById('f-lorry').value||'___________'};
-  return{sub,tq,lab,weigh,freight,others,online,provider,sender,upi,tot,payNote,meta,rawName};
+  return{sub,tq,lab,weigh,freight,others,online,provider,sender,rtgs,upi,tot,payNote,meta,rawName};
 }
 function buildChittiPages(rowsData,c){
   const cc=[c.lab,c.weigh,c.freight,c.others,c.upi].filter(v=>v>0).length,tr2=2+cc+(c.payNote?1:0),mp1=FIRST_TOTAL-tr2;
@@ -650,7 +683,7 @@ function finalizeChitti(){
   const catItems=rows.filter(r=>r.name&&(parseFloat(r.q)||0)>0&&ITEM_CATEGORY[(r.name||'').trim()]).map(r=>({category:ITEM_CATEGORY[(r.name||'').trim()],qty:parseFloat(r.q)||0}));
   var newEntry={
     id:crypto.randomUUID(),
-    customerName:c.rawName,total:c.tot,online:c.online,provider:c.provider,sender:c.sender,items:catItems,
+    customerName:c.rawName,total:c.tot,online:c.online,provider:c.provider,sender:c.sender,rtgs:c.rtgs,items:catItems,
     fullRows:rows.map(function(r){return{q:r.q,name:r.name,p:r.p,r:r.r};}),
     charges:{lab:c.lab,weigh:c.weigh,freight:c.freight,others:c.others,upi:c.upi},
     payNote:c.payNote,meta:c.meta,sub:c.sub,tq:c.tq,ts:Date.now()
@@ -665,6 +698,7 @@ function finalizeChitti(){
   ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others','f-sender','f-upi'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('f-date').value=todayStr();
   document.getElementById('f-online').checked=false;
+  document.getElementById('f-rtgs').checked=false;
   document.getElementById('f-provider').value='Gpay';
   document.getElementById('online-block').style.display='none';
   recalc();
@@ -682,7 +716,8 @@ function invoiceDisplayName(e){return (e.customerName||'').trim()||'CASH';}
 function invoiceGroupRank(e){
   if(invoiceDisplayName(e).toUpperCase()==='CASH')return 0;
   if(e.online)return 1;
-  return 2;
+  if(e.rtgs)return 2;
+  return 3;
 }
 function renderInvoiceList(){
   var wrap=document.getElementById('inv-list');
@@ -694,7 +729,7 @@ function renderInvoiceList(){
   });
   wrap.innerHTML=sorted.map(function(e){
     var dispName=invoiceDisplayName(e);
-    var tag=e.online?e.provider:(dispName.toUpperCase()==='CASH'?'Cash':'Credit');
+    var tag=e.online?e.provider:(e.rtgs?'RTGS':(dispName.toUpperCase()==='CASH'?'Cash':'Credit'));
     return '<div class="inv-row">'
       +'<div class="inv-main" onclick="previewInvoice(\''+e.id+'\')"><span class="inv-name">'+escHtml(dispName)+' <span class="inv-tag">· '+tag+'</span></span><span class="inv-amt">₹'+fmt(e.total)+'</span></div>'
       +'<button class="inv-del" onclick="event.stopPropagation();deleteInvoice(\''+e.id+'\')" title="Delete invoice">×</button>'
@@ -984,6 +1019,7 @@ function reset(){
   document.getElementById('f-date').value=todayStr();
   document.getElementById('q-date').value=todayStrDash();
   document.getElementById('f-online').checked=false;
+  document.getElementById('f-rtgs').checked=false;
   document.getElementById('f-provider').value='Gpay';
   document.getElementById('online-block').style.display='none';
   document.querySelectorAll('.type-btn').forEach(function(b){b.classList.remove('on');});
