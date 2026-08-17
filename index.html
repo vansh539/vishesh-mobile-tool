@@ -525,7 +525,7 @@ function dbsGenerate(){
   purgeStaleLedger();
   var cashEntries=[],onlineEntries=[],totalCash=0,totalOnline=0,catTotals={};
   dailyLedger.forEach(function(e){
-    var isCashName=(e.customerName||'').trim().toUpperCase()==='CASH';
+    var isCashName=invoiceDisplayName(e).toUpperCase()==='CASH';
     if(e.online){onlineEntries.push(e);totalOnline+=e.total;}
     else if(isCashName){cashEntries.push(e);totalCash+=e.total;}
     e.items.forEach(function(it){catTotals[it.category]=(catTotals[it.category]||0)+it.qty;});
