@@ -143,6 +143,13 @@ input[type=number]{-moz-appearance:textfield}
 .inv-del{background:none;border:none;color:#bdb6ae;cursor:pointer;font-size:21px;padding:7px 9px;line-height:1}
 .inv-del:hover,.inv-del:active{color:var(--bad)}
 .empty{color:var(--muted);font-size:13px;padding:18px 2px;line-height:1.5}
+.stock-cat{margin-bottom:16px}
+.stock-cat:last-child{margin-bottom:0}
+.stock-cat h3{display:flex;align-items:baseline;gap:6px}
+.stock-count{font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)}
+.stock-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0 9px 10px;border-bottom:1px solid var(--rule);font-size:13px;color:var(--ink)}
+.stock-row:last-child{border-bottom:none}
+.stock-dot{color:#bdb6ae;font-size:13px;padding:4px 9px;line-height:1}
 .dbs-doc{background:#fff;color:#000;width:105mm;height:148.5mm;overflow:hidden;font-family:'Times New Roman',serif;border:1.5px solid #000;padding:2.5mm 3.5mm 3mm 3.5mm;display:flex;flex-direction:column}
 .dbs-shri{text-align:center;font-size:16.5pt;font-weight:bold;margin-bottom:1mm}
 .dbs-rule1{border-top:0.75px solid #000;margin-bottom:1mm}
@@ -261,6 +268,7 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
       <button class="type-btn" onclick="pickType('Quotation',this)"><svg class="ic" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" aria-hidden="true"><path d="M6 2.75h7.5L19 8.25v13A1.75 1.75 0 0 1 17.25 23H6a1.75 1.75 0 0 1-1.75-1.75V4.5A1.75 1.75 0 0 1 6 2.75Z"/><path d="M13.5 2.75v5.5H19"/><path d="M8 13h8M8 17h5"/></svg><span><span class="tl">Quotation</span><span class="sb">Rate quote on letterhead &middot; A4 print</span></span></button>
       <button class="type-btn" onclick="pickType('DailyBalance',this)"><svg class="ic" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" aria-hidden="true"><path d="M3.75 4.25h16.5v15.5H3.75z"/><path d="M12 4.25v15.5"/><path d="M6.75 9h2.5M6.75 13h2.5M14.75 9h2.5M14.75 13h2.5"/></svg><span><span class="tl">Daily balance sheet</span><span class="sb">Today's cash, online, expenses &amp; kg sold</span></span></button>
       <button class="type-btn" onclick="goInvoiceList()"><svg class="ic" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" aria-hidden="true"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><circle cx="4.75" cy="6.5" r="1.15"/><circle cx="4.75" cy="12" r="1.15"/><circle cx="4.75" cy="17.5" r="1.15"/></svg><span><span class="tl">Today's invoices</span><span class="sb">Reopen or delete a finalised chitti</span></span></button>
+      <button class="type-btn" onclick="goStock()"><svg class="ic" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" aria-hidden="true"><path d="M3.75 7.5 12 3.25l8.25 4.25M3.75 7.5v9l8.25 4.25M3.75 7.5 12 11.75M20.25 7.5v9L12 20.75M20.25 7.5 12 11.75M12 11.75v9"/></svg><span><span class="tl">Stock / Items</span><span class="sb">View catalog by category, add or remove items</span></span></button>
     </div>
     <div class="acts"><button class="btn-p" id="n2" onclick="go(3)" disabled>Continue →</button></div>
   </div></div>
@@ -278,6 +286,18 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
   <div class="step" id="s11">
     <div class="card"><h2>Today's Invoices</h2>
       <div id="inv-list"></div>
+    </div>
+    <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button></div>
+  </div>
+  <div class="step" id="s12">
+    <div class="card"><h2>Add item</h2>
+      <div class="fg"><label>Item name</label><input id="stock-add-name" type="text" placeholder="e.g. Superarc 6013 2.5mm"></div>
+      <div class="fg"><label>Category</label><select id="stock-add-cat"></select></div>
+      <div class="fg" id="stock-add-newcat-wrap" style="display:none"><label>New category name</label><input id="stock-add-newcat" type="text" placeholder="e.g. Welding Rods"></div>
+      <button class="btn-a" onclick="stockAddItem()">+ Add item</button>
+    </div>
+    <div class="card"><h2>Item Catalog</h2>
+      <div id="stock-list"></div>
     </div>
     <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button></div>
   </div>
@@ -567,13 +587,15 @@ function dbsGenerate(){
     else if(e.rtgs){rtgsEntries.push(e);totalRTGS+=e.total;}
     else if(isCashName){cashEntries.push(e);totalCash+=e.total;}
     (e.items||[]).forEach(function(it){
-      var qty=it.qty||0;
-      if(qty>0){
+      var kg=it.kg||0,pcs=it.pcs||0;
+      if(kg>0||pcs>0){
         var cat=it.category||'Other';
-        catTotals[cat]=(catTotals[cat]||0)+qty;
+        if(!catTotals[cat])catTotals[cat]={kg:0,pcs:0};
+        catTotals[cat].kg+=kg;catTotals[cat].pcs+=pcs;
         if(cat==='Other'){
           var nm=(it.name||'').trim()||'(unnamed item)';
-          otherItemTotals[nm]=(otherItemTotals[nm]||0)+qty;
+          if(!otherItemTotals[nm])otherItemTotals[nm]={kg:0,pcs:0};
+          otherItemTotals[nm].kg+=kg;otherItemTotals[nm].pcs+=pcs;
         }
       }
     });
@@ -590,18 +612,24 @@ function dbsGenerate(){
   incomes.forEach(function(r){leftItems.push('<div class="dbs-row"><span>'+escHtml(r.desc)+'</span><span>'+fmt(parseFloat(r.amt)||0)+'</span></div>');});
   var rightItems=[];
   expenses.forEach(function(r){rightItems.push('<div class="dbs-row"><span>'+escHtml(r.desc)+'</span><span>'+fmt(parseFloat(r.amt)||0)+'</span></div>');});
+  function fmtCatQty(t){
+    var parts=[];
+    if(t.kg>0)parts.push((t.kg%1===0?t.kg:t.kg.toFixed(2))+' kg');
+    if(t.pcs>0)parts.push((t.pcs%1===0?t.pcs:t.pcs.toFixed(2))+' pcs');
+    return parts.join(' + ');
+  }
   var catRows='';
   Object.keys(catTotals).sort().forEach(function(c){
-    var q=catTotals[c];
-    if(q<=0)return;
+    var t=catTotals[c];
+    if(t.kg<=0&&t.pcs<=0)return;
     if(c==='Other'){
       Object.keys(otherItemTotals).sort().forEach(function(nm){
-        var oq=otherItemTotals[nm];
-        if(oq>0)catRows+='<div class="dbs-catrow"><span>'+escHtml(nm)+'</span><span>'+(oq%1===0?oq:oq.toFixed(2))+' kg</span></div>';
+        var ot=otherItemTotals[nm];
+        if(ot.kg>0||ot.pcs>0)catRows+='<div class="dbs-catrow"><span>'+escHtml(nm)+'</span><span>'+fmtCatQty(ot)+'</span></div>';
       });
       return;
     }
-    catRows+='<div class="dbs-catrow"><span>'+c+'</span><span>'+(q%1===0?q:q.toFixed(2))+' kg</span></div>';
+    catRows+='<div class="dbs-catrow"><span>'+c+'</span><span>'+fmtCatQty(t)+'</span></div>';
   });
   if(!catRows)catRows='<div class="dbs-catrow" style="color:#888">No sales today</div>';
   var needsPage2=leftItems.length>DBS_LEFT_LAST||rightItems.length>DBS_RIGHT_LAST;
@@ -720,7 +748,10 @@ function finalizeChitti(){
   const c=getChittiCalc();
   const hasItems=rows.some(r=>(r.name||'').trim()&&((parseFloat(r.q)||0)>0||(parseFloat(r.p)||0)>0));
   if(!hasItems||c.tot<=0){alert('Add at least one item before finalizing.');return;}
-  const catItems=rows.filter(r=>r.name&&(parseFloat(r.q)||0)>0).map(r=>({category:categoryForItemName(r.name),qty:parseFloat(r.q)||0,name:r.name}));
+  const catItems=rows.filter(r=>r.name&&((parseFloat(r.q)||0)>0||(parseFloat(r.p)||0)>0)).map(r=>{
+    const q=parseFloat(r.q)||0,p=parseFloat(r.p)||0;
+    return{category:categoryForItemName(r.name),kg:q>0?q:0,pcs:q<=0&&p>0?p:0,name:r.name};
+  });
   var newEntry={
     id:crypto.randomUUID(),
     customerName:c.rawName,total:c.tot,online:c.online,provider:c.provider,sender:c.sender,rtgs:c.rtgs,items:catItems,
@@ -888,6 +919,63 @@ function saveCustomItem(name,category){
   localStorage.setItem(CUSTOM_ITEMS_KEY,JSON.stringify(custom));
 }
 function allItemNames(){return getStockNames().concat(getCustomItemNames());}
+function goStock(){
+  setCtx('<b>Stock / Items</b>');
+  stockRefreshCatSelect();
+  renderStockList();
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('s12').classList.add('active');
+  window.scrollTo(0,0);
+}
+function stockRefreshCatSelect(){
+  var sel=document.getElementById('stock-add-cat');
+  sel.innerHTML=allCategories().map(function(c){return '<option value="'+escAttr(c)+'">'+escHtml(c)+'</option>';}).join('')+'<option value="__new__">+ New category…</option>';
+  document.getElementById('stock-add-newcat-wrap').style.display='none';
+  document.getElementById('stock-add-newcat').value='';
+}
+document.getElementById('stock-add-cat').addEventListener('change',function(){
+  document.getElementById('stock-add-newcat-wrap').style.display=this.value==='__new__'?'':'none';
+});
+function stockAddItem(){
+  var nameInput=document.getElementById('stock-add-name');
+  var name=nameInput.value.trim();
+  if(!name){alert('Enter an item name.');return;}
+  if(allItemNames().some(function(n){return n.toLowerCase()===name.toLowerCase();})){alert('That item is already in the list.');return;}
+  var sel=document.getElementById('stock-add-cat');
+  var cat=sel.value==='__new__'?document.getElementById('stock-add-newcat').value.trim():sel.value;
+  if(!cat){alert('Choose or enter a category.');return;}
+  saveCustomItem(name,cat);
+  nameInput.value='';
+  stockRefreshCatSelect();
+  renderStockList();
+}
+function stockDeleteItem(name){
+  if(!confirm('Remove "'+name+'" from the item list?\n\nThis only removes it from the catalog — past sales are unaffected.'))return;
+  deleteCustomItem(name);
+  renderStockList();
+}
+function allCatalogItems(){
+  var base=Object.keys(ITEM_CATEGORY).map(function(n){return{name:n,category:ITEM_CATEGORY[n],custom:false};});
+  var custom=getCustomItems().map(function(c){return{name:c.name,category:c.category,custom:true};});
+  return base.concat(custom);
+}
+function renderStockList(){
+  var wrap=document.getElementById('stock-list');
+  var items=allCatalogItems();
+  var byCat={};
+  items.forEach(function(it){(byCat[it.category]=byCat[it.category]||[]).push(it);});
+  var cats=Object.keys(byCat).sort();
+  if(!cats.length){wrap.innerHTML='<div class="empty">No items yet.</div>';return;}
+  wrap.innerHTML=cats.map(function(c){
+    var list=byCat[c].slice().sort(function(a,b){return a.name.localeCompare(b.name);});
+    var rows=list.map(function(it){
+      return '<div class="stock-row"><span>'+escHtml(it.name)+'</span>'
+        +(it.custom?'<button class="rm" onclick="stockDeleteItem(\''+escAttr(it.name)+'\')" title="Remove item">×</button>':'<span class="stock-dot" title="Built-in catalog item">·</span>')
+      +'</div>';
+    }).join('');
+    return '<div class="stock-cat"><h3>'+escHtml(c)+' <span class="stock-count">('+list.length+')</span></h3>'+rows+'</div>';
+  }).join('');
+}
 var catModalPendingInput=null,catModalPendingName='';
 function openCategoryModal(inputEl,name){
   catModalPendingInput=inputEl;
