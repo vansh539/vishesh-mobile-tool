@@ -265,9 +265,9 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
     <div class="acts"><button class="btn-p" id="n2" onclick="go(3)" disabled>Continue →</button></div>
   </div></div>
   <div class="step" id="s10">
-    <div class="card"><h3>Other Income (today)</h3>
+    <div class="card"><h3>Cash In (today)</h3>
       <table class="itbl"><thead><tr><th>Description</th><th style="width:100px;text-align:right">Amount</th><th style="width:28px"></th></tr></thead><tbody id="inc-tbody"></tbody></table>
-      <button class="add-row" onclick="addIncRow()">+ Add income</button>
+      <button class="add-row" onclick="addIncRow()">+ Add cash in</button>
     </div>
     <div class="card"><h3>Expenses (today)</h3>
       <table class="itbl"><thead><tr><th>Description</th><th style="width:100px;text-align:right">Amount</th><th style="width:28px"></th></tr></thead><tbody id="exp-tbody"></tbody></table>
@@ -566,13 +566,13 @@ function dbsGenerate(){
     if(e.online){onlineEntries.push(e);totalOnline+=e.total;}
     else if(e.rtgs){rtgsEntries.push(e);totalRTGS+=e.total;}
     else if(isCashName){cashEntries.push(e);totalCash+=e.total;}
-    (e.fullRows||[]).forEach(function(r){
-      var qty=parseFloat(r.q)||0;
+    (e.items||[]).forEach(function(it){
+      var qty=it.qty||0;
       if(qty>0){
-        var cat=categoryForItemName(r.name);
+        var cat=it.category||'Other';
         catTotals[cat]=(catTotals[cat]||0)+qty;
         if(cat==='Other'){
-          var nm=(r.name||'').trim()||'(unnamed item)';
+          var nm=(it.name||'').trim()||'(unnamed item)';
           otherItemTotals[nm]=(otherItemTotals[nm]||0)+qty;
         }
       }
@@ -580,6 +580,7 @@ function dbsGenerate(){
   });
   var incomes=incRows.filter(function(r){return r.desc&&parseFloat(r.amt)>0;});
   var incTotal=incomes.reduce(function(s,r){return s+(parseFloat(r.amt)||0);},0);
+  totalCash+=incTotal;
   var expenses=expRows.filter(function(r){return r.desc&&parseFloat(r.amt)>0;});
   var expTotal=expenses.reduce(function(s,r){return s+(parseFloat(r.amt)||0);},0);
   var leftItems=[];
@@ -612,7 +613,7 @@ function dbsGenerate(){
     var isLast=(p===pageCount-1);
     var leftHtml=leftChunks[p].join('')||(p===0&&!leftItems.length?'<div class="dbs-row" style="color:#888">None today</div>':'');
     var rightHtml=rightChunks[p].join('')||(p===0&&!rightItems.length?'<div class="dbs-row" style="color:#888">None today</div>':'');
-    var leftBottom=isLast?('<div class="dbs-bottom"><div class="dbs-tot"><span>Total Cash</span><span>'+fmt(totalCash)+'</span></div><div class="dbs-tot"><span>Total Online</span><span>'+fmt(totalOnline)+'</span></div><div class="dbs-tot"><span>Total RTGS</span><span>'+fmt(totalRTGS)+'</span></div><div class="dbs-tot"><span>Total Other Income</span><span>'+fmt(incTotal)+'</span></div></div>'):'';
+    var leftBottom=isLast?('<div class="dbs-bottom"><div class="dbs-tot"><span>Total Cash</span><span>'+fmt(totalCash)+'</span></div><div class="dbs-tot"><span>Total Online</span><span>'+fmt(totalOnline)+'</span></div><div class="dbs-tot"><span>Total RTGS</span><span>'+fmt(totalRTGS)+'</span></div></div>'):'';
     var rightBottom=isLast?('<div class="dbs-bottom"><div class="dbs-tot"><span>Total Expenses</span><span>'+fmt(expTotal)+'</span></div><div class="dbs-h">Category Qty Sold</div>'+catRows+'</div>'):'';
     pages+='<div class="dbs-doc">'
       +'<div class="dbs-shri">||श्री||</div>'
@@ -719,7 +720,7 @@ function finalizeChitti(){
   const c=getChittiCalc();
   const hasItems=rows.some(r=>(r.name||'').trim()&&((parseFloat(r.q)||0)>0||(parseFloat(r.p)||0)>0));
   if(!hasItems||c.tot<=0){alert('Add at least one item before finalizing.');return;}
-  const catItems=rows.filter(r=>r.name&&(parseFloat(r.q)||0)>0).map(r=>({category:categoryForItemName(r.name),qty:parseFloat(r.q)||0}));
+  const catItems=rows.filter(r=>r.name&&(parseFloat(r.q)||0)>0).map(r=>({category:categoryForItemName(r.name),qty:parseFloat(r.q)||0,name:r.name}));
   var newEntry={
     id:crypto.randomUUID(),
     customerName:c.rawName,total:c.tot,online:c.online,provider:c.provider,sender:c.sender,rtgs:c.rtgs,items:catItems,
