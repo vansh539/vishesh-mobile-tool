@@ -1038,6 +1038,8 @@ function catalogPull(){
     setCustomItemsRaw(custom);
     setHiddenItemsRaw(hidden);
     catalogDrainRetryQueue();
+    custom.filter(function(c){return !c.syncedRemote;}).forEach(function(c){catalogPushItem(c.name,c.category);});
+    hidden.filter(function(h){return !h.syncedRemote;}).forEach(function(h){catalogPushHide(h.name);});
     var s12=document.getElementById('s12');
     if(s12&&s12.classList.contains('active')){stockRefreshCatSelect();renderStockList();}
   }).catch(function(){});
