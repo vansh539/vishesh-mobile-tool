@@ -287,6 +287,10 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
       <table class="itbl"><thead><tr><th>Description</th><th style="width:100px;text-align:right">Amount</th><th style="width:28px"></th></tr></thead><tbody id="exp-tbody"></tbody></table>
       <button class="add-row" onclick="addExpRow()">+ Add expense</button>
     </div>
+    <div class="card"><h3>Total Unloading (today)</h3>
+      <table class="itbl"><thead><tr><th>Note (optional)</th><th style="width:100px;text-align:right">Kg</th><th style="width:28px"></th></tr></thead><tbody id="unload-tbody"></tbody></table>
+      <button class="add-row" onclick="addUnloadRow()">+ Add unloading</button>
+    </div>
     <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button><button class="btn-a" id="dbs-final-btn" onclick="dbsFinalize()">✓ Final</button><button class="btn-a" onclick="dbsGenerate()">Generate balance sheet</button></div>
   </div>
   <div class="step" id="s11">
@@ -434,10 +438,11 @@ var ITEM_CATEGORY={'20X20 (4.5kg/pc)':'M.S. Pipes','20x20 (5.5kg/pc)':'M.S. Pipe
 var dailyLedger=[]; // in-memory only, for this browser tab/session — never written to disk, localStorage, or a server. Gone on reload/close by design.
 var expRows=[];
 var incRows=[];
+var unloadRows=[];
 var ledgerDateKey=todayStr();
 function purgeStaleLedger(){
   var today=todayStr();
-  if(today!==ledgerDateKey){dailyLedger=[];expRows=[];incRows=[];ledgerDateKey=today;}
+  if(today!==ledgerDateKey){dailyLedger=[];expRows=[];incRows=[];unloadRows=[];ledgerDateKey=today;}
 }
 var SYNC_BASE='https://vishesh-relay.onrender.com';
 var RELAY_SECRET='8dbba301082fd985efbc4cd08f7aac7642737d38c6a4f1254f57a32062f0c204';
@@ -531,15 +536,17 @@ function syncPull(){
     decoded=decoded.filter(Boolean);
     var expDecoded=decoded.filter(function(e){return e.type==='exp';});
     var incDecoded=decoded.filter(function(e){return e.type==='inc';});
-    var chittiDecoded=decoded.filter(function(e){return e.type!=='exp'&&e.type!=='inc';});
+    var unloadDecoded=decoded.filter(function(e){return e.type==='unload';});
+    var chittiDecoded=decoded.filter(function(e){return e.type!=='exp'&&e.type!=='inc'&&e.type!=='unload';});
     mergeSyncedEntries(dailyLedger,chittiDecoded);
     mergeSyncedEntries(expRows,expDecoded);
     mergeSyncedEntries(incRows,incDecoded);
+    mergeSyncedEntries(unloadRows,unloadDecoded);
     syncDrainRetryQueue();
     var s11=document.getElementById('s11');
     if(s11&&s11.classList.contains('active'))renderInvoiceList();
     var s10=document.getElementById('s10');
-    if(s10&&s10.classList.contains('active')){expRender();incRender();}
+    if(s10&&s10.classList.contains('active')){expRender();incRender();unloadRender();}
   }).catch(function(){});
 }
 function syncStartPolling(){
@@ -560,7 +567,7 @@ function pickType(t,el){
 function go(n){
   document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
   if(n===3&&dtype==='Quotation'){document.getElementById('s9').classList.add('active');window.scrollTo(0,0);return;}
-  if(n===3&&dtype==='DailyBalance'){document.getElementById('s10').classList.add('active');if(incRows.length===0)addIncRow();else incRender();if(expRows.length===0)addExpRow();else expRender();window.scrollTo(0,0);return;}
+  if(n===3&&dtype==='DailyBalance'){document.getElementById('s10').classList.add('active');if(incRows.length===0)addIncRow();else incRender();if(expRows.length===0)addExpRow();else expRender();if(unloadRows.length===0)addUnloadRow();else unloadRender();window.scrollTo(0,0);return;}
   document.getElementById('s'+n).classList.add('active');
   if(n===3&&rows.length===0)addRow();
   window.scrollTo(0,0);
@@ -603,6 +610,25 @@ function incDel(i){
   incRender();
   if(r&&r.id)syncDeleteEntry(r.id);
 }
+function addUnloadRow(){unloadRows.push({desc:'',amt:''});unloadRender();}
+function unloadRender(){
+  var tb=document.getElementById('unload-tbody');tb.innerHTML='';
+  unloadRows.forEach(function(r,i){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td><input type="text" value="'+escAttr(r.desc)+'" placeholder="e.g. Truck 1" oninput="unloadUpd('+i+',\'desc\',this.value)"></td>'
+      +'<td><input type="number" min="0" step="any" inputmode="decimal" value="'+escAttr(r.amt)+'" placeholder="0" oninput="unloadUpd('+i+',\'amt\',this.value)"></td>'
+      +'<td><button class="rm" onclick="unloadDel('+i+')">×</button></td>';
+    tb.appendChild(tr);
+  });
+}
+function unloadUpd(i,f,v){unloadRows[i][f]=v;}
+function unloadDel(i){
+  var r=unloadRows[i];
+  unloadRows.splice(i,1);
+  if(!unloadRows.length)unloadRows.push({desc:'',amt:''});
+  unloadRender();
+  if(r&&r.id)syncDeleteEntry(r.id);
+}
 function dbsFinalize(){
   purgeStaleLedger();
   var pushed=0;
@@ -618,6 +644,14 @@ function dbsFinalize(){
     if(r.desc&&parseFloat(r.amt)>0){
       if(!r.id){r.id=crypto.randomUUID();r.ts=Date.now();}
       r.type='exp';
+      syncPushEntry(r);
+      pushed++;
+    }
+  });
+  unloadRows.forEach(function(r){
+    if(parseFloat(r.amt)>0){
+      if(!r.id){r.id=crypto.randomUUID();r.ts=Date.now();}
+      r.type='unload';
       syncPushEntry(r);
       pushed++;
     }
@@ -638,9 +672,9 @@ function dbsGenerate(){
   var cashEntries=[],onlineEntries=[],rtgsEntries=[],totalCash=0,totalOnline=0,totalRTGS=0,catTotals={},otherItemTotals={};
   dailyLedger.forEach(function(e){
     var isCashName=invoiceDisplayName(e).toUpperCase()==='CASH';
-    if(e.online){onlineEntries.push(e);totalOnline+=e.total;}
-    else if(e.rtgs){rtgsEntries.push(e);totalRTGS+=e.total;}
-    else if(isCashName){cashEntries.push(e);totalCash+=e.total;}
+    if(e.online){onlineEntries.push(e);totalOnline+=Math.round(e.total);}
+    else if(e.rtgs){rtgsEntries.push(e);totalRTGS+=Math.round(e.total);}
+    else if(isCashName){cashEntries.push(e);totalCash+=Math.round(e.total);}
     (e.items||[]).forEach(function(it){
       var kg=it.kg||0,pcs=it.pcs||0;
       if(kg>0||pcs>0){
@@ -660,6 +694,8 @@ function dbsGenerate(){
   totalCash+=incTotal;
   var expenses=expRows.filter(function(r){return r.desc&&parseFloat(r.amt)>0;});
   var expTotal=expenses.reduce(function(s,r){return s+(parseFloat(r.amt)||0);},0);
+  var unloadings=unloadRows.filter(function(r){return parseFloat(r.amt)>0;});
+  var unloadTotal=unloadings.reduce(function(s,r){return s+(parseFloat(r.amt)||0);},0);
   var leftItems=[];
   cashEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>CASH</span><span>'+fmt(e.total)+' (Cash)</span></div>');});
   onlineEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>'+e.provider+(e.sender?(' '+escHtml(e.sender)):'')+'</span><span>'+fmt(e.total)+'</span></div>');});
@@ -697,7 +733,7 @@ function dbsGenerate(){
     var leftHtml=leftChunks[p].join('')||(p===0&&!leftItems.length?'<div class="dbs-row" style="color:#888">None today</div>':'');
     var rightHtml=rightChunks[p].join('')||(p===0&&!rightItems.length?'<div class="dbs-row" style="color:#888">None today</div>':'');
     var leftBottom=isLast?('<div class="dbs-bottom"><div class="dbs-tot"><span>Total Cash</span><span>'+fmt(totalCash)+'</span></div><div class="dbs-tot"><span>Total Online</span><span>'+fmt(totalOnline)+'</span></div><div class="dbs-tot"><span>Total RTGS</span><span>'+fmt(totalRTGS)+'</span></div></div>'):'';
-    var rightBottom=isLast?('<div class="dbs-bottom"><div class="dbs-tot"><span>Total Expenses</span><span>'+fmt(expTotal)+'</span></div><div class="dbs-h">Category Qty Sold</div>'+catRows+'</div>'):'';
+    var rightBottom=isLast?('<div class="dbs-bottom"><div class="dbs-tot"><span>Total Expenses</span><span>'+fmt(expTotal)+'</span></div><div class="dbs-tot"><span>Total Unloading</span><span>'+fmt(unloadTotal)+' kg</span></div><div class="dbs-h">Category Qty Sold</div>'+catRows+'</div>'):'';
     pages+='<div class="dbs-doc">'
       +'<div class="dbs-shri">||श्री||</div>'
       +'<div class="dbs-rule1"></div>'
@@ -809,7 +845,7 @@ function finalizeChitti(){
   });
   var newEntry={
     id:crypto.randomUUID(),
-    customerName:c.rawName,total:c.tot,online:c.online,provider:c.provider,sender:c.sender,rtgs:c.rtgs,items:catItems,
+    customerName:c.rawName,total:Math.round(c.tot),online:c.online,provider:c.provider,sender:c.sender,rtgs:c.rtgs,items:catItems,
     fullRows:rows.map(function(r){return{q:r.q,name:r.name,p:r.p,r:r.r};}),
     charges:{lab:c.lab,weigh:c.weigh,freight:c.freight,others:c.others,upi:c.upi},
     payNote:c.payNote,meta:c.meta,sub:c.sub,tq:c.tq,ts:Date.now()
