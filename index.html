@@ -287,7 +287,7 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
       <table class="itbl"><thead><tr><th>Description</th><th style="width:100px;text-align:right">Amount</th><th style="width:28px"></th></tr></thead><tbody id="exp-tbody"></tbody></table>
       <button class="add-row" onclick="addExpRow()">+ Add expense</button>
     </div>
-    <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button><button class="btn-a" onclick="dbsGenerate()">Generate balance sheet</button></div>
+    <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button><button class="btn-a" id="dbs-final-btn" onclick="dbsFinalize()">✓ Final</button><button class="btn-a" onclick="dbsGenerate()">Generate balance sheet</button></div>
   </div>
   <div class="step" id="s11">
     <div class="card"><h2>Today's Invoices</h2>
@@ -506,6 +506,17 @@ function syncDrainRetryQueue(){
     else syncDeleteEntry(op.id);
   });
 }
+function mergeSyncedEntries(localArr,remoteDecoded){
+  var remoteIds=remoteDecoded.map(function(e){return e.id;});
+  var localIds=localArr.map(function(e){return e.id;});
+  remoteDecoded.forEach(function(e){
+    if(localIds.indexOf(e.id)===-1){e.syncedRemote=true;localArr.push(e);}
+  });
+  for(var i=localArr.length-1;i>=0;i--){
+    if(remoteIds.indexOf(localArr[i].id)===-1&&localArr[i].syncedRemote)localArr.splice(i,1);
+  }
+  localArr.forEach(function(e){if(remoteIds.indexOf(e.id)!==-1)e.syncedRemote=true;});
+}
 function syncPull(){
   purgeStaleLedger();
   var dateKey=syncDateKeyIST();
@@ -518,18 +529,17 @@ function syncPull(){
     });
   }).then(function(decoded){
     decoded=decoded.filter(Boolean);
-    var remoteIds=decoded.map(function(e){return e.id;});
-    var localIds=dailyLedger.map(function(e){return e.id;});
-    decoded.forEach(function(remoteEntry){
-      if(localIds.indexOf(remoteEntry.id)===-1){remoteEntry.syncedRemote=true;dailyLedger.push(remoteEntry);}
-    });
-    for(var i=dailyLedger.length-1;i>=0;i--){
-      if(remoteIds.indexOf(dailyLedger[i].id)===-1&&dailyLedger[i].syncedRemote)dailyLedger.splice(i,1);
-    }
-    dailyLedger.forEach(function(e){if(remoteIds.indexOf(e.id)!==-1)e.syncedRemote=true;});
+    var expDecoded=decoded.filter(function(e){return e.type==='exp';});
+    var incDecoded=decoded.filter(function(e){return e.type==='inc';});
+    var chittiDecoded=decoded.filter(function(e){return e.type!=='exp'&&e.type!=='inc';});
+    mergeSyncedEntries(dailyLedger,chittiDecoded);
+    mergeSyncedEntries(expRows,expDecoded);
+    mergeSyncedEntries(incRows,incDecoded);
     syncDrainRetryQueue();
     var s11=document.getElementById('s11');
     if(s11&&s11.classList.contains('active'))renderInvoiceList();
+    var s10=document.getElementById('s10');
+    if(s10&&s10.classList.contains('active')){expRender();incRender();}
   }).catch(function(){});
 }
 function syncStartPolling(){
@@ -567,7 +577,13 @@ function expRender(){
   });
 }
 function expUpd(i,f,v){expRows[i][f]=v;}
-function expDel(i){expRows.splice(i,1);if(!expRows.length)expRows.push({desc:'',amt:''});expRender();}
+function expDel(i){
+  var r=expRows[i];
+  expRows.splice(i,1);
+  if(!expRows.length)expRows.push({desc:'',amt:''});
+  expRender();
+  if(r&&r.id)syncDeleteEntry(r.id);
+}
 function addIncRow(){incRows.push({desc:'',amt:''});incRender();}
 function incRender(){
   var tb=document.getElementById('inc-tbody');tb.innerHTML='';
@@ -580,7 +596,40 @@ function incRender(){
   });
 }
 function incUpd(i,f,v){incRows[i][f]=v;}
-function incDel(i){incRows.splice(i,1);if(!incRows.length)incRows.push({desc:'',amt:''});incRender();}
+function incDel(i){
+  var r=incRows[i];
+  incRows.splice(i,1);
+  if(!incRows.length)incRows.push({desc:'',amt:''});
+  incRender();
+  if(r&&r.id)syncDeleteEntry(r.id);
+}
+function dbsFinalize(){
+  purgeStaleLedger();
+  var pushed=0;
+  incRows.forEach(function(r){
+    if(r.desc&&parseFloat(r.amt)>0){
+      if(!r.id){r.id=crypto.randomUUID();r.ts=Date.now();}
+      r.type='inc';
+      syncPushEntry(r);
+      pushed++;
+    }
+  });
+  expRows.forEach(function(r){
+    if(r.desc&&parseFloat(r.amt)>0){
+      if(!r.id){r.id=crypto.randomUUID();r.ts=Date.now();}
+      r.type='exp';
+      syncPushEntry(r);
+      pushed++;
+    }
+  });
+  var btn=document.getElementById('dbs-final-btn');
+  if(btn){
+    var orig=btn.textContent;
+    btn.textContent=pushed?('✓ Synced '+pushed):'Nothing to sync';
+    btn.disabled=true;
+    setTimeout(function(){btn.textContent=orig;btn.disabled=false;},1200);
+  }
+}
 function todayStr(){var d=new Date();var p=function(n){return String(n).padStart(2,'0');};return p(d.getDate())+'/'+p(d.getMonth()+1)+'/'+d.getFullYear();}
 function todayStrDash(){return todayStr().split('/').join('-');}
 var DBS_FULL=13,DBS_LEFT_LAST=11,DBS_RIGHT_LAST=8;
