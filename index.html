@@ -511,14 +511,21 @@ function syncDrainRetryQueue(){
     else syncDeleteEntry(op.id);
   });
 }
+var SYNC_MISS_THRESHOLD=3;
+var syncMissStreak={};
 function mergeSyncedEntries(localArr,remoteDecoded){
   var remoteIds=remoteDecoded.map(function(e){return e.id;});
   var localIds=localArr.map(function(e){return e.id;});
   remoteDecoded.forEach(function(e){
     if(localIds.indexOf(e.id)===-1){e.syncedRemote=true;localArr.push(e);}
+    delete syncMissStreak[e.id];
   });
   for(var i=localArr.length-1;i>=0;i--){
-    if(remoteIds.indexOf(localArr[i].id)===-1&&localArr[i].syncedRemote)localArr.splice(i,1);
+    var id=localArr[i].id;
+    if(remoteIds.indexOf(id)===-1&&localArr[i].syncedRemote){
+      syncMissStreak[id]=(syncMissStreak[id]||0)+1;
+      if(syncMissStreak[id]>=SYNC_MISS_THRESHOLD){localArr.splice(i,1);delete syncMissStreak[id];}
+    }
   }
   localArr.forEach(function(e){if(remoteIds.indexOf(e.id)!==-1)e.syncedRemote=true;});
 }
