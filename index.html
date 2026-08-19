@@ -274,6 +274,7 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
       <button class="type-btn" onclick="pickType('Quotation',this)"><svg class="ic" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" aria-hidden="true"><path d="M6 2.75h7.5L19 8.25v13A1.75 1.75 0 0 1 17.25 23H6a1.75 1.75 0 0 1-1.75-1.75V4.5A1.75 1.75 0 0 1 6 2.75Z"/><path d="M13.5 2.75v5.5H19"/><path d="M8 13h8M8 17h5"/></svg><span><span class="tl">Quotation</span><span class="sb">Rate quote on letterhead &middot; A4 print</span></span></button>
       <button class="type-btn" onclick="pickType('DailyBalance',this)"><svg class="ic" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" aria-hidden="true"><path d="M3.75 4.25h16.5v15.5H3.75z"/><path d="M12 4.25v15.5"/><path d="M6.75 9h2.5M6.75 13h2.5M14.75 9h2.5M14.75 13h2.5"/></svg><span><span class="tl">Daily balance sheet</span><span class="sb">Today's cash, online, expenses &amp; kg sold</span></span></button>
       <button class="type-btn" onclick="goInvoiceList()"><svg class="ic" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" aria-hidden="true"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><circle cx="4.75" cy="6.5" r="1.15"/><circle cx="4.75" cy="12" r="1.15"/><circle cx="4.75" cy="17.5" r="1.15"/></svg><span><span class="tl">Today's invoices</span><span class="sb">Reopen or delete a finalised chitti</span></span></button>
+      <button class="type-btn" id="held-chittis-btn" style="display:none" onclick="goHeldList()"><svg class="ic" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.25"/><path d="M12 7v5l3.25 2"/></svg><span><span class="tl">Held Chittis <span id="held-chittis-count"></span></span><span class="sb">Paused mid-entry &middot; tap to pick back up</span></span></button>
       <button class="type-btn" onclick="goStock()"><svg class="ic" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" aria-hidden="true"><path d="M3.75 7.5 12 3.25l8.25 4.25M3.75 7.5v9l8.25 4.25M3.75 7.5 12 11.75M20.25 7.5v9L12 20.75M20.25 7.5 12 11.75M12 11.75v9"/></svg><span><span class="tl">Stock / Items</span><span class="sb">View catalog by category, add or remove items</span></span></button>
     </div>
     <div class="acts"><button class="btn-p" id="n2" onclick="go(3)" disabled>Continue →</button></div>
@@ -308,6 +309,12 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
     </div>
     <div class="card"><h2>Item Catalog</h2>
       <div id="stock-list"></div>
+    </div>
+    <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button></div>
+  </div>
+  <div class="step" id="s13">
+    <div class="card"><h2>Held Chittis</h2>
+      <div id="held-list"></div>
     </div>
     <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button></div>
   </div>
@@ -351,7 +358,7 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
         <div class="sr tot"><span>Grand Total</span><span id="d-tot">0</span></div>
       </div>
     </div>
-    <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button><button class="btn-p" onclick="generate()">Generate Document</button><button class="btn-a" id="final-btn" onclick="finalizeChitti()">✓ Final</button></div>
+    <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button><button class="btn-s" id="hold-btn" onclick="holdChitti()">⏸ Hold</button><button class="btn-p" onclick="generate()">Generate Document</button><button class="btn-a" id="final-btn" onclick="finalizeChitti()">✓ Final</button></div>
   </div>
   <div class="step" id="s4">
     <div class="print-note" id="preview-note">✓ Ready · <strong>Generates a real A6-size PDF · Share sheet → Print</strong></div>
@@ -439,8 +446,10 @@ var dailyLedger=[]; // finalized chittis only reach persistence via the sync rel
 var expRows=[]; // Cash In / Expenses / Unloading drafts autosave to localStorage (saveDraft/loadDraft) so unfinalized rows survive a reload.
 var incRows=[];
 var unloadRows=[];
+var heldChittis=[];
 var ledgerDateKey=todayStr();
 var DRAFT_KEY='vs_draft_v1';
+var HELD_KEY='vs_held_chittis_v1';
 function saveDraft(){
   try{localStorage.setItem(DRAFT_KEY,JSON.stringify({dateKey:ledgerDateKey,exp:expRows,inc:incRows,unload:unloadRows}));}catch(e){}
 }
@@ -455,11 +464,23 @@ function loadDraft(){
     if(Array.isArray(d.unload)&&d.unload.length)unloadRows=d.unload;
   }catch(e){}
 }
+function saveHeld(){
+  try{localStorage.setItem(HELD_KEY,JSON.stringify({dateKey:ledgerDateKey,held:heldChittis}));}catch(e){}
+}
+function loadHeld(){
+  try{
+    var raw=localStorage.getItem(HELD_KEY);
+    if(!raw)return;
+    var d=JSON.parse(raw);
+    if(!d||d.dateKey!==ledgerDateKey)return;
+    if(Array.isArray(d.held))heldChittis=d.held;
+  }catch(e){}
+}
 function purgeStaleLedger(){
   var today=todayStr();
   if(today!==ledgerDateKey){
-    dailyLedger=[];expRows=[];incRows=[];unloadRows=[];
-    try{localStorage.removeItem(DRAFT_KEY);}catch(e){}
+    dailyLedger=[];expRows=[];incRows=[];unloadRows=[];heldChittis=[];
+    try{localStorage.removeItem(DRAFT_KEY);localStorage.removeItem(HELD_KEY);}catch(e){}
     ledgerDateKey=today;
   }
 }
@@ -887,6 +908,9 @@ function finalizeChitti(){
   const origText=btn.textContent;
   btn.textContent='✓ Finalized';btn.disabled=true;
   setTimeout(function(){btn.textContent=origText;btn.disabled=false;},1200);
+  resetChittiForm();
+}
+function resetChittiForm(){
   rows=[];document.getElementById('tbody').innerHTML='';addRow();
   ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others','f-sender','f-upi'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('f-date').value=todayStr();
@@ -895,6 +919,106 @@ function finalizeChitti(){
   document.getElementById('f-provider').value='Gpay';
   document.getElementById('online-block').style.display='none';
   recalc();
+}
+function chittiFieldSnapshot(){
+  return{
+    name:document.getElementById('f-name').value,
+    date:document.getElementById('f-date').value,
+    dist:document.getElementById('f-dist').value,
+    lorry:document.getElementById('f-lorry').value,
+    labour:document.getElementById('f-labour').value,
+    weigh:document.getElementById('f-weigh').value,
+    freight:document.getElementById('f-freight').value,
+    others:document.getElementById('f-others').value,
+    online:document.getElementById('f-online').checked,
+    provider:document.getElementById('f-provider').value,
+    sender:document.getElementById('f-sender').value,
+    upi:document.getElementById('f-upi').value,
+    rtgs:document.getElementById('f-rtgs').checked
+  };
+}
+function holdChitti(){
+  purgeStaleLedger();
+  var f=chittiFieldSnapshot();
+  var hasContent=f.name.trim()||rows.some(function(r){return(r.name||'').trim();});
+  if(!hasContent){resetChittiForm();return;}
+  heldChittis.push({id:crypto.randomUUID(),ts:Date.now(),fields:f,rows:rows.map(function(r){return{q:r.q,name:r.name,p:r.p,r:r.r};})});
+  saveHeld();
+  renderHeldBadge();
+  var btn=document.getElementById('hold-btn');
+  if(btn){var orig=btn.textContent;btn.textContent='⏸ Held';btn.disabled=true;setTimeout(function(){btn.textContent=orig;btn.disabled=false;},900);}
+  resetChittiForm();
+}
+function resumeHeld(id){
+  var idx=heldChittis.findIndex(function(h){return h.id===id;});
+  if(idx===-1)return;
+  var h=heldChittis[idx];
+  heldChittis.splice(idx,1);
+  saveHeld();
+  renderHeldBadge();
+  dtype='Chitti';
+  setCtx(CTX_LABEL['Chitti']);
+  document.getElementById('n2').disabled=false;
+  document.getElementById('f-name').value=h.fields.name;
+  document.getElementById('f-date').value=h.fields.date;
+  document.getElementById('f-dist').value=h.fields.dist;
+  document.getElementById('f-lorry').value=h.fields.lorry;
+  document.getElementById('f-labour').value=h.fields.labour;
+  document.getElementById('f-weigh').value=h.fields.weigh;
+  document.getElementById('f-freight').value=h.fields.freight;
+  document.getElementById('f-others').value=h.fields.others;
+  document.getElementById('f-sender').value=h.fields.sender;
+  document.getElementById('f-upi').value=h.fields.upi;
+  document.getElementById('f-provider').value=h.fields.provider;
+  document.getElementById('f-online').checked=h.fields.online;
+  document.getElementById('f-rtgs').checked=h.fields.rtgs;
+  document.getElementById('online-block').style.display=h.fields.online?'':'none';
+  rows=(h.rows&&h.rows.length)?h.rows:[{q:'',name:'',p:'',r:''}];
+  document.getElementById('tbody').innerHTML='';
+  renderRows();
+  recalc();
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('s3').classList.add('active');
+  window.scrollTo(0,0);
+}
+function discardHeld(id){
+  var idx=heldChittis.findIndex(function(h){return h.id===id;});
+  if(idx===-1)return;
+  var h=heldChittis[idx];
+  if(!confirm('Discard held chitti for "'+((h.fields.name||'').trim()||'—')+'"? This cannot be undone.'))return;
+  heldChittis.splice(idx,1);
+  saveHeld();
+  renderHeldBadge();
+  renderHeldList();
+}
+function renderHeldBadge(){
+  var btn=document.getElementById('held-chittis-btn');
+  var cnt=document.getElementById('held-chittis-count');
+  if(!btn||!cnt)return;
+  if(heldChittis.length){btn.style.display='';cnt.textContent='('+heldChittis.length+')';}
+  else{btn.style.display='none';cnt.textContent='';}
+}
+function goHeldList(){
+  purgeStaleLedger();
+  renderHeldList();
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('s13').classList.add('active');
+  window.scrollTo(0,0);
+}
+function renderHeldList(){
+  var wrap=document.getElementById('held-list');
+  if(!wrap)return;
+  if(!heldChittis.length){wrap.innerHTML='<div class="empty">No held chittis right now.</div>';return;}
+  var sorted=heldChittis.slice().sort(function(a,b){return(b.ts||0)-(a.ts||0);});
+  wrap.innerHTML=sorted.map(function(h){
+    var nm=(h.fields.name||'').trim()||'—';
+    var itemCount=h.rows.filter(function(r){return(r.name||'').trim();}).length;
+    var when=new Date(h.ts).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    return '<div class="inv-row">'
+      +'<div class="inv-main" onclick="resumeHeld(\''+h.id+'\')"><span class="inv-name">'+escHtml(nm)+' <span class="inv-tag">· '+itemCount+' item'+(itemCount===1?'':'s')+' · held '+when+'</span></span></div>'
+      +'<button class="inv-del" onclick="event.stopPropagation();discardHeld(\''+h.id+'\')" title="Discard">×</button>'
+    +'</div>';
+  }).join('');
 }
 var previewMode='live';
 function goInvoiceList(){
@@ -1516,6 +1640,8 @@ function tryUnlock(){
 function showMenu(){
   purgeStaleLedger();
   loadDraft();
+  loadHeld();
+  renderHeldBadge();
   document.getElementById('lock').classList.remove('active');
   document.getElementById('s2').classList.add('active');
   syncStartPolling();
