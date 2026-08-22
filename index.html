@@ -87,7 +87,8 @@ h3{font-size:10px;font-weight:800;color:var(--muted);margin-bottom:11px;text-tra
 .itbl th{font-size:9.5px;font-weight:800;color:var(--muted);padding:0 4px 7px;border-bottom:1.5px solid var(--rule);text-align:left;text-transform:uppercase;letter-spacing:.1em}
 .itbl td{padding:5px 3px;vertical-align:middle}
 .itbl input{width:100%;padding:10px;border:1.5px solid var(--rule);border-radius:7px;font-size:16px;background:#fbfaf8;color:var(--text);font-family:inherit;font-variant-numeric:tabular-nums}
-.itbl input:focus{outline:none;border-color:var(--amber);background:#fff;box-shadow:0 0 0 3px var(--amber-dim)}
+.itbl select{width:100%;padding:10px 4px;border:1.5px solid var(--rule);border-radius:7px;font-size:16px;background:#fbfaf8;color:var(--text);font-family:inherit}
+.itbl input:focus,.itbl select:focus{outline:none;border-color:var(--amber);background:#fff;box-shadow:0 0 0 3px var(--amber-dim)}
 .charges-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 /* Totals slab — the number you read across a counter */
 .sumbox{background:var(--ink);border-left:4px solid var(--amber);border-radius:var(--r);padding:14px 16px;margin-top:13px}
@@ -134,6 +135,8 @@ input[type=number]{-moz-appearance:textfield}
 .chk{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:600;color:var(--ink);margin:4px 0 12px;cursor:pointer;padding:11px 12px;background:#fbfaf8;border:1.5px solid var(--rule);border-radius:8px}
 .chk input{width:19px;height:19px;accent-color:var(--amber);flex:none}
 .chk:hover{border-color:var(--amber)}
+.p-cash{font-size:13px;font-weight:800;color:var(--ink);padding:10px 12px;background:var(--amber-dim);border:1.5px solid var(--amber);border-radius:8px;margin:-2px 0 12px}
+.p-cash.bad{background:#fdecec;border-color:#c0392b;color:#c0392b}
 .inv-row{display:flex;align-items:center;gap:4px;padding:0 4px 0 13px;background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:9px;margin-bottom:8px;transition:border-color .15s}
 .inv-row:hover{border-color:var(--ink);border-left-color:var(--amber)}
 .inv-main{flex:1;display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:13px 0;min-width:0;gap:10px}
@@ -281,7 +284,7 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
   </div></div>
   <div class="step" id="s10">
     <div class="card"><h3>Cash In (today)</h3>
-      <table class="itbl"><thead><tr><th>Description</th><th style="width:100px;text-align:right">Amount</th><th style="width:28px"></th></tr></thead><tbody id="inc-tbody"></tbody></table>
+      <table class="itbl"><thead><tr><th>Description</th><th style="width:78px;text-align:right">Amount</th><th style="width:88px">Mode</th><th style="width:28px"></th></tr></thead><tbody id="inc-tbody"></tbody></table>
       <button class="add-row" onclick="addIncRow()">+ Add cash in</button>
     </div>
     <div class="card"><h3>Expenses (today)</h3>
@@ -346,6 +349,15 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
           <div class="fg"><label>Sender (number/name)</label><input id="f-sender" type="text" placeholder="9876543210" oninput="recalc()"></div>
         </div>
         <div class="fg"><label>UPI Charges</label><input id="f-upi" type="number" min="0" placeholder="0" oninput="recalc()"></div>
+      </div>
+      <label class="chk"><input type="checkbox" id="f-partial" onchange="togglePartial()"> Part online / part cash</label>
+      <div id="partial-block" style="display:none">
+        <div class="grid2">
+          <div class="fg"><label>App</label><select id="f-p-provider" onchange="recalc()"><option value="Gpay">Gpay</option><option value="PhonePe">PhonePe</option></select></div>
+          <div class="fg"><label>Sender (number/name)</label><input id="f-p-sender" type="text" placeholder="9876543210" oninput="recalc()"></div>
+        </div>
+        <div class="fg"><label>Online amount</label><input id="f-p-amt" type="number" min="0" placeholder="0" oninput="recalc()"></div>
+        <div id="p-cash-line" class="p-cash">Cash balance: 0</div>
       </div>
       <label class="chk"><input type="checkbox" id="f-rtgs" onchange="toggleRTGS()"> RTGS</label>
       <div class="sumbox">
@@ -640,13 +652,14 @@ function expDel(i){
   saveDraft();
   if(r&&r.id)syncDeleteEntry(r.id);
 }
-function addIncRow(){incRows.push({desc:'',amt:''});incRender();saveDraft();}
+function addIncRow(){incRows.push({desc:'',amt:'',mode:'cash'});incRender();saveDraft();}
 function incRender(){
   var tb=document.getElementById('inc-tbody');tb.innerHTML='';
   incRows.forEach(function(r,i){
     var tr=document.createElement('tr');
     tr.innerHTML='<td><input type="text" value="'+escAttr(r.desc)+'" placeholder="e.g. Old credit settled" oninput="incUpd('+i+',\'desc\',this.value)"></td>'
       +'<td><input type="number" min="0" step="any" inputmode="decimal" value="'+escAttr(r.amt)+'" placeholder="0" oninput="incUpd('+i+',\'amt\',this.value)"></td>'
+      +'<td><select onchange="incUpd('+i+',\'mode\',this.value)"><option value="cash"'+(r.mode==='online'?'':' selected')+'>Cash</option><option value="online"'+(r.mode==='online'?' selected':'')+'>Online</option></select></td>'
       +'<td><button class="rm" onclick="incDel('+i+')">×</button></td>';
     tb.appendChild(tr);
   });
@@ -655,7 +668,7 @@ function incUpd(i,f,v){incRows[i][f]=v;saveDraft();}
 function incDel(i){
   var r=incRows[i];
   incRows.splice(i,1);
-  if(!incRows.length)incRows.push({desc:'',amt:''});
+  if(!incRows.length)incRows.push({desc:'',amt:'',mode:'cash'});
   incRender();
   saveDraft();
   if(r&&r.id)syncDeleteEntry(r.id);
@@ -721,10 +734,15 @@ function todayStrDash(){return todayStr().split('/').join('-');}
 var DBS_FULL=13,DBS_LEFT_LAST=11,DBS_RIGHT_LAST=8;
 function dbsGenerate(){
   purgeStaleLedger();
-  var cashEntries=[],onlineEntries=[],rtgsEntries=[],totalCash=0,totalOnline=0,totalRTGS=0,catTotals={},otherItemTotals={};
+  var cashEntries=[],onlineEntries=[],rtgsEntries=[],partialEntries=[],totalCash=0,totalOnline=0,totalRTGS=0,catTotals={},otherItemTotals={};
   dailyLedger.forEach(function(e){
     var isCashName=invoiceDisplayName(e).toUpperCase()==='CASH';
-    if(e.online){onlineEntries.push(e);totalOnline+=Math.round(e.total);}
+    if(e.partial){
+      var pOn=Math.round(e.pAmt||0),pCa=Math.round(e.total)-pOn;
+      partialEntries.push({e:e,on:pOn,cash:pCa});
+      totalOnline+=pOn;totalCash+=pCa;
+    }
+    else if(e.online){onlineEntries.push(e);totalOnline+=Math.round(e.total);}
     else if(e.rtgs){rtgsEntries.push(e);totalRTGS+=Math.round(e.total);}
     else if(isCashName){cashEntries.push(e);totalCash+=Math.round(e.total);}
     (e.items||[]).forEach(function(it){
@@ -742,8 +760,10 @@ function dbsGenerate(){
     });
   });
   var incomes=incRows.filter(function(r){return r.desc&&parseFloat(r.amt)>0;});
-  var incTotal=incomes.reduce(function(s,r){return s+(parseFloat(r.amt)||0);},0);
-  totalCash+=incTotal;
+  incomes.forEach(function(r){
+    var v=Math.round(parseFloat(r.amt)||0);
+    if(r.mode==='online')totalOnline+=v;else totalCash+=v;
+  });
   var expenses=expRows.filter(function(r){return r.desc&&parseFloat(r.amt)>0;});
   var expTotal=expenses.reduce(function(s,r){return s+(parseFloat(r.amt)||0);},0);
   var unloadings=unloadRows.filter(function(r){return parseFloat(r.amt)>0;});
@@ -752,7 +772,11 @@ function dbsGenerate(){
   cashEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>CASH</span><span>'+fmt(e.total)+' (Cash)</span></div>');});
   onlineEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>'+e.provider+(e.sender?(' '+escHtml(e.sender)):'')+'</span><span>'+fmt(e.total)+'</span></div>');});
   rtgsEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>RTGS</span><span>'+fmt(e.total)+'</span></div>');});
-  incomes.forEach(function(r){leftItems.push('<div class="dbs-row"><span>'+escHtml(r.desc)+'</span><span>'+fmt(parseFloat(r.amt)||0)+'</span></div>');});
+  partialEntries.forEach(function(p){
+    leftItems.push('<div class="dbs-row"><span>'+escHtml(p.e.pProvider||'Online')+(p.e.pSender?(' '+escHtml(p.e.pSender)):'')+'</span><span>'+fmt(p.on)+'</span></div>');
+    leftItems.push('<div class="dbs-row"><span>'+escHtml(invoiceDisplayName(p.e))+'</span><span>'+fmt(p.cash)+' (Cash)</span></div>');
+  });
+  incomes.forEach(function(r){leftItems.push('<div class="dbs-row"><span>'+escHtml(r.desc)+(r.mode==='online'?' (Online)':'')+'</span><span>'+fmt(parseFloat(r.amt)||0)+'</span></div>');});
   var rightItems=[];
   expenses.forEach(function(r){rightItems.push('<div class="dbs-row"><span>'+escHtml(r.desc)+'</span><span>'+fmt(parseFloat(r.amt)||0)+'</span></div>');});
   function fmtCatQty(t){
@@ -828,7 +852,7 @@ function gc(id){return parseFloat(document.getElementById(id).value)||0;}
 function fmt(v){return''+Math.round(v).toLocaleString('en-IN');}
 function toggleOnline(){
   var on=document.getElementById('f-online').checked;
-  if(on)document.getElementById('f-rtgs').checked=false;
+  if(on){document.getElementById('f-rtgs').checked=false;document.getElementById('f-partial').checked=false;document.getElementById('partial-block').style.display='none';}
   document.getElementById('online-block').style.display=on?'':'none';
   recalc();
 }
@@ -836,8 +860,25 @@ function toggleRTGS(){
   if(document.getElementById('f-rtgs').checked){
     document.getElementById('f-online').checked=false;
     document.getElementById('online-block').style.display='none';
+    document.getElementById('f-partial').checked=false;
+    document.getElementById('partial-block').style.display='none';
   }
   recalc();
+}
+function togglePartial(){
+  var on=document.getElementById('f-partial').checked;
+  if(on){
+    document.getElementById('f-online').checked=false;
+    document.getElementById('online-block').style.display='none';
+    document.getElementById('f-rtgs').checked=false;
+  }
+  document.getElementById('partial-block').style.display=on?'':'none';
+  recalc();
+}
+function partialSplit(tot){
+  if(!document.getElementById('f-partial').checked)return{partial:false,pAmt:0,pCash:0,over:false};
+  var rt=Math.round(tot),pAmt=Math.round(gc('f-p-amt'));
+  return{partial:true,pAmt:pAmt,pCash:rt-pAmt,over:pAmt>rt};
 }
 function recalc(){
   let sub=0;rows.forEach(r=>{sub+=rowAmt(r);});
@@ -845,6 +886,12 @@ function recalc(){
   const online=document.getElementById('f-online').checked;
   const upi=online?gc('f-upi'):0;
   const tot=sub+lab+weigh+freight+others+upi;
+  const ps=partialSplit(tot);
+  if(ps.partial){
+    const pl=document.getElementById('p-cash-line');
+    pl.className=ps.over?'p-cash bad':'p-cash';
+    pl.textContent=ps.over?'Online amount is more than the total':('Cash balance: '+fmt(ps.pCash));
+  }
   document.getElementById('d-sub').textContent=fmt(sub);document.getElementById('d-lab').textContent=fmt(lab);document.getElementById('d-weigh').textContent=fmt(weigh);document.getElementById('d-freight').textContent=fmt(freight);document.getElementById('d-others').textContent=fmt(others);
   document.getElementById('d-upi-row').style.display=(online&&upi>0)?'':'none';
   document.getElementById('d-upi').textContent=fmt(upi);
@@ -868,11 +915,15 @@ function getChittiCalc(){
   const rtgs=document.getElementById('f-rtgs').checked;
   const upi=online?gc('f-upi'):0;
   const tot=sub+lab+weigh+freight+others+upi;
-  const payNote=online?escHtml(provider+(sender?(': '+sender):'')):(rtgs?'RTGS':'');
+  const pProvider=document.getElementById('f-p-provider').value;
+  const pSender=document.getElementById('f-p-sender').value.trim();
+  const ps=partialSplit(tot);
+  const partialNote=ps.partial?escHtml(pProvider+(pSender?(': '+pSender):''))+' \u00b7 Online '+fmt(ps.pAmt)+' \u00b7 Cash '+fmt(ps.pCash):'';
+  const payNote=online?escHtml(provider+(sender?(': '+sender):'')):(rtgs?'RTGS':partialNote);
   const typedName=document.getElementById('f-name').value.trim();
   const rawName=typedName||(online?(provider+(sender?(' - '+sender):'')):(rtgs?'RTGS':'CASH'));
   const meta={name:rawName,date:document.getElementById('f-date').value||'________',dist:document.getElementById('f-dist').value||'___________',lorry:document.getElementById('f-lorry').value||'___________'};
-  return{sub,tq,lab,weigh,freight,others,online,provider,sender,rtgs,upi,tot,payNote,meta,rawName};
+  return{sub,tq,lab,weigh,freight,others,online,provider,sender,rtgs,upi,tot,payNote,meta,rawName,partial:ps.partial,pProvider,pSender,pAmt:ps.pAmt,pCash:ps.pCash,pOver:ps.over};
 }
 function buildChittiPages(rowsData,c){
   const cc=[c.lab,c.weigh,c.freight,c.others,c.upi].filter(v=>v>0).length,tr2=2+cc+(c.payNote?1:0),mp1=FIRST_TOTAL-tr2;
@@ -882,6 +933,7 @@ function buildChittiPages(rowsData,c){
 }
 function generate(){
   const c=getChittiCalc();
+  if(c.pOver){alert('Online amount is more than the grand total. Fix it before generating.');return;}
   document.getElementById('preview-wrap').innerHTML=buildChittiPages(rows,c);
   document.getElementById('preview-note').innerHTML='✓ Ready · <strong>Generates a real A6-size PDF · Share sheet → Print</strong>';
   go(4);
@@ -891,6 +943,7 @@ function finalizeChitti(){
   const c=getChittiCalc();
   const hasItems=rows.some(r=>(r.name||'').trim()&&((parseFloat(r.q)||0)>0||(parseFloat(r.p)||0)>0));
   if(!hasItems||c.tot<=0){alert('Add at least one item before finalizing.');return;}
+  if(c.pOver){alert('Online amount is more than the grand total. Fix it before finalizing.');return;}
   const catItems=rows.filter(r=>r.name&&((parseFloat(r.q)||0)>0||(parseFloat(r.p)||0)>0)).map(r=>{
     const q=parseFloat(r.q)||0,p=parseFloat(r.p)||0;
     return{category:categoryForItemName(r.name),kg:q>0?q:0,pcs:q<=0&&p>0?p:0,name:r.name};
@@ -898,6 +951,7 @@ function finalizeChitti(){
   var newEntry={
     id:crypto.randomUUID(),
     customerName:c.rawName,total:Math.round(c.tot),online:c.online,provider:c.provider,sender:c.sender,rtgs:c.rtgs,items:catItems,
+    partial:c.partial,pProvider:c.pProvider,pSender:c.pSender,pAmt:c.pAmt,pCash:c.pCash,
     fullRows:rows.map(function(r){return{q:r.q,name:r.name,p:r.p,r:r.r};}),
     charges:{lab:c.lab,weigh:c.weigh,freight:c.freight,others:c.others,upi:c.upi},
     payNote:c.payNote,meta:c.meta,sub:c.sub,tq:c.tq,ts:Date.now()
@@ -912,12 +966,15 @@ function finalizeChitti(){
 }
 function resetChittiForm(){
   rows=[];document.getElementById('tbody').innerHTML='';addRow();
-  ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others','f-sender','f-upi'].forEach(function(id){document.getElementById(id).value='';});
+  ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others','f-sender','f-upi','f-p-sender','f-p-amt'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('f-date').value=todayStr();
   document.getElementById('f-online').checked=false;
   document.getElementById('f-rtgs').checked=false;
   document.getElementById('f-provider').value='Gpay';
   document.getElementById('online-block').style.display='none';
+  document.getElementById('f-partial').checked=false;
+  document.getElementById('f-p-provider').value='Gpay';
+  document.getElementById('partial-block').style.display='none';
   recalc();
 }
 function chittiFieldSnapshot(){
@@ -934,7 +991,11 @@ function chittiFieldSnapshot(){
     provider:document.getElementById('f-provider').value,
     sender:document.getElementById('f-sender').value,
     upi:document.getElementById('f-upi').value,
-    rtgs:document.getElementById('f-rtgs').checked
+    rtgs:document.getElementById('f-rtgs').checked,
+    partial:document.getElementById('f-partial').checked,
+    pProvider:document.getElementById('f-p-provider').value,
+    pSender:document.getElementById('f-p-sender').value,
+    pAmt:document.getElementById('f-p-amt').value
   };
 }
 function holdChitti(){
@@ -973,6 +1034,11 @@ function resumeHeld(id){
   document.getElementById('f-online').checked=h.fields.online;
   document.getElementById('f-rtgs').checked=h.fields.rtgs;
   document.getElementById('online-block').style.display=h.fields.online?'':'none';
+  document.getElementById('f-p-sender').value=h.fields.pSender||'';
+  document.getElementById('f-p-amt').value=h.fields.pAmt||'';
+  document.getElementById('f-p-provider').value=h.fields.pProvider||'Gpay';
+  document.getElementById('f-partial').checked=!!h.fields.partial;
+  document.getElementById('partial-block').style.display=h.fields.partial?'':'none';
   rows=(h.rows&&h.rows.length)?h.rows:[{q:'',name:'',p:'',r:''}];
   document.getElementById('tbody').innerHTML='';
   renderRows();
@@ -1032,6 +1098,7 @@ function goInvoiceList(){
 function invoiceDisplayName(e){return (e.customerName||'').trim()||'CASH';}
 function invoiceGroupRank(e){
   if(invoiceDisplayName(e).toUpperCase()==='CASH')return 0;
+  if(e.partial)return 1;
   if(e.online)return 1;
   if(e.rtgs)return 2;
   return 3;
@@ -1046,7 +1113,7 @@ function renderInvoiceList(){
   });
   wrap.innerHTML=sorted.map(function(e){
     var dispName=invoiceDisplayName(e);
-    var tag=e.online?e.provider:(e.rtgs?'RTGS':(dispName.toUpperCase()==='CASH'?'Cash':'Credit'));
+    var tag=e.partial?((e.pProvider||'Online')+'+Cash'):(e.online?e.provider:(e.rtgs?'RTGS':(dispName.toUpperCase()==='CASH'?'Cash':'Credit')));
     return '<div class="inv-row">'
       +'<div class="inv-main" onclick="previewInvoice(\''+e.id+'\')"><span class="inv-name">'+escHtml(dispName)+' <span class="inv-tag">· '+tag+'</span></span><span class="inv-amt">₹'+fmt(e.total)+'</span></div>'
       +'<button class="inv-del" onclick="event.stopPropagation();deleteInvoice(\''+e.id+'\')" title="Delete invoice">×</button>'
@@ -1608,7 +1675,7 @@ async function printDbs(){
 function reset(){
   rows=[];dtype='';qRows=[];qFormat='';previewMode='live';
   document.getElementById('tbody').innerHTML='';
-  ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others','f-sender','f-upi'].forEach(function(id){document.getElementById(id).value='';});
+  ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others','f-sender','f-upi','f-p-sender','f-p-amt'].forEach(function(id){document.getElementById(id).value='';});
   ['q-to','q-date','q-addr','q-gstin','q-subject','q-kanta','q-transport','q-unload','q-note'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('f-date').value=todayStr();
   document.getElementById('q-date').value=todayStrDash();
@@ -1616,6 +1683,9 @@ function reset(){
   document.getElementById('f-rtgs').checked=false;
   document.getElementById('f-provider').value='Gpay';
   document.getElementById('online-block').style.display='none';
+  document.getElementById('f-partial').checked=false;
+  document.getElementById('f-p-provider').value='Gpay';
+  document.getElementById('partial-block').style.display='none';
   document.querySelectorAll('.type-btn').forEach(function(b){b.classList.remove('on');});
   document.getElementById('n2').disabled=true;
   document.getElementById('n9').disabled=true;
