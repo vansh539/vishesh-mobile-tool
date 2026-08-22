@@ -765,7 +765,7 @@ function dbsGenerate(){
     if(r.mode==='online')totalOnline+=v;else totalCash+=v;
   });
   var expenses=expRows.filter(function(r){return r.desc&&parseFloat(r.amt)>0;});
-  var expTotal=expenses.reduce(function(s,r){return s+(parseFloat(r.amt)||0);},0);
+  var expTotal=expenses.reduce(function(s,r){return s+Math.round(parseFloat(r.amt)||0);},0);
   var unloadings=unloadRows.filter(function(r){return parseFloat(r.amt)>0;});
   var unloadTotal=unloadings.reduce(function(s,r){return s+(parseFloat(r.amt)||0);},0);
   var leftItems=[];
@@ -808,7 +808,7 @@ function dbsGenerate(){
     var isLast=(p===pageCount-1);
     var leftHtml=leftChunks[p].join('')||(p===0&&!leftItems.length?'<div class="dbs-row" style="color:#888">None today</div>':'');
     var rightHtml=rightChunks[p].join('')||(p===0&&!rightItems.length?'<div class="dbs-row" style="color:#888">None today</div>':'');
-    var leftBottom=isLast?('<div class="dbs-bottom"><div class="dbs-tot"><span>Total Cash</span><span>'+fmt(totalCash)+'</span></div><div class="dbs-tot"><span>Total Online</span><span>'+fmt(totalOnline)+'</span></div><div class="dbs-tot"><span>Total RTGS</span><span>'+fmt(totalRTGS)+'</span></div></div>'):'';
+    var leftBottom=isLast?('<div class="dbs-bottom"><div class="dbs-tot"><span>Total Cash</span><span>'+fmt(totalCash-expTotal)+'</span></div><div class="dbs-tot"><span>Total Online</span><span>'+fmt(totalOnline)+'</span></div><div class="dbs-tot"><span>Total RTGS</span><span>'+fmt(totalRTGS)+'</span></div></div>'):'';
     var rightBottom=isLast?('<div class="dbs-bottom"><div class="dbs-tot"><span>Total Expenses</span><span>'+fmt(expTotal)+'</span></div><div class="dbs-tot"><span>Total Unloading</span><span>'+fmt(unloadTotal)+' kg</span></div><div class="dbs-h">Category Qty Sold</div>'+catRows+'</div>'):'';
     pages+='<div class="dbs-doc">'
       +'<div class="dbs-shri">||श्री||</div>'
