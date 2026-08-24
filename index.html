@@ -281,6 +281,7 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
       <button class="type-btn" onclick="goStock()"><svg class="ic" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" aria-hidden="true"><path d="M3.75 7.5 12 3.25l8.25 4.25M3.75 7.5v9l8.25 4.25M3.75 7.5 12 11.75M20.25 7.5v9L12 20.75M20.25 7.5 12 11.75M12 11.75v9"/></svg><span><span class="tl">Stock / Items</span><span class="sb">View catalog by category, add or remove items</span></span></button>
     </div>
     <div class="acts"><button class="btn-p" id="n2" onclick="go(3)" disabled>Continue →</button></div>
+    <div id="build-stamp" style="text-align:center;font-size:11px;opacity:.45;margin-top:10px;letter-spacing:.3px"></div>
   </div></div>
   <div class="step" id="s10">
     <div class="card"><h3>Cash In (today)</h3>
@@ -462,7 +463,29 @@ var heldChittis=[];
 var ledgerDateKey=todayStr();
 var DRAFT_KEY='vs_draft_v1';
 var HELD_KEY='vs_held_chittis_v1';
+var BUILD='2026-08-24b';
 var LEDGER_KEY='vs_ledger_v1';
+// This page is served by GitHub Pages, which we cannot send no-cache headers from,
+// and iOS home-screen shortcuts hold stale copies. Re-fetch our own URL bypassing the
+// HTTP cache; if the served build differs from the one running, reload into it once.
+function checkForUpdate(){
+  try{
+    if(typeof fetch!=='function'||!location||!location.href)return;
+    fetch(location.href,{cache:'reload'}).then(function(r){return r.text();}).then(function(t){
+      var m=t.match(/var BUILD='([^']+)'/);
+      if(!m||m[1]===BUILD)return;
+      try{
+        if(sessionStorage.getItem('vs_reloaded_for')===m[1])return;
+        sessionStorage.setItem('vs_reloaded_for',m[1]);
+      }catch(e){}
+      location.reload();
+    }).catch(function(){});
+  }catch(e){}
+}
+function showBuildStamp(){
+  var el=document.getElementById('build-stamp');
+  if(el)el.textContent='build '+BUILD;
+}
 // Finalized chittis now keep a durable on-device copy (localStorage, this phone only).
 // The relay is RAM-only and CAN lose everything on a restart; absence there must never
 // be read as "deleted". Real deletes propagate as explicit tombstones instead.
@@ -1816,6 +1839,8 @@ function showMenu(){
   loadDraft();
   loadLedger();
   loadHeld();
+  showBuildStamp();
+  checkForUpdate();
   renderHeldBadge();
   document.getElementById('lock').classList.remove('active');
   document.getElementById('s2').classList.add('active');
