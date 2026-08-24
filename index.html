@@ -462,6 +462,50 @@ var heldChittis=[];
 var ledgerDateKey=todayStr();
 var DRAFT_KEY='vs_draft_v1';
 var HELD_KEY='vs_held_chittis_v1';
+var LEDGER_KEY='vs_ledger_v1';
+// Finalized chittis now keep a durable on-device copy (localStorage, this phone only).
+// The relay is RAM-only and CAN lose everything on a restart; absence there must never
+// be read as "deleted". Real deletes propagate as explicit tombstones instead.
+var tombstones=[];
+function saveLedger(){
+  try{localStorage.setItem(LEDGER_KEY,JSON.stringify({dateKey:ledgerDateKey,ledger:dailyLedger,del:tombstones}));}catch(e){}
+}
+function loadLedger(){
+  try{
+    var raw=localStorage.getItem(LEDGER_KEY);
+    if(!raw)return;
+    var d=JSON.parse(raw);
+    if(!d||d.dateKey!==ledgerDateKey)return;
+    if(Array.isArray(d.ledger)&&d.ledger.length)dailyLedger=d.ledger;
+    if(Array.isArray(d.del)&&d.del.length)tombstones=d.del;
+  }catch(e){}
+}
+function isTombstoned(id){
+  if(!id)return false;
+  return tombstones.some(function(t){return t.id===id;});
+}
+function addTombstone(id){
+  if(!id||isTombstoned(id))return;
+  var t={id:id,ts:Date.now(),syncedRemote:false};
+  tombstones.push(t);
+  saveLedger();
+  syncPushTombstone(t);
+}
+function syncPushTombstone(t){
+  return getSyncKey().then(function(key){
+    return syncEncrypt(key,{type:'del',target:t.id,ts:t.ts}).then(function(enc){
+      return syncFetch('/sync/'+syncDateKeyIST()+'/push',{
+        method:'POST',headers:{'content-type':'application/json'},
+        body:JSON.stringify({id:'del:'+t.id,ciphertext:enc.ciphertext,iv:enc.iv,ts:t.ts})
+      });
+    });
+  }).then(function(res){if(res&&res.ok){t.syncedRemote=true;saveLedger();}}).catch(function(){});
+}
+function applyTombstones(localArr){
+  for(var i=localArr.length-1;i>=0;i--){
+    if(isTombstoned(localArr[i].id))localArr.splice(i,1);
+  }
+}
 function saveDraft(){
   try{localStorage.setItem(DRAFT_KEY,JSON.stringify({dateKey:ledgerDateKey,exp:expRows,inc:incRows,unload:unloadRows}));}catch(e){}
 }
@@ -491,8 +535,8 @@ function loadHeld(){
 function purgeStaleLedger(){
   var today=todayStr();
   if(today!==ledgerDateKey){
-    dailyLedger=[];expRows=[];incRows=[];unloadRows=[];heldChittis=[];
-    try{localStorage.removeItem(DRAFT_KEY);localStorage.removeItem(HELD_KEY);}catch(e){}
+    dailyLedger=[];expRows=[];incRows=[];unloadRows=[];heldChittis=[];tombstones=[];
+    try{localStorage.removeItem(DRAFT_KEY);localStorage.removeItem(HELD_KEY);localStorage.removeItem(LEDGER_KEY);}catch(e){}
     ledgerDateKey=today;
   }
 }
@@ -563,23 +607,23 @@ function syncDrainRetryQueue(){
     else syncDeleteEntry(op.id);
   });
 }
-var SYNC_MISS_THRESHOLD=3;
-var syncMissStreak={};
+// Merge is strictly additive. An entry missing from the relay means the relay lost it
+// (it is RAM-only and restarts wipe it), NOT that someone deleted it -- so we re-upload
+// instead of deleting. Deletes arrive only as explicit tombstones.
 function mergeSyncedEntries(localArr,remoteDecoded){
-  var remoteIds=remoteDecoded.map(function(e){return e.id;});
   var localIds=localArr.map(function(e){return e.id;});
   remoteDecoded.forEach(function(e){
+    if(isTombstoned(e.id))return;
     if(localIds.indexOf(e.id)===-1){e.syncedRemote=true;localArr.push(e);}
-    delete syncMissStreak[e.id];
   });
-  for(var i=localArr.length-1;i>=0;i--){
-    var id=localArr[i].id;
-    if(remoteIds.indexOf(id)===-1&&localArr[i].syncedRemote){
-      syncMissStreak[id]=(syncMissStreak[id]||0)+1;
-      if(syncMissStreak[id]>=SYNC_MISS_THRESHOLD){localArr.splice(i,1);delete syncMissStreak[id];}
-    }
-  }
+  var remoteIds=remoteDecoded.map(function(e){return e.id;});
   localArr.forEach(function(e){if(remoteIds.indexOf(e.id)!==-1)e.syncedRemote=true;});
+}
+function syncRepushMissing(localArr,remoteIds){
+  localArr.forEach(function(e){
+    if(!e.id||isTombstoned(e.id))return;
+    if(remoteIds.indexOf(e.id)===-1){e.syncedRemote=false;syncPushEntry(e);}
+  });
 }
 function syncPull(){
   purgeStaleLedger();
@@ -593,15 +637,33 @@ function syncPull(){
     });
   }).then(function(decoded){
     decoded=decoded.filter(Boolean);
-    var expDecoded=decoded.filter(function(e){return e.type==='exp';});
-    var incDecoded=decoded.filter(function(e){return e.type==='inc';});
-    var unloadDecoded=decoded.filter(function(e){return e.type==='unload';});
-    var chittiDecoded=decoded.filter(function(e){return e.type!=='exp'&&e.type!=='inc'&&e.type!=='unload';});
+    // 1. Tombstones first, so a delete is never undone by the merge or the re-push below.
+    var remoteIds=[];
+    decoded.forEach(function(e){if(e&&e.id)remoteIds.push(e.id);});
+    decoded.filter(function(e){return e.type==='del';}).forEach(function(e){
+      if(!e.target||isTombstoned(e.target))return;
+      tombstones.push({id:e.target,ts:e.ts||Date.now(),syncedRemote:true});
+    });
+    applyTombstones(dailyLedger);applyTombstones(expRows);applyTombstones(incRows);applyTombstones(unloadRows);
+    var live=decoded.filter(function(e){return e.type!=='del';});
+    var expDecoded=live.filter(function(e){return e.type==='exp';});
+    var incDecoded=live.filter(function(e){return e.type==='inc';});
+    var unloadDecoded=live.filter(function(e){return e.type==='unload';});
+    var chittiDecoded=live.filter(function(e){return e.type!=='exp'&&e.type!=='inc'&&e.type!=='unload';});
     mergeSyncedEntries(dailyLedger,chittiDecoded);
     mergeSyncedEntries(expRows,expDecoded);
     mergeSyncedEntries(incRows,incDecoded);
     mergeSyncedEntries(unloadRows,unloadDecoded);
+    // 2. Anything this phone holds that the relay does not -> put it back on the relay.
+    syncRepushMissing(dailyLedger,remoteIds);
+    syncRepushMissing(expRows,remoteIds);
+    syncRepushMissing(incRows,remoteIds);
+    syncRepushMissing(unloadRows,remoteIds);
+    tombstones.forEach(function(t){
+      if(remoteIds.indexOf('del:'+t.id)===-1){t.syncedRemote=false;syncPushTombstone(t);}
+    });
     saveDraft();
+    saveLedger();
     syncDrainRetryQueue();
     var s11=document.getElementById('s11');
     if(s11&&s11.classList.contains('active'))renderInvoiceList();
@@ -650,7 +712,7 @@ function expDel(i){
   if(!expRows.length)expRows.push({desc:'',amt:''});
   expRender();
   saveDraft();
-  if(r&&r.id)syncDeleteEntry(r.id);
+  if(r&&r.id){addTombstone(r.id);syncDeleteEntry(r.id);}
 }
 function addIncRow(){incRows.push({desc:'',amt:'',mode:'cash'});incRender();saveDraft();}
 function incRender(){
@@ -671,7 +733,7 @@ function incDel(i){
   if(!incRows.length)incRows.push({desc:'',amt:'',mode:'cash'});
   incRender();
   saveDraft();
-  if(r&&r.id)syncDeleteEntry(r.id);
+  if(r&&r.id){addTombstone(r.id);syncDeleteEntry(r.id);}
 }
 function addUnloadRow(){unloadRows.push({desc:'',amt:''});unloadRender();saveDraft();}
 function unloadRender(){
@@ -691,7 +753,7 @@ function unloadDel(i){
   if(!unloadRows.length)unloadRows.push({desc:'',amt:''});
   unloadRender();
   saveDraft();
-  if(r&&r.id)syncDeleteEntry(r.id);
+  if(r&&r.id){addTombstone(r.id);syncDeleteEntry(r.id);}
 }
 function dbsFinalize(){
   purgeStaleLedger();
@@ -957,6 +1019,7 @@ function finalizeChitti(){
     payNote:c.payNote,meta:c.meta,sub:c.sub,tq:c.tq,ts:Date.now()
   };
   dailyLedger.push(newEntry);
+  saveLedger();
   syncPushEntry(newEntry);
   const btn=document.getElementById('final-btn');
   const origText=btn.textContent;
@@ -1126,6 +1189,8 @@ function deleteInvoice(id){
   if(!e)return;
   if(!confirm('Delete invoice for "'+(e.customerName||'—')+'" (₹'+fmt(e.total)+')? This cannot be undone.'))return;
   dailyLedger.splice(idx,1);
+  addTombstone(id);
+  saveLedger();
   renderInvoiceList();
   syncDeleteEntry(id);
 }
@@ -1292,8 +1357,29 @@ function catalogPushItem(name,category){
   }).then(function(res){if(res&&res.ok)markCustomItemSynced(name);})
     .catch(function(){catalogRetryQueue.push({type:'pushItem',name:name,category:category});});
 }
+var CATALOG_DEL_KEY='vs_catalog_del_v1';
+function getCatalogTombs(){
+  try{var r=localStorage.getItem(CATALOG_DEL_KEY);var a=r?JSON.parse(r):[];return Array.isArray(a)?a:[];}catch(e){return[];}
+}
+function setCatalogTombs(l){try{localStorage.setItem(CATALOG_DEL_KEY,JSON.stringify(l));}catch(e){}}
+function isCatalogTombstoned(id){return getCatalogTombs().some(function(t){return t.id===id;});}
+function markCatalogTombSynced(id){
+  var l=getCatalogTombs(),i=l.findIndex(function(t){return t.id===id;});
+  if(i!==-1){l[i].syncedRemote=true;setCatalogTombs(l);}
+}
+function catalogPushTomb(name){
+  var id=catalogId('di',name);
+  return getCatalogSyncKey().then(function(key){
+    return syncEncrypt(key,{name:name}).then(function(enc){
+      return syncFetch('/catalog/push',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({id:id,ciphertext:enc.ciphertext,iv:enc.iv,ts:Date.now()})});
+    });
+  }).then(function(res){if(res&&res.ok)markCatalogTombSynced(id);}).catch(function(){});
+}
 function catalogDeleteItem(name){
-  var id=catalogId('item',name);
+  var id=catalogId('item',name),did=catalogId('di',name);
+  var l=getCatalogTombs();
+  if(!l.some(function(t){return t.id===did;})){l.push({id:did,name:name,syncedRemote:false});setCatalogTombs(l);}
+  catalogPushTomb(name);
   return syncFetch('/catalog/delete',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({id:id})})
     .catch(function(){catalogRetryQueue.push({type:'deleteItem',name:name});});
 }
@@ -1325,10 +1411,22 @@ function catalogPull(){
     });
   }).then(function(decoded){
     decoded=decoded.filter(Boolean);
-    var remoteItemIds={},remoteHideIds={};
+    var remoteItemIds={},remoteHideIds={},remoteDelIds={};
     var custom=getCustomItems(),hidden=getHiddenItemsRaw();
+    // 1. Remote tombstones first, so a deleted item is not re-added by the merge below.
+    var tombs=getCatalogTombs(),tombsChanged=false;
+    decoded.forEach(function(e){
+      if(e.id.indexOf('di:')!==0)return;
+      remoteDelIds[e.id]=true;
+      if(!tombs.some(function(t){return t.id===e.id;})){
+        tombs.push({id:e.id,name:e.name,syncedRemote:true});tombsChanged=true;
+      }
+    });
+    if(tombsChanged)setCatalogTombs(tombs);
+    var isTomb=function(name){var d=catalogId('di',name);return tombs.some(function(t){return t.id===d;});};
     decoded.forEach(function(e){
       if(e.id.indexOf('item:')===0){
+        if(isTomb(e.name))return;
         remoteItemIds[e.id]=true;
         var idx=custom.findIndex(function(c){return catalogId('item',c.name)===e.id;});
         if(idx===-1)custom.push({name:e.name,category:e.category,syncedRemote:true});
@@ -1340,13 +1438,19 @@ function catalogPull(){
         else hidden[hidx].syncedRemote=true;
       }
     });
-    custom=custom.filter(function(c){return !c.syncedRemote||remoteItemIds[catalogId('item',c.name)];});
-    hidden=hidden.filter(function(h){return !h.syncedRemote||remoteHideIds[catalogId('hide',h.name)];});
+    // 2. Local removal is driven by tombstones only -- never by "the relay doesn't have it".
+    custom=custom.filter(function(c){return !isTomb(c.name);});
     setCustomItemsRaw(custom);
     setHiddenItemsRaw(hidden);
     catalogDrainRetryQueue();
-    custom.filter(function(c){return !c.syncedRemote;}).forEach(function(c){catalogPushItem(c.name,c.category);});
-    hidden.filter(function(h){return !h.syncedRemote;}).forEach(function(h){catalogPushHide(h.name);});
+    // 3. Anything this phone holds that the relay does not -> put it back on the relay.
+    custom.forEach(function(c){
+      if(!c.syncedRemote||!remoteItemIds[catalogId('item',c.name)])catalogPushItem(c.name,c.category);
+    });
+    hidden.forEach(function(h){
+      if(!h.syncedRemote||!remoteHideIds[catalogId('hide',h.name)])catalogPushHide(h.name);
+    });
+    tombs.forEach(function(t){if(!remoteDelIds[t.id])catalogPushTomb(t.name);});
     var s12=document.getElementById('s12');
     if(s12&&s12.classList.contains('active')){stockRefreshCatSelect();renderStockList();}
   }).catch(function(){});
@@ -1710,6 +1814,7 @@ function tryUnlock(){
 function showMenu(){
   purgeStaleLedger();
   loadDraft();
+  loadLedger();
   loadHeld();
   renderHeldBadge();
   document.getElementById('lock').classList.remove('active');
