@@ -145,6 +145,8 @@ input[type=number]{-moz-appearance:textfield}
 .inv-amt{font-size:15px;font-weight:800;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
 .inv-del{background:none;border:none;color:#bdb6ae;cursor:pointer;font-size:21px;padding:7px 9px;line-height:1}
 .inv-del:hover,.inv-del:active{color:var(--bad)}
+.inv-edit{background:none;border:none;color:#bdb6ae;cursor:pointer;font-size:17px;padding:7px 8px;line-height:1}
+.inv-edit:hover,.inv-edit:active{color:var(--amber)}
 .empty{color:var(--muted);font-size:13px;padding:18px 2px;line-height:1.5}
 .stock-cat{border:1px solid var(--rule);border-radius:9px;margin-bottom:8px;overflow:hidden}
 .stock-cat:last-child{margin-bottom:0}
@@ -371,7 +373,7 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
         <div class="sr tot"><span>Grand Total</span><span id="d-tot">0</span></div>
       </div>
     </div>
-    <div class="acts"><button class="btn-s" onclick="go(2)">← Back</button><button class="btn-s" id="hold-btn" onclick="holdChitti()">⏸ Hold</button><button class="btn-p" onclick="generate()">Generate Document</button><button class="btn-a" id="final-btn" onclick="finalizeChitti()">✓ Final</button></div>
+    <div class="acts"><button class="btn-s" onclick="chittiBack()">← Back</button><button class="btn-s" id="hold-btn" onclick="holdChitti()">⏸ Hold</button><button class="btn-p" onclick="generate()">Generate Document</button><button class="btn-a" id="final-btn" onclick="finalizeChitti()">✓ Final</button></div>
   </div>
   <div class="step" id="s4">
     <div class="print-note" id="preview-note">✓ Ready · <strong>Generates a real A6-size PDF · Share sheet → Print</strong></div>
@@ -454,6 +456,7 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
 </script>
 <script>
 var dtype='',rows=[],qRows=[],qBlobUrl='',qFormat='';
+var editingInvoiceId=null; // set by editInvoice(); tells finalizeChitti() to update dailyLedger in place instead of pushing a new entry.
 var ITEM_CATEGORY={'20X20 (4.5kg/pc)':'M.S. Pipes','20x20 (5.5kg/pc)':'M.S. Pipes','20X20 (7kg/pc)':'M.S. Pipes','25X25 (5.5kg/pc)':'M.S. Pipes','25X25 (7kg/pc)':'M.S. Pipes','25X25 (8.5kg/pc)':'M.S. Pipes','25X25 (11kg/pc)':'M.S. Pipes','32X32 (7kg/pc)':'M.S. Pipes','32X32 (11kg/pc)':'M.S. Pipes','38X38 (8.5kg/pc)':'M.S. Pipes','38X38 (11kg/pc)':'M.S. Pipes','38X38 (14kg/pc)':'M.S. Pipes','38X38 (17kg/pc)':'M.S. Pipes','50X50 (11kg/pc)':'M.S. Pipes','50X50 (14kg/pc)':'M.S. Pipes','50X50 (17kg/pc)':'M.S. Pipes','50X50 (19kg/pc)':'M.S. Pipes','50X50 (22kg/pc)':'M.S. Pipes','50X50 (25kg/pc)':'M.S. Pipes','60X60 (18kg/pc)':'M.S. Pipes','60X60 (22kg/pc)':'M.S. Pipes','60X60 (27kg/pc)':'M.S. Pipes','72X72 (22kg/pc)':'M.S. Pipes','72X72 (27kg/pc)':'M.S. Pipes','72X72 (32kg/pc)':'M.S. Pipes','100X100 (37kg/pc)':'M.S. Pipes','100X100 (47kg/pc)':'M.S. Pipes','100X100 (55kg/pc)':'M.S. Pipes','100X100 (75kg/pc)':'M.S. Pipes','150X150 (75kg/pc)':'M.S. Pipes','150X150 (86kg/pc)':'M.S. Pipes','40X40 (8.5kg/pc)':'M.S. Pipes','50X50 (8.5kg/pc)':'M.S. Pipes','60X40 (15kg/pc)':'M.S. Pipes','75x75 (27kg/pc)':'M.S. Pipes','100X25 (TATA - 22kg/pc)':'G.P. Pipes','20X40 (7kg/pc)':'M.S. Pipes','20X40 (11kg/pc)':'M.S. Pipes','50x25 (8.5kg/pc)':'M.S. Pipes','50x25 (11kg/pc)':'M.S. Pipes','50X25 (14kg/pc)':'M.S. Pipes','50x25 (17kg/pc)':'M.S. Pipes','60X40 (11kg/pc)':'M.S. Pipes','60X40 (14kg/pc)':'M.S. Pipes','60X40 (18kg/pc)':'M.S. Pipes','60X40 (25kg/pc)':'M.S. Pipes','75X25 (14kg/pc)':'M.S. Pipes','75X25 (17kg/pc)':'M.S. Pipes','80x40 (18kg/pc)':'M.S. Pipes','80X40 (22kg/pc)':'M.S. Pipes','80X40 (27kg/pc)':'M.S. Pipes','80X40 (32kg/pc)':'M.S. Pipes','100X50 (22kg/pc)':'M.S. Pipes','100X50 (27kg/pc)':'M.S. Pipes','100X50 (32kg/pc)':'M.S. Pipes','122X61 (5 X 2.5 ) (43kg/pc)':'M.S. Pipes','145X82 (6 X 3) (53kg/pc)':'M.S. Pipes','32 OD (7kg/pc)':'M.S. Pipes','32 OD (9kg/pc)':'M.S. Pipes','32 OD (11kg/pc)':'M.S. Pipes','42 OD (7kg/pc)':'M.S. Pipes','42 OD (11kg/pc)':'M.S. Pipes','48 OD (8.5kg/pc)':'M.S. Pipes','48 OD (11kg/pc)':'M.S. Pipes','48 OD (14kg/pc)':'M.S. Pipes','48 OD (17kg/pc)':'M.S. Pipes','48 OD (20kg/pc)':'M.S. Pipes','60 OD (13kg/pc)':'M.S. Pipes','60 OD (16kg/pc)':'M.S. Pipes','60 OD (22kg/pc)':'M.S. Pipes','60 OD (25kg/pc)':'M.S. Pipes','76 OD (22kg/pc)':'M.S. Pipes','76 OD (27kg/pc)':'M.S. Pipes','76 OD (32kg/pc)':'M.S. Pipes','89 OD (27kg/pc)':'M.S. Pipes','89 OD (33kg/pc)':'M.S. Pipes','89 OD (37kg/pc)':'M.S. Pipes','89 OD (42kg/pc)':'M.S. Pipes','89 OD (46kg/pc)':'M.S. Pipes','114 OD (43kg/pc)':'M.S. Pipes','114 OD (58kg/pc)':'M.S. Pipes','165 OD (70kg/pc)':'M.S. Pipes','219 OD (84kg/pc)':'M.S. Pipes','9MM SQ':'M.S. Section','10MM SQ':'M.S. Section','12MM SQ':'M.S. Section','16MM SQ':'M.S. Section','20MM SQ':'M.S. Section','25MM SQ':'M.S. Section','32MM SQ':'M.S. Section','40MM SQ':'M.S. Section','50MM SQ':'M.S. Section','10MM ROUND':'M.S. Section','12MM ROUND':'M.S. Section','16MM ROUND':'M.S. Section','20MM ROUND':'M.S. Section','25MM ROUND':'M.S. Section','32MM ROUND':'M.S. Section','20X5 FLAT':'M.S. Section','25X6 FLAT':'M.S. Section','32X6 FLAT':'M.S. Section','40X6 FLAT':'M.S. Section','50X6 FLAT':'M.S. Section','65X6 FLAT':'M.S. Section','75X6 FLAT':'M.S. Section','100X6 FLAT':'M.S. Section','100X12 FLAT':'M.S. Section','100X16 FLAT':'M.S. Section','25X10 FLAT':'M.S. Section','40X8 FLAT':'M.S. Section','40X10 FLAT':'M.S. Section','40X12 FLAT':'M.S. Section','50X8 FLAT':'M.S. Section','50X10 FLAT':'M.S. Section','50X12 FLAT':'M.S. Section','50X16 FLAT':'M.S. Section','65X12 FLAT':'M.S. Section','65X16 FLAT':'M.S. Section','75X12 FLAT':'M.S. Section','75X16 FLAT':'M.S. Section','75X20 FLAT':'M.S. Section','75X25 FLAT':'M.S. Section','22X2 ANGLE':'M.S. Section','25X3 ANGLE':'M.S. Section','25 X5 ANGLE':'M.S. Section','32X4 ANGLE':'M.S. Section','35X5 ANGLE':'M.S. Section','40X5 ANGLE':'M.S. Section','40X6 ANGE':'M.S. Section','50X5 ANGLE':'M.S. Section','50X6 ANGLE':'M.S. Section','65X6 ANGLE':'M.S. Section','75X6 ANGLE':'M.S. Section','3X1.5 CH':'M.S. Section','4X2 CH':'M.S. Section','5X2.5 CH':'M.S. Section','6X3 CH':'M.S. Section','3X1.5 CH (30kg/pc)':'M.S. Section','5X2.5 CH (V- 80kg/pc)':'M.S. Section','4X2 IB':'M.S. Section','5X2.5 IB':'M.S. Section','6X3 IB':'M.S. Section','8X4 IB':'M.S. Section','12X2 BEND':'M.S. Section','17X2 BEND':'M.S. Section','17X3 BEND':'M.S. Section','18X4 BEND':'M.S. Section','25X3 BEND':'M.S. Section','32X3 BEND':'M.S. Section','40X3 BEND':'M.S. Section','7 X 3 RING':'Rings','7 X 7 RING':'Rings','7 X 10 RING':'Rings','7 X 12 RING':'Rings','7 X 13 RING':'Rings','7 X 14 RING':'Rings','7 X 15 RING':'Rings','7 X 16 RING':'Rings','7 X 17 RING':'Rings','7 X 20 RING':'Rings','4 X 14 RING':'Rings','4 X 13 RING':'Rings','06 MM TMT':'TMT','08 MM TMT':'TMT','10 MM TMT':'TMT','12 MM TMT':'TMT','16 MM TMT':'TMT','20 MM TMT':'TMT','25 MM TMT':'TMT','32 MM TMT':'TMT','06 MM TMT (Jai Raj)':'Jai Raj TMT','08 MM TMT (Jai Raj)':'Jai Raj TMT','10 MM TMT (Jai Raj)':'Jai Raj TMT','12 MM TMT (Jai Raj)':'Jai Raj TMT','16 MM TMT (Jai Raj)':'Jai Raj TMT','20 MM TMT (Jai Raj)':'Jai Raj TMT','25 MM TMT (Jai Raj)':'Jai Raj TMT','32 MM TMT (Jai Raj)':'Jai Raj TMT','06 MM TMT (Shree)':'Shree TMT','08 MM TMT (Shree)':'Shree TMT','10 MM TMT (Shree)':'Shree TMT','12 MM TMT (Shree)':'Shree TMT','16 MM TMT (Shree)':'Shree TMT','20 MM TMT (Shree)':'Shree TMT','25 MM TMT (Shree)':'Shree TMT','32 MM TMT (Shree)':'Shree TMT'};
 var dailyLedger=[]; // finalized chittis only reach persistence via the sync relay (see syncPushEntry); this array itself is in-memory only.
 var expRows=[]; // Cash In / Expenses / Unloading drafts autosave to localStorage (saveDraft/loadDraft) so unfinalized rows survive a reload.
@@ -463,7 +466,7 @@ var heldChittis=[];
 var ledgerDateKey=todayStr();
 var DRAFT_KEY='vs_draft_v1';
 var HELD_KEY='vs_held_chittis_v1';
-var BUILD='2026-08-24b';
+var BUILD='2026-08-25a';
 var LEDGER_KEY='vs_ledger_v1';
 // This page is served by GitHub Pages, which we cannot send no-cache headers from,
 // and iOS home-screen shortcuts hold stale copies. Re-fetch our own URL bypassing the
@@ -630,14 +633,28 @@ function syncDrainRetryQueue(){
     else syncDeleteEntry(op.id);
   });
 }
-// Merge is strictly additive. An entry missing from the relay means the relay lost it
-// (it is RAM-only and restarts wipe it), NOT that someone deleted it -- so we re-upload
-// instead of deleting. Deletes arrive only as explicit tombstones.
+// Merge is strictly additive w.r.t. existence. An entry missing from the relay means the
+// relay lost it (it is RAM-only and restarts wipe it), NOT that someone deleted it -- so we
+// re-upload instead of deleting. Deletes arrive only as explicit tombstones.
+// It DOES update an entry already present locally when the remote copy is a newer edit
+// (compared via updatedAt, falling back to ts for entries from before edit-in-place existed)
+// -- this is how editInvoice()/finalizeChitti() re-pushing the same id propagates to the
+// other phone. Equal timestamps are left alone so a phone doesn't needlessly replace its own
+// just-pushed entry with the echo it pulls back a few seconds later.
 function mergeSyncedEntries(localArr,remoteDecoded){
-  var localIds=localArr.map(function(e){return e.id;});
+  var localById={};
+  localArr.forEach(function(e){localById[e.id]=e;});
   remoteDecoded.forEach(function(e){
     if(isTombstoned(e.id))return;
-    if(localIds.indexOf(e.id)===-1){e.syncedRemote=true;localArr.push(e);}
+    var local=localById[e.id];
+    if(!local){e.syncedRemote=true;localArr.push(e);localById[e.id]=e;return;}
+    var remoteU=e.updatedAt||e.ts||0,localU=local.updatedAt||local.ts||0;
+    if(remoteU>localU){
+      var idx=localArr.indexOf(local);
+      e.syncedRemote=true;
+      if(idx!==-1)localArr[idx]=e;
+      localById[e.id]=e;
+    }
   });
   var remoteIds=remoteDecoded.map(function(e){return e.id;});
   localArr.forEach(function(e){if(remoteIds.indexOf(e.id)!==-1)e.syncedRemote=true;});
@@ -1033,24 +1050,33 @@ function finalizeChitti(){
     const q=parseFloat(r.q)||0,p=parseFloat(r.p)||0;
     return{category:categoryForItemName(r.name),kg:q>0?q:0,pcs:q<=0&&p>0?p:0,name:r.name};
   });
+  var isEdit=!!editingInvoiceId;
+  var existing=isEdit?dailyLedger.find(function(x){return x.id===editingInvoiceId;}):null;
   var newEntry={
-    id:crypto.randomUUID(),
+    id:(isEdit&&existing)?existing.id:crypto.randomUUID(),
     customerName:c.rawName,total:Math.round(c.tot),online:c.online,provider:c.provider,sender:c.sender,rtgs:c.rtgs,items:catItems,
     partial:c.partial,pProvider:c.pProvider,pSender:c.pSender,pAmt:c.pAmt,pCash:c.pCash,
     fullRows:rows.map(function(r){return{q:r.q,name:r.name,p:r.p,r:r.r};}),
     charges:{lab:c.lab,weigh:c.weigh,freight:c.freight,others:c.others,upi:c.upi},
-    payNote:c.payNote,meta:c.meta,sub:c.sub,tq:c.tq,ts:Date.now()
+    payNote:c.payNote,meta:c.meta,sub:c.sub,tq:c.tq,
+    ts:(isEdit&&existing)?existing.ts:Date.now(),updatedAt:Date.now()
   };
-  dailyLedger.push(newEntry);
+  if(isEdit&&existing){
+    var idx=dailyLedger.indexOf(existing);
+    if(idx!==-1)dailyLedger[idx]=newEntry;else dailyLedger.push(newEntry);
+  }else{
+    dailyLedger.push(newEntry);
+  }
   saveLedger();
   syncPushEntry(newEntry);
   const btn=document.getElementById('final-btn');
-  const origText=btn.textContent;
   btn.textContent='✓ Finalized';btn.disabled=true;
-  setTimeout(function(){btn.textContent=origText;btn.disabled=false;},1200);
+  setTimeout(function(){btn.textContent='✓ Final';btn.disabled=false;},1200);
   resetChittiForm();
+  if(isEdit)goInvoiceList();
 }
 function resetChittiForm(){
+  editingInvoiceId=null;
   rows=[];document.getElementById('tbody').innerHTML='';addRow();
   ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others','f-sender','f-upi','f-p-sender','f-p-amt'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('f-date').value=todayStr();
@@ -1061,7 +1087,12 @@ function resetChittiForm(){
   document.getElementById('f-partial').checked=false;
   document.getElementById('f-p-provider').value='Gpay';
   document.getElementById('partial-block').style.display='none';
+  var hb=document.getElementById('hold-btn');if(hb)hb.style.display='';
   recalc();
+}
+function chittiBack(){
+  if(editingInvoiceId){resetChittiForm();goInvoiceList();}
+  else go(2);
 }
 function chittiFieldSnapshot(){
   return{
@@ -1202,6 +1233,7 @@ function renderInvoiceList(){
     var tag=e.partial?((e.pProvider||'Online')+'+Cash'):(e.online?e.provider:(e.rtgs?'RTGS':(dispName.toUpperCase()==='CASH'?'Cash':'Credit')));
     return '<div class="inv-row">'
       +'<div class="inv-main" onclick="previewInvoice(\''+e.id+'\')"><span class="inv-name">'+escHtml(dispName)+' <span class="inv-tag">· '+tag+'</span></span><span class="inv-amt">₹'+fmt(e.total)+'</span></div>'
+      +'<button class="inv-edit" onclick="event.stopPropagation();editInvoice(\''+e.id+'\')" title="Edit invoice">✎</button>'
       +'<button class="inv-del" onclick="event.stopPropagation();deleteInvoice(\''+e.id+'\')" title="Delete invoice">×</button>'
     +'</div>';
   }).join('');
@@ -1216,6 +1248,60 @@ function deleteInvoice(id){
   saveLedger();
   renderInvoiceList();
   syncDeleteEntry(id);
+}
+// Undoes the CASH/RTGS/provider-name auto-fill from getChittiCalc() so the name field shows
+// blank (not the literal word "CASH") when the customer never actually typed a name -- editing
+// a blank-name cash sale should let you re-blank it, not force you to delete the word "CASH".
+function editNameField(e){
+  var nm=(e.customerName||'').trim();
+  if(!nm)return'';
+  if(e.online){
+    var auto=(e.provider||'')+(e.sender?(' - '+e.sender):'');
+    if(nm===auto)return'';
+  }else if(e.rtgs){
+    if(nm==='RTGS')return'';
+  }else if(nm.toUpperCase()==='CASH'){
+    return'';
+  }
+  return nm;
+}
+function blankPlaceholder(v,ph){return v===ph?'':v;}
+function editInvoice(id){
+  purgeStaleLedger();
+  var e=dailyLedger.find(function(x){return x.id===id;});
+  if(!e)return;
+  editingInvoiceId=id;
+  dtype='Chitti';
+  setCtx('Editing chitti for <b>'+escHtml(invoiceDisplayName(e))+'</b>');
+  document.getElementById('n2').disabled=false;
+  document.getElementById('f-name').value=editNameField(e);
+  document.getElementById('f-date').value=blankPlaceholder(e.meta.date,'________')||todayStr();
+  document.getElementById('f-dist').value=blankPlaceholder(e.meta.dist,'___________');
+  document.getElementById('f-lorry').value=blankPlaceholder(e.meta.lorry,'___________');
+  document.getElementById('f-labour').value=e.charges.lab||'';
+  document.getElementById('f-weigh').value=e.charges.weigh||'';
+  document.getElementById('f-freight').value=e.charges.freight||'';
+  document.getElementById('f-others').value=e.charges.others||'';
+  document.getElementById('f-sender').value=e.sender||'';
+  document.getElementById('f-upi').value=e.charges.upi||'';
+  document.getElementById('f-provider').value=e.provider||'Gpay';
+  document.getElementById('f-online').checked=!!e.online;
+  document.getElementById('f-rtgs').checked=!!e.rtgs;
+  document.getElementById('online-block').style.display=e.online?'':'none';
+  document.getElementById('f-p-sender').value=e.pSender||'';
+  document.getElementById('f-p-amt').value=e.pAmt||'';
+  document.getElementById('f-p-provider').value=e.pProvider||'Gpay';
+  document.getElementById('f-partial').checked=!!e.partial;
+  document.getElementById('partial-block').style.display=e.partial?'':'none';
+  rows=(e.fullRows&&e.fullRows.length)?e.fullRows.map(function(r){return{q:r.q,name:r.name,p:r.p,r:r.r};}):[{q:'',name:'',p:'',r:''}];
+  document.getElementById('tbody').innerHTML='';
+  renderRows();
+  recalc();
+  var fb=document.getElementById('final-btn');if(fb)fb.textContent='✓ Update';
+  var hb=document.getElementById('hold-btn');if(hb)hb.style.display='none';
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('s3').classList.add('active');
+  window.scrollTo(0,0);
 }
 function previewInvoice(id){
   purgeStaleLedger();
@@ -1800,6 +1886,7 @@ async function printDbs(){
   btn.textContent=origText;btn.disabled=false;
 }
 function reset(){
+  editingInvoiceId=null;
   rows=[];dtype='';qRows=[];qFormat='';previewMode='live';
   document.getElementById('tbody').innerHTML='';
   ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others','f-sender','f-upi','f-p-sender','f-p-amt'].forEach(function(id){document.getElementById(id).value='';});
@@ -1816,6 +1903,8 @@ function reset(){
   document.querySelectorAll('.type-btn').forEach(function(b){b.classList.remove('on');});
   document.getElementById('n2').disabled=true;
   document.getElementById('n9').disabled=true;
+  var hb=document.getElementById('hold-btn');if(hb)hb.style.display='';
+  var fb=document.getElementById('final-btn');if(fb)fb.textContent='\u2713 Final';
   setCtx('Nothing is saved \u00b7 instant print only');
   recalc();go(2);
 }
