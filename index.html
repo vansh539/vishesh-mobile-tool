@@ -378,7 +378,7 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
   <div class="step" id="s4">
     <div class="print-note" id="preview-note">✓ Ready · <strong>Generates a real A6-size PDF · Share sheet → Print</strong></div>
     <div class="doc-wrap" id="preview-wrap"></div>
-    <div class="acts"><button class="btn-s" onclick="editOrBack()">← Edit</button><button class="btn-a" id="chitti-print-btn" onclick="printDoc()">🖨 Print / Save PDF</button><button class="btn-s" onclick="reset()">New</button></div>
+    <div class="acts"><button class="btn-s" id="preview-back-btn" onclick="editOrBack()">← Edit</button><button class="btn-s" id="preview-edit-btn" onclick="editInvoice(previewedInvoiceId)" style="display:none">✎ Edit Chitti</button><button class="btn-a" id="chitti-print-btn" onclick="printDoc()">🖨 Print / Save PDF</button><button class="btn-s" onclick="reset()">New</button></div>
   </div>
   <div class="step" id="s9"><div class="card"><h2>Quotation format</h2>
     <div class="grid3">
@@ -466,7 +466,7 @@ var heldChittis=[];
 var ledgerDateKey=todayStr();
 var DRAFT_KEY='vs_draft_v1';
 var HELD_KEY='vs_held_chittis_v1';
-var BUILD='2026-08-25a';
+var BUILD='2026-08-25b';
 var LEDGER_KEY='vs_ledger_v1';
 // This page is served by GitHub Pages, which we cannot send no-cache headers from,
 // and iOS home-screen shortcuts hold stale copies. Re-fetch our own URL bypassing the
@@ -1036,6 +1036,9 @@ function buildChittiPages(rowsData,c){
 function generate(){
   const c=getChittiCalc();
   if(c.pOver){alert('Online amount is more than the grand total. Fix it before generating.');return;}
+  previewMode='live';previewedInvoiceId=null;
+  document.getElementById('preview-back-btn').textContent='← Edit';
+  document.getElementById('preview-edit-btn').style.display='none';
   document.getElementById('preview-wrap').innerHTML=buildChittiPages(rows,c);
   document.getElementById('preview-note').innerHTML='✓ Ready · <strong>Generates a real A6-size PDF · Share sheet → Print</strong>';
   go(4);
@@ -1204,6 +1207,7 @@ function renderHeldList(){
   }).join('');
 }
 var previewMode='live';
+var previewedInvoiceId=null; // which archived invoice is on screen, so the preview screen's ✎ Edit button knows what to open.
 function goInvoiceList(){
   purgeStaleLedger();
   setCtx("<b>Today's invoices</b>");
@@ -1309,6 +1313,9 @@ function previewInvoice(id){
   if(!e)return;
   dtype='Chitti';
   previewMode='archive';
+  previewedInvoiceId=id;
+  document.getElementById('preview-back-btn').textContent='← Back';
+  document.getElementById('preview-edit-btn').style.display='';
   var c={sub:e.sub,tq:e.tq,lab:e.charges.lab,weigh:e.charges.weigh,freight:e.charges.freight,others:e.charges.others,upi:e.charges.upi,tot:e.total,payNote:e.payNote,meta:e.meta};
   document.getElementById('preview-wrap').innerHTML=buildChittiPages(e.fullRows,c);
   document.getElementById('preview-note').innerHTML='✓ Ready · <strong>Generates a real A6-size PDF · Share sheet → Print</strong>';
