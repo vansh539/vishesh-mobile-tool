@@ -369,7 +369,7 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
         <div class="sr muted"><span>Labour</span><span id="d-lab">0</span></div>
         <div class="sr muted"><span>Weighment</span><span id="d-weigh">0</span></div>
         <div class="sr muted"><span>Freight</span><span id="d-freight">0</span></div>
-        <div class="sr muted"><span>Others</span><span id="d-others">0</span></div>
+        <div class="sr muted" id="d-others-row" style="display:none"><span>Others</span><span id="d-others">0</span></div>
         <div class="sr muted" id="d-upi-row" style="display:none"><span>UPI Charges</span><span id="d-upi">0</span></div>
         <div class="sr muted" id="d-advance-row" style="display:none"><span>Advance Received</span><span id="d-advance">- 0</span></div>
         <div class="sr tot"><span>Grand Total</span><span id="d-tot">0</span></div>
@@ -468,7 +468,7 @@ var heldChittis=[];
 var ledgerDateKey=todayStr();
 var DRAFT_KEY='vs_draft_v1';
 var HELD_KEY='vs_held_chittis_v1';
-var BUILD='2026-08-29a';
+var BUILD='2026-08-29b';
 var LEDGER_KEY='vs_ledger_v1';
 // This page is served by GitHub Pages, which we cannot send no-cache headers from,
 // and iOS home-screen shortcuts hold stale copies. Re-fetch our own URL bypassing the
@@ -999,6 +999,7 @@ function recalc(){
     pl.textContent=ps.over?'Online amount is more than the total':('Cash balance: '+fmt(ps.pCash));
   }
   document.getElementById('d-sub').textContent=fmt(sub);document.getElementById('d-lab').textContent=fmt(lab);document.getElementById('d-weigh').textContent=fmt(weigh);document.getElementById('d-freight').textContent=fmt(freight);document.getElementById('d-others').textContent=fmt(others);
+  document.getElementById('d-others-row').style.display=(others>0)?'':'none';
   document.getElementById('d-upi-row').style.display=(online&&upi>0)?'':'none';
   document.getElementById('d-upi').textContent=fmt(upi);
   document.getElementById('d-advance-row').style.display=(advance>0)?'':'none';
@@ -1329,7 +1330,7 @@ function previewInvoice(id){
   previewedInvoiceId=id;
   document.getElementById('preview-back-btn').textContent='← Back';
   document.getElementById('preview-edit-btn').style.display='';
-  var c={sub:e.sub,tq:e.tq,lab:e.charges.lab,weigh:e.charges.weigh,freight:e.charges.freight,others:e.charges.others,upi:e.charges.upi,tot:e.total,payNote:e.payNote,meta:e.meta};
+  var c={sub:e.sub,tq:e.tq,lab:e.charges.lab,weigh:e.charges.weigh,freight:e.charges.freight,others:e.charges.others,upi:e.charges.upi,advance:e.charges.advance||0,tot:e.total,payNote:e.payNote,meta:e.meta};
   document.getElementById('preview-wrap').innerHTML=buildChittiPages(e.fullRows,c);
   document.getElementById('preview-note').innerHTML='✓ Ready · <strong>Generates a real A6-size PDF · Share sheet → Print</strong>';
   document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
