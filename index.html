@@ -346,6 +346,7 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
         <div class="fg"><label>Others</label><input id="f-others" type="number" min="0" placeholder="0" oninput="recalc()"></div>
       </div>
       <div class="fg" style="margin-top:6px"><label>Advance Received (deducted from total)</label><input id="f-advance" type="number" min="0" placeholder="0" oninput="recalc()"></div>
+      <label class="chk"><input type="checkbox" id="f-bill" onchange="recalc()"> Bill (customer name is for the GST bill only — already paid, not credit)</label>
       <label class="chk"><input type="checkbox" id="f-online" onchange="toggleOnline()"> Online Payment</label>
       <div id="online-block" style="display:none">
         <div class="grid2">
@@ -354,8 +355,9 @@ c-340 0 -632 -2 -649 -6z"/></g></svg><div class="mast-txt"><div class="mast-name
         </div>
         <div class="fg"><label>UPI Charges</label><input id="f-upi" type="number" min="0" placeholder="0" oninput="recalc()"></div>
       </div>
-      <label class="chk"><input type="checkbox" id="f-partial" onchange="togglePartial()"> Part online / part cash</label>
+      <label class="chk"><input type="checkbox" id="f-partial" onchange="togglePartial()"> Split payment (RTGS / Online / Cash)</label>
       <div id="partial-block" style="display:none">
+        <div class="fg"><label>RTGS amount</label><input id="f-p-rtgs" type="number" min="0" placeholder="0" oninput="recalc()"></div>
         <div class="grid2">
           <div class="fg"><label>App</label><select id="f-p-provider" onchange="recalc()"><option value="Gpay">Gpay</option><option value="PhonePe">PhonePe</option></select></div>
           <div class="fg"><label>Sender (number/name)</label><input id="f-p-sender" type="text" placeholder="9876543210" oninput="recalc()"></div>
@@ -468,7 +470,7 @@ var heldChittis=[];
 var ledgerDateKey=todayStr();
 var DRAFT_KEY='vs_draft_v1';
 var HELD_KEY='vs_held_chittis_v1';
-var BUILD='2026-08-29b';
+var BUILD='2026-09-11a';
 var LEDGER_KEY='vs_ledger_v1';
 // This page is served by GitHub Pages, which we cannot send no-cache headers from,
 // and iOS home-screen shortcuts hold stale copies. Re-fetch our own URL bypassing the
@@ -838,17 +840,18 @@ function todayStrDash(){return todayStr().split('/').join('-');}
 var DBS_FULL=13,DBS_LEFT_LAST=11,DBS_RIGHT_LAST=8;
 function dbsGenerate(){
   purgeStaleLedger();
-  var cashEntries=[],onlineEntries=[],rtgsEntries=[],partialEntries=[],totalCash=0,totalOnline=0,totalRTGS=0,catTotals={},otherItemTotals={};
+  var cashEntries=[],onlineEntries=[],rtgsEntries=[],partialEntries=[],billEntries=[],totalCash=0,totalOnline=0,totalRTGS=0,catTotals={},otherItemTotals={};
   dailyLedger.forEach(function(e){
     var isCashName=invoiceDisplayName(e).toUpperCase()==='CASH';
     if(e.partial){
-      var pOn=Math.round(e.pAmt||0),pCa=Math.round(e.total)-pOn;
-      partialEntries.push({e:e,on:pOn,cash:pCa});
-      totalOnline+=pOn;totalCash+=pCa;
+      var pOn=Math.round(e.pAmt||0),pRt=Math.round(e.pRtgs||0),pCa=Math.round(e.total)-pOn-pRt;
+      partialEntries.push({e:e,on:pOn,rtgs:pRt,cash:pCa});
+      totalOnline+=pOn;totalRTGS+=pRt;totalCash+=pCa;
     }
     else if(e.online){onlineEntries.push(e);totalOnline+=Math.round(e.total);}
     else if(e.rtgs){rtgsEntries.push(e);totalRTGS+=Math.round(e.total);}
     else if(isCashName){cashEntries.push(e);totalCash+=Math.round(e.total);}
+    else if(e.bill){billEntries.push(e);totalCash+=Math.round(e.total);}
     (e.items||[]).forEach(function(it){
       var kg=it.kg||0,pcs=it.pcs||0;
       if(kg>0||pcs>0){
@@ -873,12 +876,14 @@ function dbsGenerate(){
   var unloadings=unloadRows.filter(function(r){return parseFloat(r.amt)>0;});
   var unloadTotal=unloadings.reduce(function(s,r){return s+(parseFloat(r.amt)||0);},0);
   var leftItems=[];
-  cashEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>CASH</span><span>'+fmt(e.total)+' (Cash)</span></div>');});
+  cashEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>CASH</span><span>'+fmt(e.total)+'</span></div>');});
+  billEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>'+escHtml(invoiceDisplayName(e))+'</span><span>'+fmt(e.total)+' (Cash)</span></div>');});
   onlineEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>'+e.provider+(e.sender?(' '+escHtml(e.sender)):'')+'</span><span>'+fmt(e.total)+'</span></div>');});
   rtgsEntries.forEach(function(e){leftItems.push('<div class="dbs-row"><span>RTGS</span><span>'+fmt(e.total)+'</span></div>');});
   partialEntries.forEach(function(p){
-    leftItems.push('<div class="dbs-row"><span>'+escHtml(p.e.pProvider||'Online')+(p.e.pSender?(' '+escHtml(p.e.pSender)):'')+'</span><span>'+fmt(p.on)+'</span></div>');
-    leftItems.push('<div class="dbs-row"><span>'+escHtml(invoiceDisplayName(p.e))+'</span><span>'+fmt(p.cash)+' (Cash)</span></div>');
+    if(p.rtgs>0)leftItems.push('<div class="dbs-row"><span>RTGS</span><span>'+fmt(p.rtgs)+'</span></div>');
+    if(p.on>0)leftItems.push('<div class="dbs-row"><span>'+escHtml(p.e.pProvider||'Online')+(p.e.pSender?(' '+escHtml(p.e.pSender)):'')+'</span><span>'+fmt(p.on)+'</span></div>');
+    if(p.cash>0)leftItems.push('<div class="dbs-row"><span>'+escHtml(invoiceDisplayName(p.e))+'</span><span>'+fmt(p.cash)+' (Cash)</span></div>');
   });
   incomes.forEach(function(r){leftItems.push('<div class="dbs-row"><span>'+escHtml(r.desc)+(r.mode==='online'?' (Online)':'')+'</span><span>'+fmt(parseFloat(r.amt)||0)+'</span></div>');});
   var rightItems=[];
@@ -980,9 +985,9 @@ function togglePartial(){
   recalc();
 }
 function partialSplit(tot){
-  if(!document.getElementById('f-partial').checked)return{partial:false,pAmt:0,pCash:0,over:false};
-  var rt=Math.round(tot),pAmt=Math.round(gc('f-p-amt'));
-  return{partial:true,pAmt:pAmt,pCash:rt-pAmt,over:pAmt>rt};
+  if(!document.getElementById('f-partial').checked)return{partial:false,pRtgs:0,pAmt:0,pCash:0,over:false};
+  var rt=Math.round(tot),pRtgs=Math.round(gc('f-p-rtgs')),pAmt=Math.round(gc('f-p-amt'));
+  return{partial:true,pRtgs:pRtgs,pAmt:pAmt,pCash:rt-pRtgs-pAmt,over:(pRtgs+pAmt)>rt};
 }
 function recalc(){
   let sub=0;rows.forEach(r=>{sub+=rowAmt(r);});
@@ -996,7 +1001,7 @@ function recalc(){
   if(ps.partial){
     const pl=document.getElementById('p-cash-line');
     pl.className=ps.over?'p-cash bad':'p-cash';
-    pl.textContent=ps.over?'Online amount is more than the total':('Cash balance: '+fmt(ps.pCash));
+    pl.textContent=ps.over?'RTGS + Online is more than the total':('Cash balance: '+fmt(ps.pCash));
   }
   document.getElementById('d-sub').textContent=fmt(sub);document.getElementById('d-lab').textContent=fmt(lab);document.getElementById('d-weigh').textContent=fmt(weigh);document.getElementById('d-freight').textContent=fmt(freight);document.getElementById('d-others').textContent=fmt(others);
   document.getElementById('d-others-row').style.display=(others>0)?'':'none';
@@ -1028,13 +1033,18 @@ function getChittiCalc(){
   const tot=gross-advance;
   const pProvider=document.getElementById('f-p-provider').value;
   const pSender=document.getElementById('f-p-sender').value.trim();
+  const bill=document.getElementById('f-bill').checked;
   const ps=partialSplit(tot);
-  const partialNote=ps.partial?escHtml(pProvider+(pSender?(': '+pSender):''))+' \u00b7 Online '+fmt(ps.pAmt)+' \u00b7 Cash '+fmt(ps.pCash):'';
+  const partialParts=[];
+  if(ps.pRtgs>0)partialParts.push('RTGS '+fmt(ps.pRtgs));
+  if(ps.pAmt>0)partialParts.push(escHtml(pProvider+(pSender?(': '+pSender):''))+' '+fmt(ps.pAmt));
+  if(ps.pCash>0)partialParts.push('Cash '+fmt(ps.pCash));
+  const partialNote=ps.partial?partialParts.join(' \u00b7 '):'';
   const payNote=online?escHtml(provider+(sender?(': '+sender):'')):(rtgs?'RTGS':partialNote);
   const typedName=document.getElementById('f-name').value.trim();
   const rawName=typedName||(online?(provider+(sender?(' - '+sender):'')):(rtgs?'RTGS':'CASH'));
   const meta={name:rawName,date:document.getElementById('f-date').value||'________',dist:document.getElementById('f-dist').value||'___________',lorry:document.getElementById('f-lorry').value||'___________'};
-  return{sub,tq,lab,weigh,freight,others,online,provider,sender,rtgs,upi,advance,tot,payNote,meta,rawName,partial:ps.partial,pProvider,pSender,pAmt:ps.pAmt,pCash:ps.pCash,pOver:ps.over,advOver:advance>gross};
+  return{sub,tq,lab,weigh,freight,others,online,provider,sender,rtgs,upi,advance,tot,payNote,meta,rawName,bill,partial:ps.partial,pProvider,pSender,pRtgs:ps.pRtgs,pAmt:ps.pAmt,pCash:ps.pCash,pOver:ps.over,advOver:advance>gross};
 }
 function buildChittiPages(rowsData,c){
   const cc=[c.lab,c.weigh,c.freight,c.others,c.upi,c.advance].filter(v=>v>0).length,tr2=2+cc+(c.payNote?1:0),mp1=FIRST_TOTAL-tr2;
@@ -1044,7 +1054,7 @@ function buildChittiPages(rowsData,c){
 }
 function generate(){
   const c=getChittiCalc();
-  if(c.pOver){alert('Online amount is more than the grand total. Fix it before generating.');return;}
+  if(c.pOver){alert('RTGS + Online amount is more than the grand total. Fix it before generating.');return;}
   if(c.advOver){alert('Advance is more than the total. Fix it before generating.');return;}
   previewMode='live';previewedInvoiceId=null;
   document.getElementById('preview-back-btn').textContent='← Edit';
@@ -1058,7 +1068,7 @@ function finalizeChitti(){
   const c=getChittiCalc();
   const hasItems=rows.some(r=>(r.name||'').trim()&&((parseFloat(r.q)||0)>0||(parseFloat(r.p)||0)>0));
   if(!hasItems||c.tot<=0){alert('Add at least one item before finalizing.');return;}
-  if(c.pOver){alert('Online amount is more than the grand total. Fix it before finalizing.');return;}
+  if(c.pOver){alert('RTGS + Online amount is more than the grand total. Fix it before finalizing.');return;}
   if(c.advOver){alert('Advance is more than the total. Fix it before finalizing.');return;}
   const catItems=rows.filter(r=>r.name&&((parseFloat(r.q)||0)>0||(parseFloat(r.p)||0)>0)).map(r=>{
     const q=parseFloat(r.q)||0,p=parseFloat(r.p)||0;
@@ -1068,8 +1078,8 @@ function finalizeChitti(){
   var existing=isEdit?dailyLedger.find(function(x){return x.id===editingInvoiceId;}):null;
   var newEntry={
     id:(isEdit&&existing)?existing.id:crypto.randomUUID(),
-    customerName:c.rawName,total:Math.round(c.tot),online:c.online,provider:c.provider,sender:c.sender,rtgs:c.rtgs,items:catItems,
-    partial:c.partial,pProvider:c.pProvider,pSender:c.pSender,pAmt:c.pAmt,pCash:c.pCash,
+    customerName:c.rawName,total:Math.round(c.tot),online:c.online,provider:c.provider,sender:c.sender,rtgs:c.rtgs,bill:c.bill,items:catItems,
+    partial:c.partial,pProvider:c.pProvider,pSender:c.pSender,pRtgs:c.pRtgs,pAmt:c.pAmt,pCash:c.pCash,
     fullRows:rows.map(function(r){return{q:r.q,name:r.name,p:r.p,r:r.r};}),
     charges:{lab:c.lab,weigh:c.weigh,freight:c.freight,others:c.others,upi:c.upi,advance:c.advance},
     payNote:c.payNote,meta:c.meta,sub:c.sub,tq:c.tq,
@@ -1092,8 +1102,9 @@ function finalizeChitti(){
 function resetChittiForm(){
   editingInvoiceId=null;
   rows=[];document.getElementById('tbody').innerHTML='';addRow();
-  ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others','f-advance','f-sender','f-upi','f-p-sender','f-p-amt'].forEach(function(id){document.getElementById(id).value='';});
+  ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others','f-advance','f-sender','f-upi','f-p-sender','f-p-rtgs','f-p-amt'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('f-date').value=todayStr();
+  document.getElementById('f-bill').checked=false;
   document.getElementById('f-online').checked=false;
   document.getElementById('f-rtgs').checked=false;
   document.getElementById('f-provider').value='Gpay';
@@ -1119,6 +1130,7 @@ function chittiFieldSnapshot(){
     freight:document.getElementById('f-freight').value,
     others:document.getElementById('f-others').value,
     advance:document.getElementById('f-advance').value,
+    bill:document.getElementById('f-bill').checked,
     online:document.getElementById('f-online').checked,
     provider:document.getElementById('f-provider').value,
     sender:document.getElementById('f-sender').value,
@@ -1127,6 +1139,7 @@ function chittiFieldSnapshot(){
     partial:document.getElementById('f-partial').checked,
     pProvider:document.getElementById('f-p-provider').value,
     pSender:document.getElementById('f-p-sender').value,
+    pRtgs:document.getElementById('f-p-rtgs').value,
     pAmt:document.getElementById('f-p-amt').value
   };
 }
@@ -1161,6 +1174,7 @@ function resumeHeld(id){
   document.getElementById('f-freight').value=h.fields.freight;
   document.getElementById('f-others').value=h.fields.others;
   document.getElementById('f-advance').value=h.fields.advance||'';
+  document.getElementById('f-bill').checked=!!h.fields.bill;
   document.getElementById('f-sender').value=h.fields.sender;
   document.getElementById('f-upi').value=h.fields.upi;
   document.getElementById('f-provider').value=h.fields.provider;
@@ -1168,6 +1182,7 @@ function resumeHeld(id){
   document.getElementById('f-rtgs').checked=h.fields.rtgs;
   document.getElementById('online-block').style.display=h.fields.online?'':'none';
   document.getElementById('f-p-sender').value=h.fields.pSender||'';
+  document.getElementById('f-p-rtgs').value=h.fields.pRtgs||'';
   document.getElementById('f-p-amt').value=h.fields.pAmt||'';
   document.getElementById('f-p-provider').value=h.fields.pProvider||'Gpay';
   document.getElementById('f-partial').checked=!!h.fields.partial;
@@ -1235,7 +1250,15 @@ function invoiceGroupRank(e){
   if(e.partial)return 1;
   if(e.online)return 1;
   if(e.rtgs)return 2;
-  return 3;
+  if(e.bill)return 3;
+  return 4;
+}
+function splitTag(e){
+  var parts=[];
+  if((e.pRtgs||0)>0)parts.push('RTGS');
+  if((e.pAmt||0)>0)parts.push(e.pProvider||'Online');
+  parts.push('Cash');
+  return parts.join('+');
 }
 function renderInvoiceList(){
   var wrap=document.getElementById('inv-list');
@@ -1247,7 +1270,7 @@ function renderInvoiceList(){
   });
   wrap.innerHTML=sorted.map(function(e){
     var dispName=invoiceDisplayName(e);
-    var tag=e.partial?((e.pProvider||'Online')+'+Cash'):(e.online?e.provider:(e.rtgs?'RTGS':(dispName.toUpperCase()==='CASH'?'Cash':'Credit')));
+    var tag=e.partial?splitTag(e):(e.online?e.provider:(e.rtgs?'RTGS':(dispName.toUpperCase()==='CASH'?'Cash':(e.bill?'Bill':'Credit'))));
     return '<div class="inv-row">'
       +'<div class="inv-main" onclick="previewInvoice(\''+e.id+'\')"><span class="inv-name">'+escHtml(dispName)+' <span class="inv-tag">· '+tag+'</span></span><span class="inv-amt">₹'+fmt(e.total)+'</span></div>'
       +'<button class="inv-edit" onclick="event.stopPropagation();editInvoice(\''+e.id+'\')" title="Edit invoice">✎</button>'
@@ -1300,6 +1323,7 @@ function editInvoice(id){
   document.getElementById('f-freight').value=e.charges.freight||'';
   document.getElementById('f-others').value=e.charges.others||'';
   document.getElementById('f-advance').value=e.charges.advance||'';
+  document.getElementById('f-bill').checked=!!e.bill;
   document.getElementById('f-sender').value=e.sender||'';
   document.getElementById('f-upi').value=e.charges.upi||'';
   document.getElementById('f-provider').value=e.provider||'Gpay';
@@ -1307,6 +1331,7 @@ function editInvoice(id){
   document.getElementById('f-rtgs').checked=!!e.rtgs;
   document.getElementById('online-block').style.display=e.online?'':'none';
   document.getElementById('f-p-sender').value=e.pSender||'';
+  document.getElementById('f-p-rtgs').value=e.pRtgs||'';
   document.getElementById('f-p-amt').value=e.pAmt||'';
   document.getElementById('f-p-provider').value=e.pProvider||'Gpay';
   document.getElementById('f-partial').checked=!!e.partial;
@@ -1910,10 +1935,11 @@ function reset(){
   editingInvoiceId=null;
   rows=[];dtype='';qRows=[];qFormat='';previewMode='live';
   document.getElementById('tbody').innerHTML='';
-  ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others','f-advance','f-sender','f-upi','f-p-sender','f-p-amt'].forEach(function(id){document.getElementById(id).value='';});
+  ['f-name','f-date','f-dist','f-lorry','f-labour','f-weigh','f-freight','f-others','f-advance','f-sender','f-upi','f-p-sender','f-p-rtgs','f-p-amt'].forEach(function(id){document.getElementById(id).value='';});
   ['q-to','q-date','q-addr','q-gstin','q-subject','q-kanta','q-transport','q-unload','q-note'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('f-date').value=todayStr();
   document.getElementById('q-date').value=todayStrDash();
+  document.getElementById('f-bill').checked=false;
   document.getElementById('f-online').checked=false;
   document.getElementById('f-rtgs').checked=false;
   document.getElementById('f-provider').value='Gpay';
